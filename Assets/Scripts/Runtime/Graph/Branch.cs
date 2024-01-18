@@ -6,4 +6,6 @@ using UnityEngine;
     [HideInInspector] public bool expanded;
     public abstract Node[] children { get; }
 
+    public abstract void AddChild(Node arg);
+
 }

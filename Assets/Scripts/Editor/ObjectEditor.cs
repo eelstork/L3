@@ -17,6 +17,7 @@ public class ObjectInspector{
         this.didEdit = false;
         var type = arg.GetType(); Label(type.Name.ToUpper()); Space(8);
         OnGUI(arg, type);
+        EditorActions(arg);
         didUseAction = this.didUseAction;
         didEdit = this.didEdit;
     }
@@ -42,6 +43,11 @@ public class ObjectInspector{
             if(IsHidden(field)) continue;
             if(field.DeclaringType == type) OnGUI(arg, field, hz);
         }
+    }
+
+    void EditorActions(object arg){
+        var type = arg.GetType();
+        if(type == null) return;
         BeginHorizontal();
         foreach(var method in type.GetMethods()){
             if(IsEditorAction(method) && Button(method.Name)){

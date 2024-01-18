@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-[System.Serializable] public partial class Function : Branch{
+public partial class Function : Branch{
 
     public List<Parameter> parameters;
     [Hierarchy]
@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
     override public Node[] children
     => expression == null ? null : new Node[]{ expression as Node };
+
+    override public void AddChild(Node child)
+    => expression = (Expression) child;
 
     public Function(string name){
         this.name = name;

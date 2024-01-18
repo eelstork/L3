@@ -15,18 +15,14 @@ public class NodeEditor : EditorWindow{
 
     void OnGUI(){
         if(inspector == null) inspector = new ObjectInspector();
-        Edits.nodeEditor = this;
         if(selection == null){
             Label("No selection");
             return;
         }
         inspector.OnGUI(
-            selection,
-            out bool didUseAction,
-            out bool didEdit
+            selection, out bool didUseAction, out bool didEdit
         );
-        //selection.OnGUI();
-        if(Edits.didChange || didUseAction || didEdit){
+        if(didUseAction || didEdit){
             GraphEditor.Save();
         }
     }
@@ -35,12 +31,5 @@ public class NodeEditor : EditorWindow{
         var i = ShowWindow();
         i.selection = arg;
     }
-
-    //public static void Save(){
-        //if(GraphEditor.instance.)
-        //EditorUtility.SetDirty(GraphEditor.instance.target);
-        //GraphEditor.DoRepaint();
-        //Edits.didChange = false;
-    //}
 
 }

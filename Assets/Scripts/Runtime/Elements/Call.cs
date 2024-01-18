@@ -4,6 +4,7 @@ using System.Linq;
 [System.Serializable]
 public partial class Call : Branch, Expression{
 
+    [Hierarchy]
     public List<Expression> args = new ();
 
     [EditorAction]
@@ -18,5 +19,8 @@ public partial class Call : Branch, Expression{
     override public Node[] children
     =>  args == null ? null
      : (from x in args select x as Node).ToArray();
+
+     override public void AddChild(Node child)
+     => args.Add((Expression)child);
 
 }

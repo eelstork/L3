@@ -15,7 +15,6 @@ public class GraphEditor : EditorWindow{
     => instance = GetWindow<GraphEditor>("L3 Graph");
 
     void OnGUI(){
-        Edits.graphEditor = this;
         CreateStyles();
         target = EGL.ObjectField(
             "Unit", target, typeof(Unit), allowSceneObjects: false
@@ -41,7 +40,6 @@ public class GraphEditor : EditorWindow{
         if(instance == null) instance = ShowWindow();
         EditorUtility.SetDirty(GraphEditor.instance.target);
         instance.Repaint();
-        Edits.didChange = false;
     }
 
     static Texture2D tex;

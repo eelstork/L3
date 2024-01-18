@@ -12,13 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d23ea66c8d46849d52da54f906bb7, type: 3}
   m_Name: Unit
   m_EditorClassIdentifier: 
-  func:
-    name: Villager
-    expanded: 0
-    parameters:
-    - type: string
-      name: arg
-    - type: int
-      name: index
-    - type: object
-      name: client
+  xml: <Function expanded="False" name="Bar"><parameters><Parameter type="string"
+    name="info" /><Parameter type="int" name="index" /></parameters><Composite expanded="False"
+    name="COMPOSITE" /></Function>
