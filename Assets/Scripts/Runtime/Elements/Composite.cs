@@ -15,8 +15,10 @@ public partial class Composite : Branch, Expression{
 
     public void Delete(){}
 
-    override public void AddChild(Node child)
-    => nodes.Add((Expression)child);
+    override public void AddChild(Node child){
+        if(nodes == null) nodes = new ();
+        nodes.Add((Expression)child);
+    }
 
     override public Node[] children
     => nodes == null ? null

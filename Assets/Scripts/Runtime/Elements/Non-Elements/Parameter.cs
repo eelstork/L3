@@ -1,4 +1,4 @@
-[System.Serializable] public class Parameter{
+public class Parameter{
 
     public string type;
     public string name;
