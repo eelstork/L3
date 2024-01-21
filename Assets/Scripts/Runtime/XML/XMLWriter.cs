@@ -8,11 +8,6 @@ public class XMLWriter{
 
     public string ToXML(Node arg){
         var doc = new XmlDocument();
-        // XML dec recommended, not mandatory
-        //XmlDeclaration xmlDeclaration
-        //    = doc.CreateXmlDeclaration( "1.0", "UTF-8", null );
-        //var root = doc.DocumentElement;
-        //doc.InsertBefore( xmlDeclaration, root );
         Write(arg, doc);
         return doc.OuterXml;
     }
