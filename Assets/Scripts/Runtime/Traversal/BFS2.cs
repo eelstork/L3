@@ -5,9 +5,9 @@ public class BFS2{
     public T[] Find<T>(
         Func<T, T[]> graph, T _root, Func<T, bool> isGoal
     ){
-        var visited = new Dictionary<T,N<T>>();
-        var root = new N<T>(_root);
-        visited[_root] = root;
+        var visited = new HashSet<T>();
+        var root = new N<T>(_root, parent: null);
+        visited.Add(_root);
         var q = new Queue<N<T>>();
         q.Enqueue(root);
         while(q.Count > 0){
@@ -16,9 +16,9 @@ public class BFS2{
                 int i = 0; return Path(V, ref i);
             }
             foreach(var w in graph(V)){
-                if(visited.ContainsKey(w)) continue;
-                var W = new N<T>(w);
-                W.parent = V; visited[w] = W;
+                if(visited.Contains(w)) continue;
+                var W = new N<T>(w, parent: V);
+                visited.Add(w);
                 q.Enqueue(W);
             }
         }
@@ -35,9 +35,9 @@ public class BFS2{
     }
 
     class N<T>{
-        public N<T> parent;
-        public T value;
-        public N(T arg) => value = arg;
+        public readonly N<T> parent;
+        public readonly T value;
+        public N(T z, N<T> parent){ value = z; this.parent = parent; }
         public static implicit operator T(N<T> node) => node.value;
     }
 
