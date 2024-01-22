@@ -1,3 +1,4 @@
+namespace L3{
 public class Parameter{
 
     public string type;
@@ -8,4 +9,4 @@ public class Parameter{
         name = "NAME";
     }
 
-}
+}}

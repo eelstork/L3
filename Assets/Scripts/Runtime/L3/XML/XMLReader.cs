@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 
+namespace L3{
 public class XMLReader{
 
     public Node FromXML(string arg){
@@ -90,4 +91,4 @@ public class XMLReader{
         }
     }
 
-}
+}}

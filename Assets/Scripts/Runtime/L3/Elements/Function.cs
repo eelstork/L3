@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+namespace L3{
 public partial class Function : Branch{
 
     public List<Parameter> parameters;
@@ -36,4 +37,4 @@ public partial class Function : Branch{
         expression = new Call();
     }
 
-}
+}}

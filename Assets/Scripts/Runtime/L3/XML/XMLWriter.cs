@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Field = System.Reflection.FieldInfo;
 
+namespace L3{
 public class XMLWriter{
 
     public string ToXML(Node arg){
@@ -49,4 +50,4 @@ public class XMLWriter{
     bool IsHidden(Field arg)
     => Attribute.IsDefined(arg, typeof(HierarchyAttribute));
 
-}
+}}

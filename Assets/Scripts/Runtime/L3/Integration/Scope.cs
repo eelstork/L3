@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+namespace L3{
 public class Scope{
 
     List<Node> nodes = new ();
@@ -10,4 +11,4 @@ public class Scope{
 
     public Node Find(string name) => null;
 
-}
+}}

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-[System.Serializable]
+namespace L3{
 public partial class Composite : Branch, Expression{
 
     [Hierarchy]
@@ -24,4 +24,4 @@ public partial class Composite : Branch, Expression{
     => nodes == null ? null
      : (from x in nodes select x as Node).ToArray();
 
-}
+}}

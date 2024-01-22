@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+namespace L3{
 public class Record{
 
     Frame frame;
@@ -27,4 +28,4 @@ public class Record{
         }
     }
 
-}
+}}

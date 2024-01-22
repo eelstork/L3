@@ -1,7 +1,8 @@
 using EGL = UnityEditor.EditorGUILayout;
 using UnityEngine;
 
-[System.Serializable] public abstract partial class Node{
+namespace L3{
+public abstract partial class Node{
 
     public string name;
 
@@ -9,4 +10,4 @@ using UnityEngine;
 
     public virtual string TFormat() => name;
 
-}
+}}

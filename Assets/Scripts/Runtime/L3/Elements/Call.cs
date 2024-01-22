@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-[System.Serializable]
+namespace L3{
 public partial class Call : Branch, Expression{
 
     [Hierarchy]
@@ -23,4 +23,4 @@ public partial class Call : Branch, Expression{
      override public void AddChild(Node child)
      => args.Add((Expression)child);
 
-}
+}}
