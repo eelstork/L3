@@ -1,5 +1,6 @@
 using System; using System.Collections.Generic;
 
+namespace Activ.Graphs{
 public class DFSr{
 
     public T[] Find<T>(
@@ -19,4 +20,4 @@ public class DFSr{
         }
     }
 
-}
+}}
