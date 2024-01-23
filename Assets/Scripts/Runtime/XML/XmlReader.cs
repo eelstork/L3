@@ -5,7 +5,7 @@ using Elem = System.Xml.XmlElement; using Node = System.Xml.XmlNode;
 using static UnityEngine.Debug;
 
 namespace Activ.XML{
-public static class XReader{
+public static class XmlReader{
 
     public static object Read<T>(string arg) => Read(arg, typeof(T));
 
@@ -63,11 +63,16 @@ public static class XReader{
         return obj;
     }
 
-    static void AddChild(dynamic parent, dynamic value, int index){
+    static void AddChild(dynamic parent, dynamic value,  int index){
         if(parent.GetType().IsArray){
             parent[index] = value;
         }else{
-            parent.Add(value);
+            try{
+                parent.Add (value);
+            }catch(Exception){
+                UnityEngine.Debug.LogError($"Cannot add {value} of type ({value.GetType()}) to {parent}");
+                throw;
+            }
         }
     }
 

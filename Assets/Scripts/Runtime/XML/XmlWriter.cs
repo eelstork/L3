@@ -1,13 +1,15 @@
+using UnityEngine;
 using System; using System.Collections;
 using Doc = System.Xml.XmlDocument;
 using Elem = System.Xml.XmlElement;
 using static UnityEngine.Debug;
 
 namespace Activ.XML{
-public static class XWriter{
+public static class XmlWriter{
 
     public static string Write(object obj){
         var doc = new Doc();
+        Debug.Log($"Write [{obj}]") ;
         var root = Write(obj, doc);
         doc.AppendChild(root);
         return doc.OuterXml;
@@ -24,6 +26,7 @@ public static class XWriter{
         }else foreach(var field in type.GetFields()){
             if(field.IsStatic) continue;
             var value = field.GetValue(obj);
+            if(value == null) continue ;
             var child = Write(value, doc);
             child.SetAttribute("field-name", field.Name);
             elem.AppendChild(child);

@@ -60,7 +60,9 @@ public class ObjectInspector{
 
     void OnGUI(object arg, Field field, bool hz){
         var value = field.GetValue(arg); var name = field.Name;
-        switch(value){
+        if(value.GetType().IsEnum){
+            EditEnum(arg, field, value as Enum, hz);
+        }else switch(value){
             case bool @bool:
                 EGL.Toggle(name, @bool); break;
             case float @float:
@@ -83,6 +85,13 @@ public class ObjectInspector{
     => Attribute.IsDefined(arg, typeof(HideInInspector))
     || Attribute.IsDefined(arg, typeof(HierarchyAttribute));
 
+    void EditEnum(object owner, Field field, Enum value, bool hz){
+        var @new = EnumPopup(field.Name, value, hz);
+        if(@new == value) return;
+        field.SetValue(owner, @new);
+        didEdit = true;
+    }
+
     void EditString(object owner, Field field, string value, bool hz){
         var @new = TextField(field.Name, value, hz);
         if(@new == value) return;
@@ -95,6 +104,11 @@ public class ObjectInspector{
         if(@new == value) return;
         field.SetValue(owner, @new);
         didEdit = true;
+    }
+
+    Enum EnumPopup(string label, Enum value, bool hz){
+        if(hz) return EGL.EnumPopup(value);
+        else return EGL.EnumPopup(label, value);
     }
 
     float FloatField(string label, float value, bool hz){

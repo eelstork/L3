@@ -21,6 +21,8 @@ public partial class Function : Branch{
         this.name = name;
     }
 
+    override public string TFormat() => "func " + name + "(...)";
+
     [EditorAction]
     public void AddParameter(){
         if(parameters == null) parameters = new ();

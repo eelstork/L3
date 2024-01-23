@@ -1,24 +1,27 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Writer = Activ.XML.XmlWriter;
+using Reader = Activ.XML.XmlReader;
 
 namespace L3{
-[CreateAssetMenu(
-    fileName = "Unit.asset",
-    menuName = "L3/Unit")
-] public class Unit : ScriptableObject, ISerializationCallbackReceiver{
+[CreateAssetMenu(fileName = "Unit.asset", menuName = "L3/Unit")]
+public class Unit : ScriptableObject, ISerializationCallbackReceiver{
 
-    public Function func = new Function();
+    public Composite value = new Composite();
     public string xml;
 
     public void OnBeforeSerialize(){
-        var writer = new XMLWriter();
-        xml = writer.ToXML(func);
+        if(value == null)
+            Debug.LogWarning("Block is empty");
+        else{
+            xml = Writer.Write(value);
+            Debug.Log("XML VIEW:\n" + xml);
+        }
     }
 
     public void OnAfterDeserialize(){
-        var reader = new XMLReader();
-        var node = reader.FromXML(xml);
-        this.func = node as Function;
+        var node = Reader.Read(xml);
+        this.value = node as Composite;
         xml = null;
     }
 

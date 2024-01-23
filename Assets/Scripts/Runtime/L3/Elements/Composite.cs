@@ -4,6 +4,10 @@ using System.Linq;
 namespace L3{
 public partial class Composite : Branch, Expression{
 
+    public enum Type{block, sel, seq, act};
+
+    public Type type;
+
     [Hierarchy]
     public List<Expression> nodes;
 
@@ -14,6 +18,9 @@ public partial class Composite : Branch, Expression{
     }
 
     public void Delete(){}
+
+    override public string TFormat()
+    => type + ": " + name;
 
     override public void AddChild(Node child){
         if(nodes == null) nodes = new ();

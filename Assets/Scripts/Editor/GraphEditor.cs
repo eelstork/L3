@@ -20,7 +20,7 @@ public class GraphEditor : EditorWindow{
             "Unit", target, typeof(Unit), allowSceneObjects: false
         ) as L3.Unit;
         if(target == null) return;
-        Draw(target.func);
+        Draw(target.value);
     }
 
     void Draw(Node node, int depth=0){
@@ -45,6 +45,7 @@ public class GraphEditor : EditorWindow{
     static Texture2D tex;
 
     void DrawNode(Node client, int tabs = 0){
+        //Debug.Log($"Draw {client}");
         var label = client.TFormat();
         BeginHorizontal();
         Space(tabs * 8 * 4);
