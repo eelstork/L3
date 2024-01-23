@@ -1,26 +1,20 @@
 using System;
-using System.Collections.Generic;
-using InvOp = System.InvalidOperationException;
+using System.ComponentModel;
 
 public static class PrimitiveType{
 
-    public static object FromString(string type, string x)
-    => type switch{
-        "Boolean" => bool.Parse(x),
-        "Byte" => byte.Parse(x),
-        "SByte" => sbyte.Parse(x),
-        "Int16" => int.Parse(x),
-        "Int32" => int.Parse(x),
-        "Int64" => int.Parse(x),
-        "UInt16" => uint.Parse(x),
-        "UInt32" => uint.Parse(x),
-        "UInt64" => uint.Parse(x),
-        "Char" => char.Parse(x),
-        "Double" => double.Parse(x),
-        "Single" => float.Parse(x),
-        "IntPtr" => throw new InvOp("IntPtr is not supported"),
-        "UIntPtr" => throw new InvOp("UIntPtr is not supported"),
-        _ => null
+    static Type[] primitives = {
+        typeof(bool), typeof(byte), typeof(sbyte), typeof(char),
+        typeof(short), typeof(ushort), typeof(int), typeof(uint),
+        typeof(long), typeof(ulong), typeof(float), typeof(double),
+        typeof(decimal), typeof(IntPtr), typeof(UIntPtr)
     };
+
+    public static object FromString(string type, string value){
+        var T = Array.Find(primitives, x => x.Name == type);
+        if(T == null) return null;
+        var c = TypeDescriptor.GetConverter(T);
+        return c.ConvertFromString(value);
+    }
 
 }
