@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
 using static UnityEngine.Debug;
-//using Activ.XML;
-//using static Activ.XML.XmlWriter;
-//using Activ.XML.TestTypes;
 
 public class TypeConverterTest{
 
