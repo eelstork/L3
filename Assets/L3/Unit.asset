@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d23ea66c8d46849d52da54f906bb7, type: 3}
   m_Name: Unit
   m_EditorClassIdentifier: 
-  xml: <Composite><type t="Type">block</type><nodes t="List"><Call><args t="List"><LString><value
-    t="String">Hello</value><name t="String">LSTRING</name></LString></args><expanded
+  xml: <Composite><type t="Type">seq</type><nodes t="List"><Call><opt t="Boolean">False</opt><args
+    t="List"><Var><value t="String">target</value><opt t="Boolean">False</opt><name
+    t="String">VAR</name></Var></args><expanded t="Boolean">False</expanded><name
+    t="String">MoveTo</name></Call><Call><opt t="Boolean">False</opt><args t="List"><LString><value
+    t="String">Hello World</value><name t="String">LSTRING</name></LString></args><expanded
     t="Boolean">False</expanded><name t="String">Log</name></Call></nodes><expanded
-    t="Boolean">False</expanded><name t="String">COMPOSITE</name></Composite>
+    t="Boolean">False</expanded><name t="String"></name></Composite>

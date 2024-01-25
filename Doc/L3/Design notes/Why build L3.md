@@ -4,6 +4,34 @@
 
 ## Leveraging narrative memory
 
+## Resolving "BT fall-through"
+
+Symptom: an agent will display unexpected behavior, such as resuming a mundane task (low pri) in the middle of handling an emergency.
+
+Solution: this may be resolved with certainties. In a related case study I demonstrate how returning a restricted status 'forces' reorganising the behavior tree.
+
+Status: solved in C#, however certainties have not been used much because they stretch both the C# compiler and built-in logging.
+
+## Resolving action conflicts
+
+Often the planning result (the desired output when running the behavior tree) is a unique action, which decides what the agent will do next.
+
+This disposition, however intuitive, flies in the face of how traditional BTs execute, since BTs return a status, not an action.
+
+As it is, production BTs have been observed to return 0, 1 or several actions.
+
+There are several approaches to this problem:
+
+(1) Detect incorrect output at runtime, and raise an error.
+(2) Raise the action (similar to exception raising)
+(3) We are doing it wrong, the BT should *return* an action.
+
+Status:
+
+So far (1) has been used. However this is not very satisfying; we'd much prefer pre-empting the issue at compile time. Depending on the environment, getting at the concurrent stacks generating the actions may be difficult.
+
+NOTE: the "one action" approach does not cover all uses of BTs. There are BTs designed for multi-tasking, which at times is making sense even when just one agent is involved.
+
 ## Built-in event support and vetoing
 
 In most languages events must be explicitly defined; for the most part this is pure drudgery, because events related to entering/exiting functions are easily implied.

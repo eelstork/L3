@@ -1,0 +1,16 @@
+{
+    "name": "activ.data.demo",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7cfc138365e8742eea14a9af3c33088c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
