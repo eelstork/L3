@@ -9,7 +9,7 @@ public static class XmlWriter{
 
     public static string Write(object obj){
         var doc = new Doc();
-        Debug.Log($"Write [{obj}]") ;
+        //Debug.Log($"Write [{obj}]") ;
         var root = Write(
             obj, GetTypeName(obj.GetType()), doc, skipTypeAttr:true
         );
@@ -35,7 +35,8 @@ public static class XmlWriter{
             elem.AppendChild(child);
         }else foreach(var field in type.GetFields()){
             if(field.IsStatic) continue;
-            if(field.Name == "xml") continue;
+            // NOTE needed since made this private
+            //if(field.Name == "xml") continue;
             var value = field.GetValue(obj);
             if(value == null) continue;
             var child = Write(value, field.Name, doc);

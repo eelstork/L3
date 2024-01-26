@@ -33,32 +33,37 @@ public class XmlReaderTest{
     // -------------------------------------------------------------
 
     [Test] public void ReadObject_withTypeInfo(){
-        var output = Read<ChessPiece>(@chess);
+        var output = Read<ChessPiece>(@chessPiece);
         Assert.That(output, Is.InstanceOf<ChessPiece>());
         var piece = (ChessPiece) output;
         Assert.That(piece.name, Is.EqualTo("Rook"));
         Assert.That(piece.value, Is.EqualTo(5));
     }
 
-    // NOTE - this will fail because `ChessPiece` is part of the test
-    // assembly. Types partaking
-    [Test] public void ReadObject_withoutTypeInfo_fails(){
-        var ex = Assert.Throws<InvalidOperationException>(
-            () => Read(@chess)
-        );
-        Assert.That(
-            ex.Message,
-            Is.EqualTo("No matching type for <ChessPiece>")
+    [Test] public void ReadBadXML(){
+        var ex = Assert.Throws<System.Xml.XmlException>(
+            () => Read(@badXML)
         );
     }
 
-    //[Test] public void ReadObject_withoutTypeInfo(){
-    //    var output = Read(@param);
-    //    Assert.That(output, Is.InstanceOf<L3.Parameter>());
-    //    var _param = (L3.Parameter) output;
-    //    Assert.That(_param.type, Is.EqualTo("int"));
-    //    Assert.That(_param.name, Is.EqualTo("index"));
-    //}
+    [Test] public void ReadObject_with_orphan_fails(){
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Read(@badChessPiece)
+        );
+        Assert.That(
+            ex.Message,
+            Is.EqualTo("No [score] field in type [ChessPiece]")
+        );
+    }
+
+    // NOTE - Normally when an assembly starts with 'test' the
+    // type will not be found. However in our case the test assembly
+    // name starts with 'activ.data' therefore we can deserialize
+    // the type
+    [Test] public void ReadObject_withoutTypeInfo_succeeds(){
+        var result = Read(@chessPiece);
+        Debug.Log(result);
+    }
 
     [Test] public void ReadString(){
         var output = Read<string>(@string);

@@ -7,6 +7,6 @@ using Activ.Data;
 public class Ability : Model{
 
     public string elemental;
-    public int rank;
+    public int score;
 
 }

@@ -20,7 +20,7 @@ public class Ed{
     => arg.value.Fields();
 
     public void Visit(Field arg){
-        if(arg.name == "xml") return;
+        //if(arg.name == "xml") return;
         if(arg.value == null){
             if(arg.type == typeof(string)) arg.value = "";
         }

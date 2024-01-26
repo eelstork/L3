@@ -21,11 +21,21 @@ public static class TestData{
             + "<Int32>3</Int32>"
         + "</List>";
 
-    public static string @chess
+    public static string @chessPiece
         = "<ChessPiece>"
             + "<name t='String'>Rook</name>"
             + "<value t='Int32'>5</value>"
         + "</ChessPiece>";
+
+    public static string @badChessPiece
+        = "<ChessPiece>"
+            + "<name t='String'>Rook</name>"
+            + "<score t='Int32'>5</score>"
+        + "</ChessPiece>";
+
+    public static string @badXML
+        = "<ChessPiece>"
+        + "</Pawn>";
 
     public static string @param =
         "<Parameter>"

@@ -5,16 +5,10 @@ namespace Activ.Data{
 public abstract class Model : ScriptableObject,
                               ISerializationCallbackReceiver{
 
-    public string xml;
+    [SerializeField, HideInInspector] string xml;
 
     public void OnBeforeSerialize(){
         xml = XmlWriter.Write(this);
-        Debug.Log("XML VIEW:\n" + xml);
-    }
-
-    public void OnAfterSerialize(){
-        Debug.Log($"After serializing {this}");
-        xml = null;
     }
 
     public void OnAfterDeserialize(){

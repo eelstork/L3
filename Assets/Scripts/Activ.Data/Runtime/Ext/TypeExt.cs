@@ -6,7 +6,7 @@ public static class TypeExt{
     public static Type FieldType(this Type self, string fieldName){
         var field = self.GetField(fieldName);
         if(field == null) throw new InvOp(
-            $"{self.Name}/{fieldName} not found"
+            $"No [{fieldName}] field in type [{self.Name}]"
         );
         return field.FieldType;
     }

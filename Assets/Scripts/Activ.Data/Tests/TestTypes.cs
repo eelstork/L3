@@ -15,6 +15,9 @@ namespace Activ.XML.TestTypes{
             this.value = value;
         }
 
+        override public string ToString()
+        => $"ChessPiece{{name: {name} value: {value}}}";
+
     }
 
 }
