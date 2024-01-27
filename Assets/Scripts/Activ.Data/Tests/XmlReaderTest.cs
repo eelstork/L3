@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework; using UnityEngine;
 using Activ.XML; using Activ.XML.TestTypes;
-using static Activ.XML.XmlReader;
+using static Activ.XML.Xml;
 using static Activ.XML.XmlWriter;
 using static Activ.XML.TestData;
 

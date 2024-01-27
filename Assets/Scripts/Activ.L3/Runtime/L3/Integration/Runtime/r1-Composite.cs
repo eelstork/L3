@@ -8,7 +8,7 @@ namespace R1{
 public static class Composite{
 
     // TODO BT style composites not implemented
-    public static object Step(Co co, Script cx)
+    public static object Step(Co co, Context cx)
     => co.type switch{
         block => Block(co, cx),
         sel => Sel(co, cx),
@@ -17,13 +17,13 @@ public static class Composite{
         _ => throw new InvOp($"Unknown composite: {co.type}")
     };
 
-    public static object Block(Co co, Script cx){
+    public static object Block(Co co, Context cx){
         cx.Log("blk/" + co);
         foreach(var k in co.nodes) cx.Step(k as Node);
         return null;
     }
 
-    public static object Sel(Co co, Script cx){
+    public static object Sel(Co co, Context cx){
         cx.Log("sel/" + co);
         object val = null;
         foreach(var k in co.nodes){
@@ -35,7 +35,7 @@ public static class Composite{
         return val;
     }
 
-    public static object Seq(Co co, Script cx){
+    public static object Seq(Co co, Context cx){
         cx.Log("seq/" + co);
         object val = null;
         foreach(var k in co.nodes){
@@ -46,7 +46,7 @@ public static class Composite{
         return val;
     }
 
-    public static object Act(Co co, Script cx){
+    public static object Act(Co co, Context cx){
         cx.Log("act/" + co);
         object val = null;
         foreach(var k in co.nodes){

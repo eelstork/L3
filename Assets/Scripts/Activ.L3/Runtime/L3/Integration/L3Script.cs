@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Writer = Activ.XML.XmlWriter;
-using Reader = Activ.XML.XmlReader;
+using Reader = Activ.XML.Xml;
 
 namespace L3{
-[CreateAssetMenu(fileName = "Unit.asset", menuName = "L3/Unit")]
-public class Unit : ScriptableObject, ISerializationCallbackReceiver{
+[CreateAssetMenu(fileName = "L3Script.asset", menuName = "L3 Script")]
+public class L3Script : ScriptableObject, ISerializationCallbackReceiver{
 
-    public Composite value = new Composite();
+    public Unit value = new Unit();
     public string xml;
 
     public void OnBeforeSerialize(){
@@ -25,8 +25,8 @@ public class Unit : ScriptableObject, ISerializationCallbackReceiver{
     }
 
     public void OnAfterDeserialize(){
-        var node = Reader.Read(xml);
-        this.value = node as Composite;
+        this.value = Reader.Read<Unit>(xml);
+        //this.value = node as Unit;
         xml = null;
     }
 

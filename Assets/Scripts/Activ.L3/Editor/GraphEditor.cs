@@ -7,7 +7,7 @@ using L3;
 public class GraphEditor : EditorWindow{
 
     GUIStyle nodeStyle;
-    public Unit target;
+    public L3Script target;
     public static GraphEditor instance;
 
     [MenuItem("Window/Graph Editor")]
@@ -17,8 +17,8 @@ public class GraphEditor : EditorWindow{
     void OnGUI(){
         CreateStyles();
         target = EGL.ObjectField(
-            "Unit", target, typeof(Unit), allowSceneObjects: false
-        ) as L3.Unit;
+            "Script", target, typeof(L3Script), allowSceneObjects: false
+        ) as L3Script;
         if(target == null) return;
         Draw(target.value, prefix: null, depth: 0, out bool _);
     }

@@ -5,7 +5,7 @@ using L3;
 namespace R1{
 public static class Var{
 
-    public static object Resolve(L3.Var @var, Script cx){
+    public static object Resolve(L3.Var @var, Context cx){
         cx.Log("var/" + @var);
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
@@ -26,7 +26,7 @@ public static class Var{
         return new L3.Object(value);
     }
 
-    static FieldInfo ResolveCsVar(string name, Script context)
+    static FieldInfo ResolveCsVar(string name, Context context)
     => context.GetType().GetField(name);
     //?? context.GetType().GetProperty(name);
 

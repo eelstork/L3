@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ada74cbb1134685b9211272ca4dbc6, type: 3}
   m_Name: Ability
   m_EditorClassIdentifier: 
-  xml: <Ability><elemental t="String">Water</elemental><score t="Int32">0</score></Ability>
-  elemental: Water
+  ignoreReadErrors: 0
+  readError: 
+  xml: <Ability><element t="String">Water</element><score t="Int32">0</score></Ability>
+  element: Water
   score: 0

@@ -11,5 +11,4 @@ public abstract class Branch : Node{
     public abstract void AddChild(Node arg);
     public abstract void DeleteChild(Node arg);
 
-
 }}

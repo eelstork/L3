@@ -4,7 +4,7 @@ using static UnityEngine.Debug;
 namespace L3{
 public static class CSharp{
 
-    public static object Invoke(Method method, Scope args, Script cx){
+    public static object Invoke(Method method, Scope args, Context cx){
         Log($"CALLING {method.Name}");
         var _args = args.Unwrap();
         int i = 0; foreach(var k in _args){

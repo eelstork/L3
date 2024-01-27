@@ -7,7 +7,9 @@ public class Home : Task{
     public float speed = 2f;
     Transform self;
 
-    public Home() => target = Random.insideUnitSphere * 5f;
+    public Home(){
+        target = Random.insideUnitSphere * 5f;
+    }
 
     public bool Exe(Transform transform){
         self = transform;

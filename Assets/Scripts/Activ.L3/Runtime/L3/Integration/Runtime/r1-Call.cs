@@ -6,7 +6,7 @@ namespace R1{
 public static class Call{
 
     public static object Invoke(
-        L3.Call ca, Scope scope, Script cx
+        L3.Call ca, Scope scope, Context cx
     ){
         cx.Log("call/" + ca);
         // 1. Find the wanted function,
@@ -42,7 +42,7 @@ public static class Call{
         }
     }
 
-    static MethodInfo ResolveCsFunc(string name, Script context)
+    static MethodInfo ResolveCsFunc(string name, Context context)
     => context.GetType().GetMethod(name);
 
 }}

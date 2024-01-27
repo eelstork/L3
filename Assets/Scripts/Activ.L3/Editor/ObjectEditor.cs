@@ -60,7 +60,7 @@ public class ObjectInspector{
 
     void OnGUI(object arg, Field field, bool hz){
         var value = field.GetValue(arg); var name = field.Name;
-        if(value.GetType().IsEnum){
+        if(field.FieldType.IsEnum){
             EditEnum(arg, field, value as Enum, hz);
         }else switch(value){
             case bool @bool:

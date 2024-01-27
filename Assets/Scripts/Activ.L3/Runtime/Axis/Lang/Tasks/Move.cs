@@ -5,7 +5,7 @@ public class Move : Task{
 
     public v3 dir;
     public v3? target = null;
-    public float speed = 1f;
+    public float speed = 4f;
     Transform self;
 
     public Move(){
@@ -19,22 +19,20 @@ public class Move : Task{
 
     public bool Exe(Transform transform){
         self = transform;
-        if(target == null) target = transform.position + dir;
+        if(target == null){
+            target = transform.position + dir * 3f;
+        }
         var P = target.Value;
         var pos = self.position;
         if(P == self.position){
             target = null; return true;
         }
         //
-        var vec = (P - self.position);
-        var dist = vec.magnitude;
-        var step = Time.deltaTime * speed;
-        if(step > dist){
-            self.position = pos; target = null; return true; 
-        }
-        var u = dir.normalized * step;
-        self.position += u;
-        return false;
+        bool didComplete = self.MoveTo(P, speed, out bool didFail);
+        if(didFail || didComplete){
+            target = null;
+            return true;
+        }else return false;
     }
 
 }
