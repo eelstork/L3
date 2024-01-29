@@ -17,6 +17,10 @@ public partial class Unit : AbstractBranch<Node>{
      }
 
      [EditorAction]
+     public void AddCall()
+     => AddChild(new Call());
+
+     [EditorAction]
      public void AddField()
      => AddChild(new Field());
 

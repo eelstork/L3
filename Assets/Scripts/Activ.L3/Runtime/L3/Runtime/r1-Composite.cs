@@ -17,6 +17,7 @@ public static class Composite{
         block => Block(co, cx),
         sel => Sel(co, cx),
         seq => Seq(co, cx),
+        sum => Sum(co, cx),
         _ => throw new InvOp($"Unknown composite: {co.type}")
     };
 
@@ -45,16 +46,16 @@ public static class Composite{
     public static object Assign(Co co, Context cx){
         cx.Log("assign/" + co);
         var n = co.nodes.Count;
-        Node val = null;
+        object val = null;
         for(int i = n - 1; i >= 0; i--){
             var next = cx.Step(co.nodes[i] as Node);
             if(val != null){
-                Assign((Node)val, (Node)next);
+                Assign(val, (Node)next);
             }
-            val = (Node) next;
+            val = next;
         }
         return val;
-        void Assign(Node value, Node @var){
+        void Assign(object value, Node @var){
             UnityEngine.Debug.Log($"assign {value} to {@var}");
             var assignable = (Assignable)@var;
             assignable.Assign(value);
@@ -82,6 +83,16 @@ public static class Composite{
             if(val == (object)@cont) return val;
         }
         return val;
+    }
+
+    public static object Sum(Co co, Context cx){
+        cx.Log("seq/" + co);
+        object x = null;
+        foreach(var k in co.nodes){
+            object y = cx.Step(k as Node);
+            x = R1.Op.Sum.Add(x, y);
+        }
+        return x;
     }
 
     public static object Act(Co co, Context cx){

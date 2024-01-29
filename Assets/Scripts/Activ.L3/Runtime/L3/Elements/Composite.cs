@@ -4,7 +4,7 @@ using System.Linq;
 namespace L3{
 public partial class Composite : Branch, Expression{
 
-    public enum Type{block, sel, seq, act, assign, access};
+    public enum Type{block, sel, seq, act, assign, access, sum};
 
     public Type type;
     public string name;
@@ -67,6 +67,7 @@ public partial class Composite : Branch, Expression{
          Type.act => "%% ",
          Type.assign => "= ",
          Type.access => ". ",
+         Type.sum => "+ ",
          _ => null
      };
 

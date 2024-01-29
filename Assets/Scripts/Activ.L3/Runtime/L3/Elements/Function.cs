@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 namespace L3{
-public partial class Function : Branch, Dec{
+public partial class Function : Branch, Dec, Named{
 
     public string type = "void";
     public string name = "";
@@ -12,6 +12,8 @@ public partial class Function : Branch, Dec{
     public Function(){
         name = "Bar";
     }
+
+    string Named.name => name;
 
     string Dec.name => name;
 

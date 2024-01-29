@@ -2,6 +2,7 @@ using System.Reflection;
 using InvOp = System.InvalidOperationException;
 using L3;
 using System.Linq;
+using UnityEngine;
 
 namespace R1{
 public static class Call{
@@ -12,7 +13,7 @@ public static class Call{
     ){
         cx.Log("call/" + ca);
         var name = ca.function;
-        // 1. Find the wanted function,
+        // Find the wanted function,
         var node = scope?.Find(name);
         MethodInfo[] cs = null;
         if(node == null){
@@ -25,19 +26,17 @@ public static class Call{
                 );
             }
         }
-        // 2. Resolve args to sub-scope
+        // Resolve args to sub-scope
         var sub = new Scope();
         foreach(var arg in ca.args){
             sub.Add(cx.Step(arg as Node) as Node);
         }
-        // 3.2a If a C# binding, call the native function
-        if(cs != null && cs.Length > 0){
+        if(cs != null && cs.Length > 0){  // (C#) native call
             return CSharp.Invoke(cs, sub, target ?? cx);
-        }
-        // 3.2b Otherwise Eval an L3 function in-scope.
-        else{
+        }else{                            // L3 call
             // Push the subscope
             cx.stack.Push( sub );
+            Debug.Log($"CALL simple function: [{node}]");
             var output = cx.Step(node);
             // Exit subscope and return the output
             cx.stack.Pop();

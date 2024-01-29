@@ -23,7 +23,7 @@ public class L3Component : MonoBehaviour, Context{
             Unit      un => R1.Unit.Step(un, this),
             Field     fi => R1.Field.Step(fi, this),
             Dec       dc => R1.Dec.Step(dc, this),
-            _            => throw new InvOp($"Unknown {exp}"),
+            _            => throw new InvOp($"Unknown construct [{exp}]"),
         };
         record.Exit(exp, value: x);
         return x;

@@ -12,16 +12,17 @@ public static class Var{
         var node = cx.scope?.Find(name);
         if(node != null) return node;
         // 2. Find the wanted variable in native object scope
-        FieldInfo cs = null;
-        cs = ResolveCsVar(name, cx);
-        if(cs == null){
-            if(@var.opt){
-                return false;
-            }else throw new InvOp(
-                $"No C# field or property matching {name}"
-            );
-        }
-        return new L3.Object(cs, cx);
+        var cs = ResolveCsVar(name, cx);
+        if(cs != null) return new L3.Object(cs, cx);
+        //
+        var prop = cx.GetType().GetProperty(name);
+        if(prop != null) return new L3.BoundProp(prop, cx);
+        //
+        if(@var.opt){
+            return false;
+        }else throw new InvOp(
+            $"No field or property matching {name}"
+        );
     }
 
     static FieldInfo ResolveCsVar(string name, Context context)

@@ -348,6 +348,10 @@ MonoBehaviour:
   main: {fileID: 11400000, guid: 15b43cc53f855411bb32b94452a0850b, type: 2}
   onDemand: 1
   runOnce: 0
+  index: 17
+  range:
+    min: 222
+    max: 222
   target: {fileID: 1917624427}
 --- !u!1 &1917624423
 GameObject:
