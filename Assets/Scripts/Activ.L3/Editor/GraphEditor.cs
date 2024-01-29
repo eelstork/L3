@@ -27,12 +27,16 @@ public class GraphEditor : EditorWindow{
         DrawNode(node, prefix, depth, out del);
         switch(node){
             case Branch branch:
-                if(branch.children == null) return;
+                var children = branch.children;
+                if(children == null) return;
                 prefix = branch.childPrefix;
                 Node toDelete = null;
-                foreach(var child in branch.children){
+                for(var i = 0; i < children.Length; i++){
+                    var child = children[i];
                     Draw(
-                        child, branch.childPrefix, depth + 1,
+                        child,
+                        i == 0 ? null : branch.childPrefix,
+                        depth + 1,
                         out bool del1
                     );
                     if(del1) toDelete = child;
