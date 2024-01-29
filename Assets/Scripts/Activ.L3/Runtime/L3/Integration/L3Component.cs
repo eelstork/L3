@@ -17,10 +17,12 @@ public class L3Component : MonoBehaviour, Context{
         record.Enter(exp);
         var x = exp switch{
             Composite co => R1.Composite.Step(co, this),
-            Call      ca => R1.Call.Invoke(ca, scope, this),
-            Function  fu => R1.Func.Step(fu, this),
+            Call      ca => R1.Call.Invoke(ca, scope, this, null),
             Literal   li => li,
             Var       va => R1.Var.Resolve(va, this),
+            Unit      un => R1.Unit.Step(un, this),
+            Field     fi => R1.Field.Step(fi, this),
+            Dec       dc => R1.Dec.Step(dc, this),
             _            => throw new InvOp($"Unknown {exp}"),
         };
         record.Exit(exp, value: x);
@@ -41,10 +43,24 @@ public class L3Component : MonoBehaviour, Context{
 
     // TEMP FOR TESTING ONLY ----------------------------------------
 
+    public int index = 2;
+    public Range range = new ();
+
     public Transform target;
 
     public void MoveTo(Transform target){
         //Log($"Move to [{target}]");
+    }
+
+    [System.Serializable]
+    public class Range{
+        public int min = -5, max = 5;
+        public void Reset(){
+            min = -1; max = 1;
+        }
+        public void Reset(float w){
+            min = max = (int) w;
+        }
     }
 
     //public void Log(object arg)

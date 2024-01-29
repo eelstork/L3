@@ -4,12 +4,15 @@ using System.Linq;
 namespace L3{
 public partial class Composite : Branch, Expression{
 
-    public enum Type{block, sel, seq, act};
+    public enum Type{block, sel, seq, act, assign, access};
 
     public Type type;
+    public string name;
 
     [Hierarchy]
     public List<Expression> nodes;
+
+    public void Delete(){}
 
     [EditorAction]
     public void AddCall(){
@@ -17,7 +20,29 @@ public partial class Composite : Branch, Expression{
         nodes.Add(new Call());
     }
 
-    public void Delete(){}
+    [EditorAction]
+    public void AddComposite(){
+        if(nodes == null) nodes = new ();
+        nodes.Add(new Composite());
+    }
+
+    [EditorAction]
+    public void AddVar(){
+        if(nodes == null) nodes = new ();
+        nodes.Add(new Var());
+    }
+
+    [EditorAction]
+    public void AddNum(){
+        if(nodes == null) nodes = new ();
+        nodes.Add(new Number());
+    }
+
+    [EditorAction]
+    public void AddField(){
+        if(nodes == null) nodes = new ();
+        nodes.Add(new Field());
+    }
 
     override public string TFormat()
     => type + ": " + name;
@@ -40,6 +65,8 @@ public partial class Composite : Branch, Expression{
          Type.sel => "|| ",
          Type.seq => "&& ",
          Type.act => "%% ",
+         Type.assign => "= ",
+         Type.access => ". ",
          _ => null
      };
 

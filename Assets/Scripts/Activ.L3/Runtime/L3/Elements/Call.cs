@@ -4,6 +4,7 @@ using System.Linq;
 namespace L3{
 public partial class Call : Branch, Expression{
 
+    public string function = "";
     public bool opt = false;
 
     [Hierarchy]
@@ -19,7 +20,7 @@ public partial class Call : Branch, Expression{
     public void AddVar() => args.Add(new Var());
 
     override public string TFormat()
-    => (opt ? "opt " : null) + name + "(...)";
+    => (opt ? "opt " : null) + function + "(...)";
 
     override public Node[] children
     => args == null ? null

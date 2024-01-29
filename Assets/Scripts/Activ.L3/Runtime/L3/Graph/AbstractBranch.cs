@@ -7,6 +7,11 @@ public partial class AbstractBranch<T> : Branch{
     [Hierarchy]
     public List<T> nodes;
 
+    protected List<T> rnodes{get{
+        if(nodes == null) nodes = new ();
+        return nodes;
+    }}
+
     override public Node[] children
     => nodes == null ? null
      : (from x in nodes select x as Node).ToArray();

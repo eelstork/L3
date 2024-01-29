@@ -2,34 +2,23 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace L3{
-public partial class Unit : Branch{
+public partial class Unit : AbstractBranch<Node>{
 
-    public List<string> @using;
+    public string @namespace = "";
+    public List<string> _using;
 
-    [Hierarchy]
-    public List<Expression> nodes;
-
-    override public string TFormat() => "Unit";
-
-    override public Node[] children
-    => nodes == null ? null
-     : (from x in nodes select x as Node).ToArray();
-
-     override public void DeleteChild(Node child){
-         if(nodes == null) return;
-         nodes.Remove((Expression)child);
-     }
-
-     override public void AddChild(Node child){
-         if(nodes == null) nodes = new ();
-         nodes.Add((Expression)child);
-     }
+    override public string TFormat()
+    => $"namespace: {@namespace}";
 
      [EditorAction]
      public void AddUsing(){
-         if(@using == null) @using = new ();
-         @using.Add("USING...");
+         if(_using == null) _using = new ();
+         _using.Add("USING...");
      }
+
+     [EditorAction]
+     public void AddField()
+     => AddChild(new Field());
 
      [EditorAction]
      public void AddClass()

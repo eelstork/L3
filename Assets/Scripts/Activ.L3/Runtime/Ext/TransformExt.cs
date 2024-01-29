@@ -19,6 +19,11 @@ public static class TransformExt{
                 didFail = true;
                 return true;
             }
+            var vec1 = new v3(vec.x, 0f, vec.z);
+            if(!self.HasLOS(vec1, 0.7f)){
+                if(vec.y > 0f) vec = v3.up;
+                else vec = v3.down;
+            }
             var u = vec.normalized * step;
             self.position += u;
             return false;

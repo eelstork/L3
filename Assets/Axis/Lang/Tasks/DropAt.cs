@@ -12,7 +12,7 @@ public class DropAt : Task{
     public bool Exe(Transform self){
         if(self.childCount == 0) return true;
         //if(target == null){
-            target = Nearest(self);
+        target = Nearest(self);
         //}
         var P = target.position + v3.up * 2f;
         if(self.MoveTo(P, speed, out bool blocked)){

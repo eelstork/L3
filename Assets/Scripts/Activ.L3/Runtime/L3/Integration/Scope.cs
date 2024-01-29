@@ -10,7 +10,14 @@ public class Scope{
         nodes.Add(arg);
     }
 
-    public Node Find(string name) => null;
+    public Node Find(string name){
+        foreach(var x in nodes){
+            var named = x as Named;
+            if(named == null) continue;
+            if(named.name == name) return x;
+        }
+        return null;
+    }
 
     public object[] Unwrap()
     => (from node in nodes select Unwrap(node)).ToArray();

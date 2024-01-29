@@ -21,9 +21,7 @@ public static class Var{
                 $"No C# field or property matching {name}"
             );
         }
-        var value = cs.GetValue(cx);
-        UnityEngine.Debug.Log($"Var returns {value}");
-        return new L3.Object(value);
+        return new L3.Object(cs, cx);
     }
 
     static FieldInfo ResolveCsVar(string name, Context context)

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 
 namespace L3{
-public partial class Function : Branch{
+public partial class Function : Branch, Dec{
 
+    public string type = "void";
+    public string name = "";
     public List<Parameter> parameters;
     [Hierarchy]
     public Expression expression;
@@ -10,6 +12,8 @@ public partial class Function : Branch{
     public Function(){
         name = "Bar";
     }
+
+    string Dec.name => name;
 
     override public Node[] children
     => expression == null ? null : new Node[]{ expression as Node };
@@ -25,7 +29,13 @@ public partial class Function : Branch{
         this.name = name;
     }
 
-    override public string TFormat() => "func " + name + "(...)";
+    override public string TFormat(){
+        var str = type + " " + name;
+        if(parameters == null)
+            return str + "()";
+        else
+            return str + "(" + string.Join(", ", parameters) + ")";
+    }
 
     [EditorAction]
     public void AddParameter(){

@@ -23,7 +23,9 @@ public static class Types{
             var name = new AssemblyName(ass.FullName).Name;
             if(Skip(name)) continue;
             foreach(var type in ass.GetTypes()){
-                types[type.Name] = type;
+                if(type.HasDefaultConstructor()){
+                    types[type.Name] = type;
+                }
             }
         }
     }

@@ -9,4 +9,8 @@ public class Parameter{
         name = "NAME";
     }
 
+    override public string ToString(){
+        return type + " " + name;
+    }
+
 }}

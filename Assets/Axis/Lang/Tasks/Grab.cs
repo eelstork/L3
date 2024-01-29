@@ -7,8 +7,7 @@ public class Grab : Task{
     public float speed = 1f;
     Transform self;
 
-    public Grab(){
-    }
+    public Grab(){}
 
     public bool Exe(Transform self){
         if(self.childCount > 0) return true;
@@ -34,7 +33,7 @@ public class Grab : Task{
     }
 
     bool Collect(Transform self){
-        Debug.Log("Collecting", self);
+        //ebug.Log("Collecting", self);
         //Debug.Break();
         target.parent = self;
         var rb = target.GetComponent<Rigidbody>();
@@ -47,7 +46,12 @@ public class Grab : Task{
         Transform @sel = null;
         var D = float.MaxValue;
         foreach(var x in candidates){
-            if(x.transform.parent != null) continue;
+            if(x.transform.parent != null)continue;
+            if(!x.transform.HasLOS(v3.up, 0.6f)){
+                //Debug.Log("No LOS", x);
+                //Debug.Break();
+                continue;
+            }
             var d = v3.Distance(x.transform.position, self.position);
             if(d < D){
                 @sel = x.transform;

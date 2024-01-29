@@ -3,6 +3,17 @@ using InvOp = System.InvalidOperationException;
 
 public static class TypeExt{
 
+    public static bool HasDefaultConstructor(this Type self){
+        ConstructorInfo[] constructors = self.GetConstructors();
+        foreach (ConstructorInfo constructor in constructors){
+            if (constructor.GetParameters().Length == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Type FieldType(this Type self, string fieldName){
         var field = self.GetField(fieldName);
         if(field == null) throw new InvOp(

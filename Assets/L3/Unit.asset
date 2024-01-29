@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d23ea66c8d46849d52da54f906bb7, type: 3}
   m_Name: Unit
   m_EditorClassIdentifier: 
-  xml: <Unit><expanded t="Boolean">False</expanded><name t="String">UNIT</name></Unit>
+  xml: <Unit><namespace t="String"></namespace><expanded t="Boolean">False</expanded></Unit>
