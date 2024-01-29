@@ -44,6 +44,12 @@ public partial class Composite : Branch, Expression{
         nodes.Add(new Field());
     }
 
+    [EditorAction]
+    public void AddNew(){
+        if(nodes == null) nodes = new ();
+        nodes.Add(new New());
+    }
+
     override public string TFormat()
     => type + ": " + name;
 

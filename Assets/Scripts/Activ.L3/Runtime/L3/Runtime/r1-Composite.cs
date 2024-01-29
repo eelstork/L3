@@ -32,9 +32,13 @@ public static class Composite{
         object prev = null, val = null;
         foreach(var k in co.nodes){
             if(prev != null){
-                Debug.Log($"Access {prev}");
-                val = ((Accessible)prev).Find(k as Node, cx);
-                prev = val;
+                if(prev is Accessible){
+                    Debug.Log($"Access {prev}");
+                    val = ((Accessible)prev).Find(k as Node, cx);
+                    prev = val;
+                }else{
+                    throw new InvOp($"{prev} is not Accessible");
+                }
             }else{
                 val = cx.Step(k as Node);
                 prev = val;
@@ -50,15 +54,18 @@ public static class Composite{
         for(int i = n - 1; i >= 0; i--){
             var next = cx.Step(co.nodes[i] as Node);
             if(val != null){
-                Assign(val, (Node)next);
+                if(next is Assignable){
+                    Assign(val, (Assignable)next);
+                }else{
+                    throw new InvOp($"{next} is not assignable");
+                }
             }
             val = next;
         }
         return val;
-        void Assign(object value, Node @var){
+        void Assign(object value, Assignable @var){
             UnityEngine.Debug.Log($"assign {value} to {@var}");
-            var assignable = (Assignable)@var;
-            assignable.Assign(value);
+            @var.Assign(value);
         }
     }
 

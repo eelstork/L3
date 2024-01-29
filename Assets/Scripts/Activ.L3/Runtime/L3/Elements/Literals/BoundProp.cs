@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace L3{
 public partial class BoundProp : Node, Expression, Assignable, Literal,
-                              Accessible{
+                                 Accessible{
 
     PropertyInfo prop;
     object owner;

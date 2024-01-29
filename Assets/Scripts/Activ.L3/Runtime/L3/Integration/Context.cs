@@ -9,6 +9,10 @@ public interface Context{
 
     object Step(Node node);
 
+    object Step(Node node, HashSet<Node> deps);
+
+    object Instantiate(Class clss);
+
     void Log(string arg)
     => UnityEngine.Debug.Log(arg);
 

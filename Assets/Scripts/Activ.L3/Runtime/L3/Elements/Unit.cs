@@ -4,16 +4,15 @@ using System.Linq;
 namespace L3{
 public partial class Unit : AbstractBranch<Node>{
 
-    public string @namespace = "";
-    public List<string> _using;
+    public string ns = "";
+    public string deps;
 
     override public string TFormat()
-    => $"namespace: {@namespace}";
+    => $"namespace: {ns}";
 
      [EditorAction]
      public void AddUsing(){
-         if(_using == null) _using = new ();
-         _using.Add("USING...");
+         if(deps == null) deps = "";
      }
 
      [EditorAction]
@@ -33,7 +32,15 @@ public partial class Unit : AbstractBranch<Node>{
      => AddChild(new Function());
 
      [EditorAction]
+     public void AddNew()
+     => AddChild(new New());
+
+     [EditorAction]
      public void AddComposite()
      => AddChild(new Composite());
+
+     override public string ToString(){
+         return $"Unit (ns:{ns})";
+     }
 
 }}

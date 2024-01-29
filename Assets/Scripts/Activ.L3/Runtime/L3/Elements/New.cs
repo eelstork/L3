@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace L3{
-public partial class Call : Branch, Expression{
+public partial class New : Branch, Expression{
 
-    public string function = "";
+    public string type = "";
     public bool opt = false;
 
     [Hierarchy]
@@ -19,11 +19,8 @@ public partial class Call : Branch, Expression{
     [EditorAction]
     public void AddVar() => args.Add(new Var());
 
-    [EditorAction]
-    public void AddCall() => args.Add(new Call());
-
     override public string TFormat()
-    => (opt ? "opt " : null) + function + "(...)";
+    => (opt ? "opt " : null) + "new " +  type + "(...)";
 
     override public Node[] children
     => args == null ? null

@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 211d23ea66c8d46849d52da54f906bb7, type: 3}
   m_Name: Unit
   m_EditorClassIdentifier: 
-  xml: <Unit><namespace t="String"></namespace><nodes t="List"><Composite><type t="Type">assign</type><nodes
-    t="List"><Composite><type t="Type">access</type><nodes t="List"><Var><value t="String">transform</value><opt
-    t="Boolean">False</opt></Var><Var><value t="String">position</value><opt t="Boolean">False</opt></Var></nodes><expanded
-    t="Boolean">False</expanded></Composite><Composite><type t="Type">sum</type><nodes
-    t="List"><Composite><type t="Type">access</type><nodes t="List"><Var><value t="String">transform</value><opt
-    t="Boolean">False</opt></Var><Var><value t="String">position</value><opt t="Boolean">False</opt></Var></nodes><expanded
-    t="Boolean">False</expanded></Composite><Number><value t="Single">1</value></Number></nodes><expanded
-    t="Boolean">False</expanded></Composite></nodes><expanded t="Boolean">False</expanded></Composite></nodes><expanded
+  xml: <Unit><ns t="String">Axis</ns><deps t="String">General</deps><nodes t="List"><Call><function
+    t="String">Log</function><opt t="Boolean">False</opt><args t="List"><Call><function
+    t="String">dt</function><opt t="Boolean">False</opt><args t="List" /><expanded
+    t="Boolean">False</expanded></Call></args><expanded t="Boolean">False</expanded></Call></nodes><expanded
     t="Boolean">False</expanded></Unit>

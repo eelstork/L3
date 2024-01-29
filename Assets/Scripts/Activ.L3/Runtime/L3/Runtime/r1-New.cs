@@ -5,21 +5,21 @@ using System.Linq;
 using UnityEngine;
 
 namespace R1{
-public static class Call{
+public static class New{
 
     // NOTE - target may be null
     public static object Invoke(
-        L3.Call ca, Scope scope, Context cx, object target
+        L3.New nw, Scope scope, Context cx, object target
     ){
-        cx.Log("call/" + ca);
-        var name = ca.function;
+        cx.Log("call/" + nw);
+        var name = nw.type;
         // Find the wanted function,
         var node = scope?.Find(name);
-        MethodInfo[] cs = null;
+        ConstructorInfo[] cs = null;
         if(node == null){
-            cs = ResolveCsFunc(name, target ?? cx, ca.args.Count);
+            cs = ResolveCsConstructor(name, target ?? cx, nw.args.Count);
             if(cs == null){
-                if(ca.opt){
+                if(nw.opt){
                     return false;
                 }else throw new InvOp(
                     $"No func or C# method matching {name}"
@@ -28,28 +28,26 @@ public static class Call{
         }
         // Resolve args to sub-scope
         var sub = new Scope();
-        foreach(var arg in ca.args){
+        foreach(var arg in nw.args){
             sub.Add(cx.Step(arg as Node) as Node);
         }
         if(cs != null && cs.Length > 0){  // (C#) native call
-            return CSharp.Invoke(cs, sub, target ?? cx);
+            return CSharp.Construct(cs, sub, target ?? cx);
         }else{                            // L3 call
-            if(node == null) throw new InvOp(
-                $"Function not found {ca.function}"
-            );
+            if(node == null) throw new InvOp($"No constructor for {nw.type}");
             // Push the subscope
             cx.stack.Push( sub );
-            Debug.Log($"CALL simple function: [{node}]");
-            var output = cx.Step(node);
+            Debug.Log($"CALL l3 constructor: [{node}]");
+            var output = cx.Instantiate(node as Class);
             // Exit subscope and return the output
             cx.stack.Pop();
             return output;
         }
     }
 
-    static MethodInfo[] ResolveCsFunc(
+    static ConstructorInfo[] ResolveCsConstructor(
         string name, object context, int count
-    ) => context.GetType().GetMethods()
+    ) => context.GetType().GetConstructors()
                         .Where(m => m.Name == name)
                         .Where(m => m.GetParameters().Length == count)
                         .ToArray();

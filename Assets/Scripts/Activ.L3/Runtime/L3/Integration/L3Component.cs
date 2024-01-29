@@ -13,19 +13,36 @@ public class L3Component : MonoBehaviour, Context{
 
     public Scope scope => stack.Count == 0 ? null : stack.Peek();
 
+    public object Step(Node exp, HashSet<Node> deps){
+        var x = exp switch{
+            Unit      un => R1.Unit.Step(un, this, deps),
+            _            => Step(exp)
+        };
+        return x;
+    }
+
     public object Step(Node exp){
         record.Enter(exp);
         var x = exp switch{
             Composite co => R1.Composite.Step(co, this),
             Call      ca => R1.Call.Invoke(ca, scope, this, null),
+            New       nw => R1.New.Invoke(nw, scope, this, null),
+            Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
             Literal   li => li,
             Var       va => R1.Var.Resolve(va, this),
-            Unit      un => R1.Unit.Step(un, this),
             Field     fi => R1.Field.Step(fi, this),
             Dec       dc => R1.Dec.Step(dc, this),
             _            => throw new InvOp($"Unknown construct [{exp}]"),
         };
         record.Exit(exp, value: x);
+        return x;
+    }
+
+    public object Instantiate(Class clss){
+        record.Enter(clss);
+        Debug.Log($"INSTANTIATE {clss}");
+        object x = new R1.Obj(clss);
+        record.Exit(clss, value: x);
         return x;
     }
 

@@ -15,7 +15,11 @@ public class L3Script : ScriptableObject, ISerializationCallbackReceiver{
             Debug.LogWarning("Block is empty");
         else{
             xml = Writer.Write(value);
-            Debug.Log("XML VIEW:\n" + xml);
+            if(xml.Contains(":")){
+                Debug.LogWarning("XML contains garbage hint");
+                Debug.LogWarning("XML VIEW:\n" + xml);
+            }
+            //Debug.Log("XML VIEW:\n" + xml);
         }
     }
 
