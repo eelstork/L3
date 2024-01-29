@@ -16,10 +16,12 @@ public class GraphEditor : EditorWindow{
 
     void OnGUI(){
         CreateStyles();
+        var prevTarget = target;
         target = EGL.ObjectField(
             "Script", target, typeof(L3Script), allowSceneObjects: false
         ) as L3Script;
         if(target == null) return;
+        if(target != prevTarget) NodeEditor.Edit(target.value);
         Draw(target.value, prefix: null, depth: 0, out bool _);
     }
 

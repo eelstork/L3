@@ -10,10 +10,12 @@ public static class Unit{
         L3.Unit unit, Context cx, HashSet<Node> deps
     ){
         cx.Log("u/" + unit);
-        cx.stack.Push(new Scope());
+        // NOTE we do not enter the namespace. As a result
+        // imported objects are available
+        //cx.stack.Push(new Scope());
         ImportUnits(unit, cx, deps);
         if(unit.nodes != null)foreach(var k in unit.nodes) cx.Step(k);
-        cx.stack.Pop();
+        //cx.stack.Pop();
         return null;
     }
 

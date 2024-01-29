@@ -48,10 +48,16 @@ public class L3Component : MonoBehaviour, Context{
 
     void Update(){
         if(onDemand){
-            if(runOnce){ runOnce = false; Step(main.value); }
+            if(runOnce){ runOnce = false; Exec(main.value); }
         }else{
-            Step(main.value);
+            Exec(main.value);
         }
+    }
+
+    void Exec(Unit unit){
+        stack.Push(new ());
+        Step(unit);
+        stack.Pop();
     }
 
     // ----

@@ -55,4 +55,6 @@ public partial class Function : Branch, Dec, Named{
         expression = new Call();
     }
 
+    override public string ToString() => TFormat();
+
 }}
