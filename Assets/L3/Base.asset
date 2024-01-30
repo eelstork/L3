@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreReadErrors: 1
   readError: 
-  xml: <L3Script><value t="Unit"><ns t="String">General</ns><expanded t="Boolean">False</expanded></value></L3Script>
+  xml: <L3Script><value t="Unit"><ns t="String">General</ns><nodes t="List"><Function><type
+    t="String">void</type><name t="String">Move</name><expanded t="Boolean">False</expanded></Function></nodes><expanded
+    t="Boolean">False</expanded></value></L3Script>

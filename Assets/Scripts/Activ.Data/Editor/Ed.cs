@@ -12,7 +12,7 @@ public class Ed{
 
     public void OnGUI(Object arg){
         current = arg;
-        Traverse(new Field(arg), Visit, Children);
+        Traverse(new Field(arg), Children, Visit);
         current = null;
     }
 

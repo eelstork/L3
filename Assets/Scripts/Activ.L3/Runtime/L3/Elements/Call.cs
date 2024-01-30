@@ -35,4 +35,6 @@ public partial class Call : Branch, Expression{
      override public void AddChild(Node child)
      => args.Add((Expression)child);
 
+     override public string ToString() => TFormat();
+
 }}

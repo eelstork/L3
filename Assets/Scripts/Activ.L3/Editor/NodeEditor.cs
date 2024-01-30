@@ -3,13 +3,14 @@ using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
 using L3;
 
+
 public class NodeEditor : EditorWindow{
 
     Node selection;
     static NodeEditor instance;
     ObjectInspector inspector;
 
-    [MenuItem("Window/Node Editor")]
+    [MenuItem("Window/L3/Node Editor")]
     public static NodeEditor ShowWindow()
     => instance = GetWindow<NodeEditor>("L3 Node Inspector");
 

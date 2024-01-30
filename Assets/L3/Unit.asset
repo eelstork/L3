@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreReadErrors: 0
   readError: 
-  xml: <L3Script><value t="Unit"><ns t="String">Axis</ns><expanded t="Boolean">False</expanded></value></L3Script>
+  xml: <L3Script><value t="Unit"><ns t="String">Axis</ns><deps t="String">General</deps><nodes
+    t="List"><Call><function t="String">Move</function><opt t="Boolean">False</opt><args
+    t="List" /><expanded t="Boolean">False</expanded></Call></nodes><expanded t="Boolean">False</expanded></value></L3Script>

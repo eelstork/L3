@@ -10,7 +10,7 @@ public class GraphEditor : EditorWindow{
     public L3Script target;
     public static GraphEditor instance;
 
-    [MenuItem("Window/Graph Editor")]
+    [MenuItem("Window/L3/Graph Editor")]
     public static GraphEditor ShowWindow()
     => instance = GetWindow<GraphEditor>("L3 Graph");
 

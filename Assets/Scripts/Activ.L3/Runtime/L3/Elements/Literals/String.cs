@@ -7,4 +7,6 @@ public partial class LString : Node, Expression, Literal{
 
     override public string TFormat() => "\"" + value + "\"";
 
+    override public string ToString() => TFormat();
+
 }}

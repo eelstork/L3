@@ -55,6 +55,7 @@ public class L3Component : MonoBehaviour, Context{
     }
 
     void Exec(Unit unit){
+        record.frame = null;
         stack.Push(new ());
         Step(unit);
         stack.Pop();
@@ -86,7 +87,7 @@ public class L3Component : MonoBehaviour, Context{
         }
     }
 
-    //public void Log(object arg)
-    //=> UnityEngine.Debug.Log(arg);
+    public void Log(object arg)
+    => UnityEngine.Debug.Log(arg);
 
 }}
