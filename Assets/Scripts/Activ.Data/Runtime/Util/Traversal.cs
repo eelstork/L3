@@ -1,26 +1,18 @@
-using UnityEngine;
 using System; using System.Collections.Generic;
 
 namespace Activ.Data{
 public class Traversal{
 
     public static T[] Traverse<T>(
-        T root,
-        Func<T, IEnumerable<T>> graph,
-        Action<T> visit,
-        Func<T, bool> isGoal = null,
-        int maxIter = -1
+        T root, Func<T, IEnumerable<T>> graph,
+        Action<T> visit, Func<T, bool> isGoal = null, int maxIter = -1
     ){
         var visited = new HashSet<T>();
         var parent = new Dictionary<T, T>();
-        var stack = new Stack<T>();
-        var rev = new Stack<T>();
-        visited.Add(root);
-        stack.Push(root);
-        int iter = 0;
+        var stack = new Stack<T>(); var rev = new Stack<T>();
+        visited.Add(root); stack.Push(root); var iter = 0;
         while(stack.Count > 0 && (maxIter == -1 || iter++ < maxIter)){
-            var v = stack.Pop();
-            visit(v);
+            var v = stack.Pop(); visit(v);
             if(isGoal != null && isGoal(v)){
                 int i = 0; return Path(v, ref i);
             }
@@ -29,9 +21,7 @@ public class Traversal{
                 // NOTE maybe popping is faster than iterate and clear
                 foreach(var w in rev){
                     if(visited.Contains(w)) continue;
-                    visited.Add(w);
-                    parent[w] = v;
-                    stack.Push(w);
+                    visited.Add(w); parent[w] = v; stack.Push(w);
                 }
             }
             rev.Clear();
