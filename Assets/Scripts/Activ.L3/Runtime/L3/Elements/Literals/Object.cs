@@ -49,7 +49,7 @@ public partial class Object : Node, Expression, Assignable, Literal,
         if(arg is L3.Call){
             var obj   = this.value;
             var @call  = arg as L3.Call;
-            return R1.Call.Invoke(@call, cx.scope, cx, obj);
+            return R1.Call.Invoke(@call, cx, obj);
         }
         throw new InvOp($"Cannot find {arg} in {this}");
     }

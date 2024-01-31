@@ -9,7 +9,7 @@ public static class Var{
         cx.Log("var/" + @var);
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
-        var node = cx.scope?.Find(name);
+        var node = cx.env.FindVar(name);
         if(node != null) return node;
         // 2. Find the wanted variable in native object scope
         var cs = ResolveCsVar(name, cx);

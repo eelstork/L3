@@ -15,6 +15,14 @@ public class Obj{
 
     public Class GetClass() => @class;
 
+    public Node Find(string name){
+        if(map.ContainsKey(name)){
+            return map[name] as Node;
+        }else{
+            return null;
+        }
+    }
+
     public class BoundProp : Assignable{
         string name; Obj owner;
         public BoundProp(string name, Obj owner){

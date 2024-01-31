@@ -10,10 +10,7 @@ public static class Dec{
         if(!(dec is Node)){
             throw new InvOp($"Not a node: {dec}");
         }
-        if(cx.scope == null){
-            throw new InvOp($"No current scope");            
-        }
-        cx.scope.Add(dec as Node);
+        cx.env.Def(dec as Node);
         return null;
     }
 

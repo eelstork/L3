@@ -9,12 +9,12 @@ public static class Call{
 
     // NOTE - target may be null
     public static object Invoke(
-        L3.Call ca, Scope scope, Context cx, object target
+        L3.Call ca, Context cx, object target
     ){
         cx.Log("call/" + ca);
         var name = ca.function;
         // Find the wanted function,
-        var node = scope?.Find(name);
+        var node = cx.env.FindFunction(name);
         MethodInfo[] cs = null;
         if(node == null){
             cs = ResolveCsFunc(name, target ?? cx, ca.args.Count);
@@ -38,11 +38,11 @@ public static class Call{
                 $"Function not found {ca.function}"
             );
             // Push the subscope
-            cx.stack.Push( sub );
+            cx.env.Push(sub, target);
             Debug.Log($"CALL simple function: [{node}]");
             var output = cx.Step(node);
             // Exit subscope and return the output
-            cx.stack.Pop();
+            cx.env.Pop();
             return output;
         }
     }

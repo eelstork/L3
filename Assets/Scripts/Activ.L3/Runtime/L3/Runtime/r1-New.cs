@@ -9,12 +9,12 @@ public static class New{
 
     // NOTE - target may be null
     public static object Invoke(
-        L3.New nw, Scope scope, Context cx, object target
+        L3.New nw, Context cx, object target
     ){
         cx.Log("call/" + nw);
         var name = nw.type;
         // Find the wanted function,
-        var node = scope?.Find(name);
+        var node = cx.env.FindConstructor(name);
         ConstructorInfo[] cs = null;
         if(node == null){
             cs = ResolveCsConstructor(name, target ?? cx, nw.args.Count);
@@ -36,11 +36,11 @@ public static class New{
         }else{                            // L3 call
             if(node == null) throw new InvOp($"No constructor for {nw.type}");
             // Push the subscope
-            cx.stack.Push( sub );
-            Debug.Log($"CALL l3 constructor: [{node}]");
             var output = cx.Instantiate(node as Class);
+            cx.env.Push( sub, output );
+            Debug.Log($"CALL l3 constructor: [{node}]");
             // Exit subscope and return the output
-            cx.stack.Pop();
+            cx.env.Pop();
             return output;
         }
     }

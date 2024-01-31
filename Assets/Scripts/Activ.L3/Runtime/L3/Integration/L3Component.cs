@@ -7,11 +7,15 @@ namespace L3{
 public class L3Component : MonoBehaviour, Context{
 
     public L3.L3Script main;
-    public Stack<Scope> stack = new ();
+    //public Stack<Scope> scope = new ();
+    //public Stack<Scope> stack = new ();
+    public Env env;
     public bool onDemand = true, runOnce;
     public Record record = new ();
 
-    public Scope scope => stack.Count == 0 ? null : stack.Peek();
+    //public Scope scope => stack.Count == 0 ? null : stack.Peek();
+
+    Env Context.env => env;
 
     public object Step(Node exp, HashSet<Node> deps){
         var x = exp switch{
@@ -25,8 +29,8 @@ public class L3Component : MonoBehaviour, Context{
         record.Enter(exp);
         var x = exp switch{
             Composite co => R1.Composite.Step(co, this),
-            Call      ca => R1.Call.Invoke(ca, scope, this, null),
-            New       nw => R1.New.Invoke(nw, scope, this, null),
+            Call      ca => R1.Call.Invoke(ca, this, null),
+            New       nw => R1.New.Invoke(nw, this, null),
             Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
             Literal   li => li,
             Var       va => R1.Var.Resolve(va, this),
@@ -56,14 +60,15 @@ public class L3Component : MonoBehaviour, Context{
 
     void Exec(Unit unit){
         record.frame = null;
-        stack.Push(new ());
+        if(env == null) env = new ();
+        env.Enter();
         Step(unit);
-        stack.Pop();
+        env.Exit();
     }
 
     // ----
 
-    Stack<Scope> Context.stack => stack;
+    //Stack<Scope> Context.stack => stack;
 
     // TEMP FOR TESTING ONLY ----------------------------------------
 
