@@ -1,9 +1,10 @@
 using L3;
 using InvOp = System.InvalidOperationException;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace R1{
-public class Obj{
+public class Obj : Accessible{
 
     Class @class;
     public Dictionary<string, object> map;
@@ -14,6 +15,16 @@ public class Obj{
     }
 
     public Class GetClass() => @class;
+
+    public object Find(Node arg, Context cx){
+        var @variable = (L3.Var)arg;
+        return Find(@variable.value);
+    }
+
+    public object Ref(Node arg, Context cx){
+        var @variable = (L3.Var)arg;
+        return new BoundProp(@variable.value, this);
+    }
 
     public Node Find(string name){
         if(map.ContainsKey(name)){
@@ -32,6 +43,17 @@ public class Obj{
             if(owner.map == null) owner.map = new ();
             owner.map[name] = value;
         }
+    }
+
+    override public string ToString(){
+        return @class.name + "{ " + FieldsToString() + " }";
+    }
+
+    string FieldsToString(){
+        if(map == null) return null;
+        return string.Join(
+            ", ", from kv in map select $"{kv.Key}: {kv.Value}"
+        );
     }
 
 }}

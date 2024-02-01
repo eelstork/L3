@@ -9,6 +9,8 @@ public interface Context{
 
     object Step(Node node);
 
+    object Ref(Node node);
+
     object Step(Node node, HashSet<Node> deps);
 
     object Instantiate(Class clss);

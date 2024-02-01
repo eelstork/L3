@@ -49,7 +49,7 @@ public static class Call{
                 var arg = new Arg(func.parameters[i].name, args[i]);
                 sub.Add(arg);
             }
-            cx.env.PushCall(sub, target);
+            cx.env.EnterCall(sub, target);
             //Debug.Log($"CALL simple function: [{node}]");
             var co = func.expression as Node;
             object output;
@@ -59,7 +59,7 @@ public static class Call{
                 output = null;
             }
             // Exit subscope and return the output
-            cx.env.PopCall();
+            cx.env.ExitCall();
             return output;
         }
     }

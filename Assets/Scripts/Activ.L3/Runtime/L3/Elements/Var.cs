@@ -6,4 +6,7 @@ public partial class Var : Node, Expression{
 
     override public string TFormat() => value;
 
+    override public string ToString()
+    => $"L3.Var{{{value}, opt: {opt}}}";
+
 }}

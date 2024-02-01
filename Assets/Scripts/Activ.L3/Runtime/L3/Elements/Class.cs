@@ -28,6 +28,6 @@ public class Class : AbstractBranch<Node>, Dec, Named{
     => AddChild(new Function());
 
     override public string ToString()
-    => $"class {name}";
+    => $"L3.Class{{{name}}}";
 
 }}

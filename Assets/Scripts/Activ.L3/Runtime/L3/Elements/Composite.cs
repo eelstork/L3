@@ -77,4 +77,7 @@ public partial class Composite : Branch, Expression{
          _ => null
      };
 
+     override public string ToString()
+     => $"L3.Composite{{{type}/{name}}}";
+
 }}

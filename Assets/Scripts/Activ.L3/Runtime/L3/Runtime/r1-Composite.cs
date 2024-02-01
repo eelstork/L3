@@ -8,10 +8,24 @@ using UnityEngine;
 namespace R1{
 public static class Composite{
 
+    public static object Ref(Co co, Context cx){
+        var output = co.type switch{
+            access => AccessRef(co, cx),
+            //act => Act(co, cx),
+            //assign => Assign(co, cx),
+            //block => Block(co, cx),
+            //sel => Sel(co, cx),
+            //seq => Seq(co, cx),
+            //sum => Sum(co, cx),
+            _ => throw new InvOp($"Cannot ref: {co.type}")
+        };
+        return output;
+    }
+
     // TODO BT style composites not implemented
     public static object Step(Co co, Context cx){
         var scoping = co.type != assign;
-        if(scoping) cx.env.PushBlock();
+        if(scoping) cx.env.EnterScope();
         var output = co.type switch{
             access => Access(co, cx),
             act => Act(co, cx),
@@ -22,7 +36,7 @@ public static class Composite{
             sum => Sum(co, cx),
             _ => throw new InvOp($"Unknown composite: {co.type}")
         };
-        if(scoping) cx.env.PopBlock();
+        if(scoping) cx.env.ExitScope();
         return output;
     }
 
@@ -32,44 +46,76 @@ public static class Composite{
         return null;
     }
 
-    public static object Access(Co co, Context cx){
-        cx.Log("access/" + co);
-        object prev = null, val = null;
-        foreach(var k in co.nodes){
-            if(prev != null){
-                if(prev is Accessible){
-                    Debug.Log($"Access {prev}");
-                    val = ((Accessible)prev).Find(k as Node, cx);
-                    prev = val;
-                }else{
-                    throw new InvOp($"{prev} is not Accessible");
-                }
-            }else{
-                val = cx.Step(k as Node);
-                prev = val;
+    public static object AccessRef(Co co, Context cx){
+        cx.Log("access-ref/" + co);
+        var first = co.nodes[0] as Node;
+        if(first == null){
+            throw new InvOp($"{co.nodes[0]} is not a node");
+        }
+        var X = cx.Step(first);
+        //ebug.Log($"Stepping {co.nodes[0]} yields {X}");
+        for(var i = 1; i < co.nodes.Count; i++){
+            var Y = co.nodes[i];
+            switch (Y){
+                case L3.Var @var:
+                    // TODO
+                    var X1 = X as R1.Obj;
+                    if(X1 == null) throw new InvOp($"{X} is not an R1.Obj");
+                    X = X1.Ref(@var, cx);
+                    break;
+                case L3.Call call:
+                    X = R1.Call.Invoke(call, cx, X);
+                    break;
+                default:
+                    throw new InvOp($"{Y} cannot access {X}");
             }
         }
-        return val;
+        return X;
+    }
+
+    public static object Access(Co co, Context cx){
+        cx.Log("access/" + co);
+        var X = cx.Step(co.nodes[0] as Node);
+        for(var i = 1; i < co.nodes.Count; i++){
+            var Y = co.nodes[i];
+            switch (Y){
+                case L3.Var @var:
+                    // TODO
+                    X = (X as R1.Obj).Find(@var, cx);
+                    break;
+                case L3.Call call:
+                    X = R1.Call.Invoke(call, cx, X);
+                    break;
+                default:
+                    throw new InvOp($"{Y} cannot access {X}");
+            }
+        }
+        return X;
     }
 
     public static object Assign(Co co, Context cx){
         cx.Log("assign/" + co);
         var n = co.nodes.Count;
-        object val = null;
-        for(int i = n - 1; i >= 0; i--){
-            var next = cx.Step(co.nodes[i] as Node);
-            if(val != null){
-                if(next is Assignable){
-                    Assign(val, (Assignable)next);
-                }else{
-                    throw new InvOp($"{next} is not assignable");
-                }
+        int i = n - 1;
+        object val = cx.Step(co.nodes[i] as Node);
+        for(i--; i >= 0; i--){
+            var X = co.nodes[i];
+            var X1 = X as Node;
+            if(X1 == null){
+                throw new InvOp($"{X} is not a Node");
             }
-            val = next;
+            var x = cx.Ref(X1);
+            if(x == null){
+                throw new InvOp($"Referring {X1} returned null");
+            }else if(x is Assignable){
+                Assign(val, (Assignable)x);
+            }else{
+                throw new InvOp($"{x} is not assignable");
+            }
         }
         return val;
         void Assign(object value, Assignable @var){
-            UnityEngine.Debug.Log($"assign {value} to {@var}");
+            //UnityEngine.Debug.Log($"assign {value} to {@var}");
             @var.Assign(value);
         }
     }

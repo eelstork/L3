@@ -11,7 +11,7 @@ public static class New{
     public static object Invoke(
         L3.New nw, Context cx, object target
     ){
-        cx.Log("call/" + nw);
+        cx.Log("construct/" + nw);
         var name = nw.type;
         // Find the wanted function,
         var node = cx.env.FindConstructor(name);
@@ -45,6 +45,7 @@ public static class New{
             //Debug.Log($"CALL l3 constructor: [{node}]");
             // Exit subscope and return the output
             //cx.env.Pop();
+            cx.Log($"Created custom type instance: {output}");
             return output;
         }
     }

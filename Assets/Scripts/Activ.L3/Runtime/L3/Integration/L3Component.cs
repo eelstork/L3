@@ -29,10 +29,29 @@ public class L3Component : MonoBehaviour, Context{
             New       nw => R1.New.Invoke(nw, this, null),
             Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
             Literal   li => li.value,
-            Var       va => R1.Var.Resolve(va, this),
+            L3.Var    va => R1.Var.Resolve(va, this),
+            // TODO if the below is Ref, this cannot be Step
             Field     fi => R1.Field.Step(fi, this),
             Dec       dc => R1.Dec.Step(dc, this),
             _            => throw new InvOp($"Unknown construct [{exp}]"),
+        };
+        record.Exit(exp, value: x);
+        return x;
+    }
+
+    public object Ref(Node exp){
+        record.Enter(exp);
+        var x = exp switch{
+            Composite co => R1.Composite.Ref(co, this),
+            //Call      ca => R1.Call.Invoke(ca, this, null),
+            //New       nw => R1.New.Invoke(nw, this, null),
+            //Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
+            //Literal   li => li.value,
+            L3.Var    va => va,  //R1.Var.Resolve(va, this),
+            Field     fi => R1.Field.Step(fi, this),
+            //Field     fi => R1.Field.Step(fi, this),
+            //Dec       dc => R1.Dec.Step(dc, this),
+            _            => throw new InvOp($"Cannot ref [{exp}]"),
         };
         record.Exit(exp, value: x);
         return x;

@@ -8,7 +8,7 @@ In order to enforce scoping, "env" is modified as follows:
 
 (1) When retrieving a name, all scopes are considered (iterate the stack)
 
-(2) To Env, we add the PushBlock and PopBlock methods (for now we cannot use Push and Pop because they affect the object scope)
+(2) To Env, we add the EnterScope and ExitScope methods (for now we cannot use Push and Pop because they affect the object scope)
 
 (3) Before evaluating a composite, we push a scope. After evaluating the composite, we pop the scope.
 

@@ -6,16 +6,22 @@ namespace R1{
 public static class Var{
 
     public static object Resolve(L3.Var @var, Context cx){
-        cx.Log("var/" + @var);
+        cx.Log("var/" + @var + "(resolve)");
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
         var node = cx.env.FindVar(name);
+        cx.Log($"{@var} in env as {node}");
         if(node != null){
             switch(node){
-                case Variable x: return x.value;
-                case Arg x: return x.value;
+                case Variable x:
+                    //cx.Log($"return value of {x}, {x.value}");
+                    return x.value;
+                case Arg x:
+                    return x.value;
             }
             return node;
+        }else{
+            cx.Log($"{name} not in env");
         }
         // 2. Find the wanted variable in native object scope
         var cs = ResolveCsVar(name, cx);

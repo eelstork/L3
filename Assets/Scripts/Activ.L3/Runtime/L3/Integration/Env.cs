@@ -8,9 +8,9 @@ public class Env{
 
     public void Enter(){
         store.Clear();
-        var stack = new Stack<Scope>();
-        stack.Push(new());
-        store.Push(stack);
+        var frame = new Stack<Scope>();
+        frame.Push(new());
+        store.Push(frame);
         @object = null;
     }
 
@@ -18,23 +18,19 @@ public class Env{
         store.Pop();
     }
 
-    public void PushBlock(){
-        stack.Push( new () );
-    }
+    public void EnterScope() => frame.Push( new () );
 
-    public void PopBlock(){
-        stack.Pop();
-    }
+    public void ExitScope() => frame.Pop();
 
-    public void PushCall(Scope arg, object target){
+    public void EnterCall(Scope arg, object target){
         if(target is R1.Obj) @object = target as R1.Obj;
         var stk = new Stack<Scope>();
         stk.Push(arg);
         store.Push(stk);
     }
 
-    public void PopCall(){
-        stack.Pop();
+    public void ExitCall(){
+        frame.Pop();
         @object = null;
     }
 
@@ -47,15 +43,15 @@ public class Env{
     public Node FindConstructor(string name) => Find(name);
 
     Node Find(string name){
-        foreach(var z in stack){
+        foreach(var z in frame){
             var output = z.Find(name);
             if(output != null) return output;
         }
         return @object?.Find(name);
     }
 
-    Stack<Scope> stack => store.Peek();
+    Stack<Scope> frame => store.Peek();
 
-    Scope local => stack.Peek();
+    Scope local => frame.Peek();
 
 }}

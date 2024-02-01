@@ -36,4 +36,7 @@ public partial class Variable : Node, Expression, Assignable, Named,
         throw new InvOp($"Cannot find {arg} in {this}");
     }
 
+    override public string ToString()
+    => $"L3.Variable{{owner:{owner} value:{value}}}";
+
 }}

@@ -10,4 +10,7 @@ Therefore we redefine the environment as follows:
 Stack<Stack<Scope>> store
 ```
 
-The naming is... not so good
+The naming is... a work in progress. But for now
+
+- everything that is stored, let's call it 'store'
+- a single stack of scopes, this will be referred as a 'frame'

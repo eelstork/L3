@@ -106,7 +106,7 @@ public partial class XmlReader{
 
     object Instantiate(Node node, Type bound, out Type type){
         var elem = node as Elem;
-        Log($"instantiate {node.Name}");
+        //Log($"instantiate {node.Name}");
         type = Types.Find(ReadTypeName(elem));
         if(bound == null && type == null) throw new InvOp(
             $"No matching type for <{node.Name}>"
