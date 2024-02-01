@@ -43,11 +43,23 @@ public static class Call{
             );
             // TODO - need another method to push arguments
             // Push the subscope
-            //cx.env.Push(sub, target);
+            var func = node as Function;
+            var sub = new Scope();
+            for(int i = 0; i < args.Length; i++){
+                var arg = new Arg(func.parameters[i].name, args[i]);
+                sub.Add(arg);
+            }
+            cx.env.PushCall(sub, target);
             //Debug.Log($"CALL simple function: [{node}]");
-            var output = cx.Step(node);
+            var co = func.expression as Node;
+            object output;
+            if(co != null){
+                output = cx.Step(co);
+            }else{
+                output = null;
+            }
             // Exit subscope and return the output
-            //cx.env.Pop();
+            cx.env.PopCall();
             return output;
         }
     }

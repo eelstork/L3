@@ -9,17 +9,22 @@ namespace R1{
 public static class Composite{
 
     // TODO BT style composites not implemented
-    public static object Step(Co co, Context cx)
-    => co.type switch{
-        access => Access(co, cx),
-        act => Act(co, cx),
-        assign => Assign(co, cx),
-        block => Block(co, cx),
-        sel => Sel(co, cx),
-        seq => Seq(co, cx),
-        sum => Sum(co, cx),
-        _ => throw new InvOp($"Unknown composite: {co.type}")
-    };
+    public static object Step(Co co, Context cx){
+        var scoping = co.type != assign;
+        if(scoping) cx.env.PushBlock();
+        var output = co.type switch{
+            access => Access(co, cx),
+            act => Act(co, cx),
+            assign => Assign(co, cx),
+            block => Block(co, cx),
+            sel => Sel(co, cx),
+            seq => Seq(co, cx),
+            sum => Sum(co, cx),
+            _ => throw new InvOp($"Unknown composite: {co.type}")
+        };
+        if(scoping) cx.env.PopBlock();
+        return output;
+    }
 
     public static object Block(Co co, Context cx){
         cx.Log("blk/" + co);

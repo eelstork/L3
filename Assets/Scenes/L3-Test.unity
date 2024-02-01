@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b521736817514a91ab8055a22aca256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  main: {fileID: 11400000, guid: 15b43cc53f855411bb32b94452a0850b, type: 2}
+  main: {fileID: 11400000, guid: 60d3e6977af7443d5b299528e6757614, type: 2}
   onDemand: 1
   runOnce: 0
   index: 17

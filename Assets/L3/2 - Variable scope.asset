@@ -15,8 +15,10 @@ MonoBehaviour:
   ignoreReadErrors: 0
   readError: 
   xml: <L3Script><value t="Unit"><ns t="String">Axis</ns><deps t="String"></deps><nodes
-    t="List"><Composite><type t="Type">assign</type><nodes t="List"><Field><type
-    t="String">int</type><name t="String">x</name></Field><Number><value t="Single">10</value></Number></nodes><expanded
-    t="Boolean">False</expanded></Composite><Call><function t="String">Log</function><opt
-    t="Boolean">False</opt><args t="List"><Var><value t="String">x</value><opt t="Boolean">False</opt></Var></args><expanded
-    t="Boolean">False</expanded></Call></nodes><expanded t="Boolean">False</expanded></value></L3Script>
+    t="List"><Composite><type t="Type">block</type><nodes t="List"><Composite><type
+    t="Type">assign</type><nodes t="List"><Field><type t="String">int</type><name
+    t="String">x</name></Field><Number><value t="Single">10</value></Number></nodes><expanded
+    t="Boolean">False</expanded></Composite></nodes><expanded t="Boolean">False</expanded></Composite><Call><function
+    t="String">Log</function><opt t="Boolean">False</opt><args t="List"><Var><value
+    t="String">x</value><opt t="Boolean">False</opt></Var></args><expanded t="Boolean">False</expanded></Call></nodes><expanded
+    t="Boolean">False</expanded></value></L3Script>

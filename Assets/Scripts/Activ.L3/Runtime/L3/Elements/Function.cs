@@ -7,7 +7,7 @@ public partial class Function : Branch, Dec, Named{
     public string name = "";
     public List<Parameter> parameters;
     [Hierarchy]
-    public Expression expression;
+    public Node expression;
 
     public Function(){
         name = "Bar";
@@ -21,7 +21,7 @@ public partial class Function : Branch, Dec, Named{
     => expression == null ? null : new Node[]{ expression as Node };
 
     override public void AddChild(Node child)
-    => expression = (Expression) child;
+    => expression = child;
 
     override public void DeleteChild(Node child){
         expression = null;

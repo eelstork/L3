@@ -13,6 +13,7 @@ public static class Var{
         if(node != null){
             switch(node){
                 case Variable x: return x.value;
+                case Arg x: return x.value;
             }
             return node;
         }

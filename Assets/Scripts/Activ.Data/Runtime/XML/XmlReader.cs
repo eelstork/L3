@@ -31,10 +31,10 @@ public partial class XmlReader{
     object Read(Node node, object target, Type type){
         string S = ReadTypeName(node as Elem);
         string T = type?.Name(out int gcount);
-        if(!MatchTypeNames(S, T)) throw new InvOp(
-            $"Source type [{S}] (XML) does not match "
-          + $"target type [{T}] (C#)"
-        );
+        //if(!MatchTypeNames(S, T)) throw new InvOp(
+        //    $"Source type [{S}] (XML) does not match "
+        //  + $"target type [{T}] (C#)"
+        //);
         var text = node.InnerText;
         if(type?.IsEnum ?? false){
             return Enum.Parse(type, text);
@@ -105,8 +105,9 @@ public partial class XmlReader{
     }
 
     object Instantiate(Node node, Type bound, out Type type){
-        //Log($"instantiate {node.Name}");
-        type = Types.Find(node.Name);
+        var elem = node as Elem;
+        Log($"instantiate {node.Name}");
+        type = Types.Find(ReadTypeName(elem));
         if(bound == null && type == null) throw new InvOp(
             $"No matching type for <{node.Name}>"
         );
