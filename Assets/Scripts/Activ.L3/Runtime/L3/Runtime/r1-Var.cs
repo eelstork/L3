@@ -10,7 +10,12 @@ public static class Var{
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
         var node = cx.env.FindVar(name);
-        if(node != null) return node;
+        if(node != null){
+            switch(node){
+                case Variable x: return x.value;
+            }
+            return node;
+        }
         // 2. Find the wanted variable in native object scope
         var cs = ResolveCsVar(name, cx);
         if(cs != null) return new L3.Object(cs, cx);

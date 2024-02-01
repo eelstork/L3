@@ -7,13 +7,9 @@ namespace L3{
 public class L3Component : MonoBehaviour, Context{
 
     public L3.L3Script main;
-    //public Stack<Scope> scope = new ();
-    //public Stack<Scope> stack = new ();
     public Env env;
     public bool onDemand = true, runOnce;
     public Record record = new ();
-
-    //public Scope scope => stack.Count == 0 ? null : stack.Peek();
 
     Env Context.env => env;
 
@@ -32,7 +28,7 @@ public class L3Component : MonoBehaviour, Context{
             Call      ca => R1.Call.Invoke(ca, this, null),
             New       nw => R1.New.Invoke(nw, this, null),
             Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
-            Literal   li => li,
+            Literal   li => li.value,
             Var       va => R1.Var.Resolve(va, this),
             Field     fi => R1.Field.Step(fi, this),
             Dec       dc => R1.Dec.Step(dc, this),

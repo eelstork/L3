@@ -27,6 +27,7 @@ public class Scope{
             case Number    n: return n.value;
             case LString   s: return s.value;
             case L3.Object o: return o.value;
+            case Variable x: return x.value;
             default: return arg;
         }
     }

@@ -7,19 +7,19 @@ namespace L3{
 public static class CSharp{
 
     public static object Construct(
-        ConstructorInfo[] group, Scope args, object target
+        ConstructorInfo[] group, object[] args, object target
     ){
         //Log($"CALLING {cst.Name}");
         //Log($"CALLING {method.Name}");
-        var _args = args.Unwrap();
-        int i = 0; foreach(var k in _args){
-            Log($"Arg {i}: {_args[i]}");
-            i++;
-        }
+        //var _args = args.Unwrap();
+        //int i = 0; foreach(var k in _args){
+        //    Log($"Arg {i}: {_args[i]}");
+        //    i++;
+        //}
         //var rtype = method.ReturnType;
         foreach(var c in group){
             //try{
-                var output = c.Invoke(target, _args);
+                var output = c.Invoke(target, args);
                 if(output != null){
                     Log($"Value type [{output.GetType()}]");
                 }
@@ -30,16 +30,16 @@ public static class CSharp{
     }
 
     public static object Invoke(
-        Method method, Scope args, object target
+        Method method, object[] args, object target
     ){
         Log($"CALLING {method.Name}");
-        var _args = args.Unwrap();
-        int i = 0; foreach(var k in _args){
-            Log($"Arg {i}: {_args[i]}");
-            i++;
-        }
+        //var _args = args.Unwrap();
+        //int i = 0; foreach(var k in _args){
+        //    Log($"Arg {i}: {_args[i]}");
+        //    i++;
+        //}
         var rtype = method.ReturnType;
-        var output = method.Invoke(target, _args);
+        var output = method.Invoke(target, args);
         if(output != null){
             Log($"Value type [{output.GetType()}]");
         }
@@ -47,18 +47,18 @@ public static class CSharp{
     }
 
     public static object Invoke(
-        Method[] group, Scope args, object target
+        Method[] group, object[] args, object target
     ){
         //Log($"CALLING {method.Name}");
-        var _args = args.Unwrap();
-        int i = 0; foreach(var k in _args){
-            Log($"Arg {i}: {_args[i]}");
-            i++;
-        }
+        //var _args = args.Unwrap();
+        //int i = 0; foreach(var k in _args){
+        //    Log($"Arg {i}: {_args[i]}");
+        //    i++;
+        //}
         //var rtype = method.ReturnType;
         foreach(var method in group){
             //try{
-                var output = method.Invoke(target, _args);
+                var output = method.Invoke(target, args);
                 if(output != null){
                     Log($"Value type [{output.GetType()}]");
                 }

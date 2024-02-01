@@ -14,16 +14,8 @@ public partial class Variable : Node, Expression, Assignable, Named,
         this.owner = owner;
     }
 
-    public void Assign(object value){
-        switch(value){
-            case Literal lit:
-                this.value = lit.value;
-                break;
-            default: // TODO is this safe???
-                this.value = value;
-                break;
-        }
-    }
+    public void Assign(object value)
+    => this.value = value;
 
     public object Find(Node arg, Context cx){
         Debug.Log($"Find {arg} in {this} holding {value}");

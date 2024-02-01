@@ -27,22 +27,27 @@ public static class Call{
             }
         }
         // Resolve args to sub-scope
-        var sub = new Scope();
-        foreach(var arg in ca.args){
-            sub.Add(cx.Step(arg as Node) as Node);
+        var args = new object[ca.args.Count];
+        for(var i = 0; i < args.Length; i++){
+            args[i] = cx.Step(ca.args[i] as Node);
         }
+        //}
+        //foreach(var arg in ca.args){
+        //    sub.Add(cx.Step(arg as Node) as Node);
+        //}
         if(cs != null && cs.Length > 0){  // (C#) native call
-            return CSharp.Invoke(cs, sub, target ?? cx);
+            return CSharp.Invoke(cs, args, target ?? cx);
         }else{                            // L3 call
             if(node == null) throw new InvOp(
                 $"Function not found {ca.function}"
             );
+            // TODO - need another method to push arguments
             // Push the subscope
-            cx.env.Push(sub, target);
-            Debug.Log($"CALL simple function: [{node}]");
+            //cx.env.Push(sub, target);
+            //Debug.Log($"CALL simple function: [{node}]");
             var output = cx.Step(node);
             // Exit subscope and return the output
-            cx.env.Pop();
+            //cx.env.Pop();
             return output;
         }
     }

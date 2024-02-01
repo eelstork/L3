@@ -7,8 +7,6 @@ public class Record{
     public Frame frame;
 
     public void Enter(Node arg){
-        Debug.Log($"Enter {arg}");
-        Debug.Break();
         var @new = new Frame(arg, parent: frame);
         if(frame != null) frame.Add(@new);
         frame = @new;

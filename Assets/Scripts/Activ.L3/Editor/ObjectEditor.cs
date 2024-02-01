@@ -50,12 +50,16 @@ public class ObjectInspector{
         if(type == null) return;
         BeginHorizontal();
         foreach(var method in type.GetMethods()){
-            if(IsEditorAction(method) && Button(method.Name)){
+            if(IsEditorAction(method) && Button(ActionName(method.Name))){
                 method.Invoke(arg, null);
                 didUseAction = true;
             }
         }
         EndHorizontal();
+    }
+
+    public string ActionName(string func){
+        return func.Replace("Add", "+ ");
     }
 
     void OnGUI(object arg, Field field, bool hz){
