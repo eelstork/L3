@@ -3,7 +3,7 @@ using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
 using L3;
 
-
+namespace L3.Editor{
 public class NodeEditor : EditorWindow{
 
     Node selection;
@@ -24,7 +24,7 @@ public class NodeEditor : EditorWindow{
             selection, out bool didUseAction, out bool didEdit
         );
         if(didUseAction || didEdit){
-            GraphEditor.Save();
+            DevWindow.Save();
         }
     }
 
@@ -33,4 +33,4 @@ public class NodeEditor : EditorWindow{
         i.selection = arg;
     }
 
-}
+}}

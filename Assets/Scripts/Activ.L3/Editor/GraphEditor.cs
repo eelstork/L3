@@ -1,28 +1,21 @@
-#if UNITY_EDITOR
 using UnityEngine; using UnityEditor;
 using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
 using L3;
 
-public class GraphEditor : EditorWindow{
+namespace L3.Editor{
+public class GraphEd{
 
     GUIStyle nodeStyle;
-    public L3Script target;
-    public static GraphEditor instance;
+    Vector3 scroll;
+    L3Script target;
 
-    [MenuItem("Window/L3/Graph Editor")]
-    public static GraphEditor ShowWindow()
-    => instance = GetWindow<GraphEditor>("L3 Graph");
-
-    void OnGUI(){
+    public void OnGUI(L3Script target){
+        this.target = target;
         CreateStyles();
-        var prevTarget = target;
-        target = EGL.ObjectField(
-            "Script", target, typeof(L3Script), allowSceneObjects: false
-        ) as L3Script;
-        if(target == null) return;
-        if(target != prevTarget) NodeEditor.Edit(target.value);
+        scroll = EGL.BeginScrollView(scroll);
         Draw(target.value, prefix: null, depth: 0, out bool _);
+        EGL.EndScrollView();
     }
 
     void Draw(Node node, string prefix, int depth, out bool del){
@@ -38,8 +31,7 @@ public class GraphEditor : EditorWindow{
                     Draw(
                         child,
                         i == 0 ? null : branch.childPrefix,
-                        depth + 1,
-                        out bool del1
+                        depth + 1, out bool del1
                     );
                     if(del1) toDelete = child;
                 }
@@ -52,16 +44,9 @@ public class GraphEditor : EditorWindow{
         }
     }
 
-    public static void Save(){
-        if(instance == null) instance = ShowWindow();
-        EditorUtility.SetDirty(GraphEditor.instance.target);
-        instance.Repaint();
-    }
-
     static Texture2D tex;
 
     void DrawNode(Node client, string prefix, int tabs, out bool del){
-        //Debug.Log($"Draw {client}");
         var label = prefix + client.TFormat();
         BeginHorizontal();
         Space(tabs * 8 * 4);
@@ -100,5 +85,4 @@ public class GraphEditor : EditorWindow{
         tex.SetPixels(pixels); tex.Apply(); return tex;
     }
 
-}
-#endif
+}}
