@@ -3,6 +3,7 @@ using InvOp = System.InvalidOperationException;
 using Doc = System.Xml.XmlDocument;
 using Elem = System.Xml.XmlElement; using Node = System.Xml.XmlNode;
 using static UnityEngine.Debug;
+using Activ.Util;
 
 namespace Activ.XML{
 public partial class XmlReader{
@@ -107,7 +108,7 @@ public partial class XmlReader{
     object Instantiate(Node node, Type bound, out Type type){
         var elem = node as Elem;
         //Log($"instantiate {node.Name}");
-        type = Types.Find(ReadTypeName(elem));
+        type = Types.FindOld(ReadTypeName(elem));
         if(bound == null && type == null) throw new InvOp(
             $"No matching type for <{node.Name}>"
         );

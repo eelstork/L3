@@ -13,6 +13,19 @@ public class L3Component : MonoBehaviour, Context{
 
     Env Context.env => env;
 
+    public Node FindFunction(string name)
+    => env.FindFunction(name) ?? FindFuncHere(name);
+
+    public Node FindFuncHere(string name){
+        var unit = main.value;
+        foreach(var x in unit.children){
+            var f = x as Function;
+            if(f==null) continue;
+            if(f.name == name) return f;
+        }
+        return null;
+    }
+
     public object Step(Node exp, HashSet<Node> deps){
         var x = exp switch{
             Unit      un => R1.Unit.Step(un, this, deps),
@@ -23,20 +36,25 @@ public class L3Component : MonoBehaviour, Context{
 
     public object Step(Node exp){
         record.Enter(exp);
-        var x = exp switch{
-            Composite co => R1.Composite.Step(co, this),
-            Call      ca => R1.Call.Invoke(ca, this, null),
-            New       nw => R1.New.Invoke(nw, this, null),
-            Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
-            Literal   li => li.value,
-            L3.Var    va => R1.Var.Resolve(va, this),
-            // TODO if the below is Ref, this cannot be Step
-            Field     fi => R1.Field.Step(fi, this),
-            Dec       dc => R1.Dec.Step(dc, this),
-            _            => throw new InvOp($"Unknown construct [{exp}]"),
-        };
-        record.Exit(exp, value: x);
-        return x;
+        try{
+            var x = exp switch{
+                Composite co => R1.Composite.Step(co, this),
+                Call      ca => R1.Call.Invoke(ca, this, null),
+                New       nw => R1.New.Invoke(nw, this, null),
+                Unit      un => R1.Unit.Step(un, this, new ()),
+                Literal   li => li.value,
+                L3.Var    va => R1.Var.Resolve(va, this),
+                // TODO if the below is Ref, this cannot be Step
+                Field     fi => R1.Field.Step(fi, this),
+                Dec       dc => R1.Dec.Step(dc, this),
+                _            => throw new InvOp($"Unknown construct [{exp}]"),
+            };
+            record.Exit(exp, value: x);
+            return x;
+        }catch(System.Exception ex){
+            record.ExitWithError(exp, ex);
+            throw;
+        }
     }
 
     public object Ref(Node exp){
@@ -47,7 +65,7 @@ public class L3Component : MonoBehaviour, Context{
             //New       nw => R1.New.Invoke(nw, this, null),
             //Unit      un => R1.Unit.Step(un, this, new HashSet<Node>()),
             //Literal   li => li.value,
-            L3.Var    va => va,  //R1.Var.Resolve(va, this),
+            L3.Var    va => R1.Var.Refer(va, this),
             Field     fi => R1.Field.Step(fi, this),
             //Field     fi => R1.Field.Step(fi, this),
             //Dec       dc => R1.Dec.Step(dc, this),
@@ -74,6 +92,7 @@ public class L3Component : MonoBehaviour, Context{
     }
 
     void Exec(Unit unit){
+        Activ.Util.Types.SetCustomTypes(TypeMap.types);
         record.frame = null;
         if(env == null) env = new ();
         env.Enter();

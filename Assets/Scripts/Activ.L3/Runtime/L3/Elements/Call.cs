@@ -17,6 +17,9 @@ public partial class Call : Branch, Expression{
     public void AddNumber() => args.Add(new Number());
 
     [EditorAction]
+    public void AddComposite() => args.Add(new Composite());
+
+    [EditorAction]
     public void AddVar() => args.Add(new Var());
 
     [EditorAction]

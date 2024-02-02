@@ -6,6 +6,7 @@ public partial class Unit : AbstractBranch<Node>{
 
     public string ns = "";
     public string deps;
+    public bool isTest;
 
     override public string TFormat()
     => $"namespace: {ns}";

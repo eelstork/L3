@@ -20,12 +20,13 @@ public partial class Object : Node, Expression, Assignable, Literal,
 
     // <Assignable>
     public void Assign(object value){
+        // TODO unwrapping should no longer be needed
         object unwrapped = value switch{
             L3.Object obj => obj.value,
             L3.Number num => num.value,
             L3.LString str => str.value,
             L3.Variable @var => @var.value,
-            _ => throw new InvOp($"Don't know how to unwrap {value}")
+            _ => value
         };
         if(field.FieldType.IsAssignableFrom(typeof(int))){
             UnityEngine.Debug.Log($"type of unwrapped: {unwrapped.GetType()}");

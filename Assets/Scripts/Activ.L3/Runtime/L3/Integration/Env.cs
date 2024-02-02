@@ -18,9 +18,15 @@ public class Env{
         store.Pop();
     }
 
-    public void EnterScope() => frame.Push( new () );
+    public void EnterScope(){
+        Log($"ENTER SCOPE => {frame.Count}");
+        frame.Push( new () );
+    }
 
-    public void ExitScope() => frame.Pop();
+    public void ExitScope(){
+        Log($"EXIT SCOPE => {frame.Count}");
+        frame.Pop();
+    }
 
     public void EnterCall(Scope arg, object target){
         if(target is R1.Obj) @object = target as R1.Obj;
@@ -30,7 +36,7 @@ public class Env{
     }
 
     public void ExitCall(){
-        frame.Pop();
+        store.Pop();
         @object = null;
     }
 
@@ -53,5 +59,8 @@ public class Env{
     Stack<Scope> frame => store.Peek();
 
     Scope local => frame.Peek();
+
+    void Log(object arg)
+    => UnityEngine.Debug.Log(arg);
 
 }}

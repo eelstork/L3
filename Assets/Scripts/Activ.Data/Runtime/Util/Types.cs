@@ -1,6 +1,8 @@
 using System; using System.Collections.Generic;
 using System.Reflection;
+using InvOp = System.InvalidOperationException;
 
+namespace Activ.Util{
 public static class Types{
 
     public static string[] hints = {
@@ -9,22 +11,41 @@ public static class Types{
         "test", "reportgen", "system", "unity", "webgl"
     };
 
-    static Dictionary <string, Type> types;
+    static Dictionary <string, Type> _types;
+    static Dictionary <string, Type> custom;
 
-    public static Type Find(string name){
-        if(types == null) Init();
-        return types.ContainsKey(name) ? types[name] : null;
+    public static Type FindOld(string name){
+        if(_types == null) Init();
+        if(!_types.ContainsKey(name)) return null;
+        return _types[name];
+    }
+
+    public static Type Find(string name)
+    => custom.Get(name)
+    ?? _types.Get(name)
+    ?? throw new InvOp($"C# type not found: {name}");
+
+    public static Type FindOrDefault(string name)
+    => custom.Get(name) ?? _types.Get(name) ?? null;
+
+    public static void SetCustomTypes(Dictionary<string, Type> types){
+        custom = types;
+    }
+
+    public static void SetCustomTypes(params Type[] _types){
+        custom = new ();
+        foreach(var k in _types) custom[k.Name] = k;
     }
 
     static void Init(){
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        types = new ();
+        _types = new ();
         foreach (var ass in assemblies){
             var name = new AssemblyName(ass.FullName).Name;
             if(Skip(name)) continue;
             foreach(var type in ass.GetTypes()){
                 if(type.HasDefaultConstructor()){
-                    types[type.Name] = type;
+                    _types[type.Name] = type;
                 }
             }
         }
@@ -33,4 +54,9 @@ public static class Types{
     static bool Skip(string name)
     => Array.Exists(hints, x => name.ToLower().StartsWith(x));
 
-}
+    static Dictionary <string, Type> types{ get{
+        if(_types == null) Init();
+        return _types;
+    }}
+
+}}

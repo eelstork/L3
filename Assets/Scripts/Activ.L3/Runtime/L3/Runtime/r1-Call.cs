@@ -14,7 +14,7 @@ public static class Call{
         cx.Log("call/" + ca);
         var name = ca.function;
         // Find the wanted function,
-        var node = cx.env.FindFunction(name);
+        var node = cx.FindFunction(name);
         MethodInfo[] cs = null;
         if(node == null){
             cs = ResolveCsFunc(name, target ?? cx, ca.args.Count);
@@ -46,6 +46,7 @@ public static class Call{
             var func = node as Function;
             var sub = new Scope();
             for(int i = 0; i < args.Length; i++){
+                //ebug.Log($"Build arg {i} for {ca.function} with params [{func.parameters}]");
                 var arg = new Arg(func.parameters[i].name, args[i]);
                 sub.Add(arg);
             }
@@ -56,7 +57,7 @@ public static class Call{
             if(co != null){
                 output = cx.Step(co);
             }else{
-                output = null;
+                output = Token.@void;
             }
             // Exit subscope and return the output
             cx.env.ExitCall();

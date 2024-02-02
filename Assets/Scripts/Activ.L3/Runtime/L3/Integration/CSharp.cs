@@ -1,30 +1,33 @@
+using System; using System.Linq; using System.Reflection;
 using Method = System.Reflection.MethodInfo;
-using static UnityEngine.Debug;
+using Constructor = System.Reflection.ConstructorInfo;
 using InvOp = System.InvalidOperationException;
-using System.Reflection;
+using static UnityEngine.Debug;
 
 namespace L3{
 public static class CSharp{
 
+    public static object Construct(Type type, object[] args){
+        var z = GetConstructors(type, args.Length);
+        return Construct(z, args);
+    }
+
+    static Constructor[] GetConstructors(
+        Type type, int paramcount
+    )
+    => type.GetConstructors()
+           .Where(m => m.GetParameters().Length == paramcount)
+           .ToArray();
+
     public static object Construct(
-        ConstructorInfo[] group, object[] args, object target
+        Constructor[] group, object[] args
     ){
-        //Log($"CALLING {cst.Name}");
-        //Log($"CALLING {method.Name}");
-        //var _args = args.Unwrap();
-        //int i = 0; foreach(var k in _args){
-        //    Log($"Arg {i}: {_args[i]}");
-        //    i++;
-        //}
-        //var rtype = method.ReturnType;
         foreach(var c in group){
-            //try{
-                var output = c.Invoke(target, args);
-                if(output != null){
-                    Log($"Value type [{output.GetType()}]");
-                }
-                return output;
-            //}catch()
+            var output = c.Invoke(args);
+            if(output != null){
+                Log($"Value type [{output.GetType()}]");
+            }
+            return output;
         }
         throw new InvOp("Could not call method");
     }
@@ -33,11 +36,6 @@ public static class CSharp{
         Method method, object[] args, object target
     ){
         Log($"CALLING {method.Name}");
-        //var _args = args.Unwrap();
-        //int i = 0; foreach(var k in _args){
-        //    Log($"Arg {i}: {_args[i]}");
-        //    i++;
-        //}
         var rtype = method.ReturnType;
         var output = method.Invoke(target, args);
         if(output != null){
@@ -49,19 +47,12 @@ public static class CSharp{
     public static object Invoke(
         Method[] group, object[] args, object target
     ){
-        //Log($"CALLING {method.Name}");
-        //var _args = args.Unwrap();
-        //int i = 0; foreach(var k in _args){
-        //    Log($"Arg {i}: {_args[i]}");
-        //    i++;
-        //}
-        //var rtype = method.ReturnType;
         foreach(var method in group){
             //try{
                 var output = method.Invoke(target, args);
-                if(output != null){
-                    Log($"Value type [{output.GetType()}]");
-                }
+                //if(output != null){
+                //    Log($"Value type [{output.GetType()}]");
+                //}
                 return output;
             //}catch()
         }

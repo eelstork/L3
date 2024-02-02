@@ -4,10 +4,13 @@ using System.Linq;
 namespace L3{
 public partial class Composite : Branch, Expression{
 
-    public enum Type{block, sel, seq, act, assign, access, sum};
+    public enum Type{
+        block, sel, seq, act, assign, access, sum, eq, uneq,
+        @true, @false
+    };
 
     public Type type;
-    public string name;
+    public string name = "";
 
     [Hierarchy]
     public List<Expression> nodes;
@@ -74,6 +77,10 @@ public partial class Composite : Branch, Expression{
          Type.assign => "= ",
          Type.access => ". ",
          Type.sum => "+ ",
+         Type.eq => "== ",
+         Type.uneq => "≠ ",
+         Type.@true => "T ",
+         Type.@false => "F ",
          _ => null
      };
 

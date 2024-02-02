@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static L3.Statuses;
 
 namespace L3{
 public class Record{
@@ -17,10 +18,16 @@ public class Record{
         if(frame.parent != null) frame = frame.parent;
     }
 
+    public void ExitWithError(Node arg, System.Exception err){
+        frame.error = err;
+        if(frame.parent != null) frame = frame.parent;
+    }
+
     public class Frame{
         public Frame parent;
         public List<Frame> children;
         public Node node;
+        public System.Exception error;
         public object value;
         public int depth;
         public Frame(Node x, Frame parent){
@@ -31,7 +38,18 @@ public class Record{
             if(children == null) children = new ();
             children.Add(child);
         }
-        override public string ToString() => node.ToString();
+        override public string ToString()
+        => ValueChar() + (' ' + node.ToString());
+
+        public char ValueChar(){
+            if(error != null) return 'E';
+            if(value == null) return '-';
+            if(IsCont(value)) return '→';
+            if(IsDoneStatus(value)) return '✓';
+            if(IsFailing(value)) return '✗';
+            return '+';
+        }
+
     }
 
 }}

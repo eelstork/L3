@@ -4,6 +4,7 @@ using static L3.Composite.Type;
 using static L3.Token;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
+using static L3.Statuses;
 
 namespace R1{
 public static class Composite{
@@ -22,7 +23,6 @@ public static class Composite{
         return output;
     }
 
-    // TODO BT style composites not implemented
     public static object Step(Co co, Context cx){
         var scoping = co.type != assign;
         if(scoping) cx.env.EnterScope();
@@ -34,6 +34,10 @@ public static class Composite{
             sel => Sel(co, cx),
             seq => Seq(co, cx),
             sum => Sum(co, cx),
+            eq => Eq(co, cx),
+            uneq => Uneq(co, cx),
+            @true => True(co, cx),
+            @false => False(co, cx),
             _ => throw new InvOp($"Unknown composite: {co.type}")
         };
         if(scoping) cx.env.ExitScope();
@@ -80,8 +84,13 @@ public static class Composite{
             var Y = co.nodes[i];
             switch (Y){
                 case L3.Var @var:
-                    // TODO
-                    X = (X as R1.Obj).Find(@var, cx);
+                    X = X switch{
+                        R1.Obj r1obj
+                        => r1obj.Find(@var, cx),
+                        object csobj
+                        => csobj.GetFieldOrPropertyValue
+                           (@var.value, out bool _)
+                    };
                     break;
                 case L3.Call call:
                     X = R1.Call.Invoke(call, cx, X);
@@ -121,13 +130,14 @@ public static class Composite{
     }
 
     public static object Sel(Co co, Context cx){
-        cx.Log("sel/" + co);
+        cx.Log("sel/" + co + ": " + co.nodes.Count);
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);
-            if(val == (object)true) return val;
-            if(val == (object)@cont) return val;
-            if(val == (object)@void) return val;
+            if(IsDone(val) || IsCont(val)){
+                Debug.Log($"Exit selector {co.name} cause {val}");
+                return val;
+            }
         }
         return val;
     }
@@ -137,20 +147,64 @@ public static class Composite{
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);
-            if(val == (object)false) return val;
-            if(val == (object)@cont) return val;
+            if(IsFailing(val) || IsCont(val)) return val;
         }
         return val;
     }
 
     public static object Sum(Co co, Context cx){
-        cx.Log("seq/" + co);
+        cx.Log("sum/" + co);
         object x = null;
         foreach(var k in co.nodes){
-            object y = cx.Step(k as Node);
+            var y = cx.Step(k as Node);
             x = R1.Op.Sum.Add(x, y);
         }
         return x;
+    }
+
+    public static object Eq(Co co, Context cx){
+        cx.Log("eq/" + co);
+        var x = cx.Step(co.nodes[0] as Node);
+        for(var i = 1; i < co.nodes.Count; i++){
+            var k = co.nodes[i];
+            var y = cx.Step(k as Node);
+            if(x != y){
+                Debug.Log($"False because {x} != {y}");
+                return false;
+            }
+            x = y;
+        }
+        return true;
+    }
+
+    public static object Uneq(Co co, Context cx){
+        cx.Log("eq/" + co);
+        var x = cx.Step(co.nodes[0] as Node);
+        for(var i = 1; i < co.nodes.Count; i++){
+            var k = co.nodes[i];
+            var y = cx.Step(k as Node);
+            if(x == y) return false;
+            x = y;
+        }
+        return true;
+    }
+
+    public static object True(Co co, Context cx){
+        cx.Log("eq/" + co);
+        foreach(var k in co.nodes){
+            var x = cx.Step(k as Node);
+            if(!true.Equals(x)) return false;
+        }
+        return true;
+    }
+
+    public static object False(Co co, Context cx){
+        cx.Log("eq/" + co);
+        foreach(var k in co.nodes){
+            var x = cx.Step(k as Node);
+            if(!false.Equals(x)) return false;
+        }
+        return true;
     }
 
     public static object Act(Co co, Context cx){
@@ -158,7 +212,7 @@ public static class Composite{
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);
-            if(val == (object)@cont) return val;
+            if(IsCont(val)) return val;
         }
         return val;
     }

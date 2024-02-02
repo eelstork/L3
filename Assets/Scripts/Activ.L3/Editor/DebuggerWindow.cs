@@ -11,11 +11,15 @@ public class DebuggerWindow : EditorWindow{
 
     void OnGUI(){
         var obj = Selection.activeTransform;
-        var script = obj.GetComponent<L3Component>();
-        if(script == null){ Label("Nothing to show"); }else{
+        var script = obj ? obj.GetComponent<L3Component>() : null;
+        if(script == null){
+            Label("Nothing to show");
+        }else{
             Label($"{obj.name}/L3Component"); record = script.record;
         }
-        if(record.frame == null){ Label("(no record)"); }else{
+        if(record == null || record.frame == null){
+            Label("(no record)");
+        }else{
             Traverse(record.frame, x => x.children, DrawNode);
         }
     }
@@ -23,6 +27,7 @@ public class DebuggerWindow : EditorWindow{
     void OnInspectorUpdate() => Repaint();
 
     void DrawNode(Frame arg){
+        if(arg.node is L3.Dec && arg.error == null) return;
         BeginHorizontal();
         Space(arg.depth * 16); Label(arg.ToString());
         EndHorizontal();
