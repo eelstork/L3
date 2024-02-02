@@ -2,25 +2,25 @@ using System.Reflection;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
 
-namespace L3{
-public partial class BoundProp : Node, Expression, Assignable, Literal,
-                                 Accessible{
+namespace R1{
+public partial class PropRef : L3.Node, R1.Assignable, R1.Accessible{
 
     PropertyInfo prop;
     object owner;
 
-    public BoundProp(PropertyInfo p, object o){ prop = p; owner = o; }
+    public PropRef(PropertyInfo p, object o){ prop = p; owner = o; }
 
     public object value => prop.GetValue(owner);
 
     // <Assignable>
     public void Assign(object value){
+        // TODO suspicious unwrap call
         object unwrapped = value switch{
-            L3.Object obj => obj.value,
-            L3.BoundProp prop => prop.value,
+            FieldRef obj => obj.value,
+            PropRef prop => prop.value,
             L3.Number num => num.value,
             L3.LString str => str.value,
-            L3.Variable @var => @var.value,
+            R1.Variable @var => @var.value,
             Vector3 v3 => v3,
             _ => throw new InvOp($"Don't know how to unwrap {value}")
         };
@@ -34,16 +34,16 @@ public partial class BoundProp : Node, Expression, Assignable, Literal,
     }
 
     // <Accessible>
-    public object Find(Node arg, Context cx){
+    public object Find(L3.Node arg, Context cx){
         Debug.Log($"Find {arg} in {this}");
-        if(arg is Var){
+        if(arg is L3.Var){
             var obj   = this.value;
             var type  = obj.GetType();
-            var @var  = arg as Var;
+            var @var  = arg as L3.Var;
             var field = type.GetField(@var.value);
-            if(field != null) return new Object(field, obj);
+            if(field != null) return new FieldRef(field, obj);
             var prop = type.GetProperty(@var.value);
-            if(prop != null) return new BoundProp(prop, obj);
+            if(prop != null) return new PropRef(prop, obj);
             throw new InvOp($"{@var.value} not in {obj}");
         }
         if(arg is L3.Call){
@@ -54,6 +54,6 @@ public partial class BoundProp : Node, Expression, Assignable, Literal,
         throw new InvOp($"Cannot find {arg} in {this}");
     }
 
-    override public string TFormat() => "prop " + prop.Name;
+    //override public string TFormat() => "prop " + prop.Name;
 
 }}

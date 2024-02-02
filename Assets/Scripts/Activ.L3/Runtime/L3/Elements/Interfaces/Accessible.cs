@@ -1,6 +1,6 @@
-namespace L3{
+namespace R1{
 public interface Accessible{
 
-    object Find(Node arg, Context cx);
+    object Find(L3.Node arg, Context cx);
 
 }}

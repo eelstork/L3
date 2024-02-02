@@ -23,7 +23,7 @@ public class Obj : Accessible{
 
     public object Ref(Node arg, Context cx){
         var @variable = (L3.Var)arg;
-        return new BoundProp(@variable.value, this);
+        return new PropRef(@variable.value, this);
     }
 
     public Node Find(string name){
@@ -34,9 +34,9 @@ public class Obj : Accessible{
         }
     }
 
-    public class BoundProp : Assignable{
+    public class PropRef : Assignable{
         string name; Obj owner;
-        public BoundProp(string name, Obj owner){
+        public PropRef(string name, Obj owner){
             this.name = name; this.owner = owner;
         }
         public void Assign(object value){

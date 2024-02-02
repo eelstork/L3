@@ -1,15 +1,15 @@
 using System.Reflection;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
+using L3;
 
-namespace L3{
-public partial class Object : Node, Expression, Assignable, Literal,
-                              Accessible{
+namespace R1{
+public class FieldRef : L3.Node, Assignable, Accessible{
 
     FieldInfo field;
     object owner;
 
-    public Object(FieldInfo f, object o){
+    public FieldRef(FieldInfo f, object o){
         if(f == null) throw new InvOp("NULL field is not allowed");
         if(o == null) throw new InvOp("NULL target is not allowed");
         field = f;
@@ -22,10 +22,10 @@ public partial class Object : Node, Expression, Assignable, Literal,
     public void Assign(object value){
         // TODO unwrapping should no longer be needed
         object unwrapped = value switch{
-            L3.Object obj => obj.value,
+            R1.FieldRef obj => obj.value,
             L3.Number num => num.value,
             L3.LString str => str.value,
-            L3.Variable @var => @var.value,
+            R1.Variable @var => @var.value,
             _ => value
         };
         if(field.FieldType.IsAssignableFrom(typeof(int))){
@@ -38,14 +38,15 @@ public partial class Object : Node, Expression, Assignable, Literal,
     }
 
     // <Accessible>
-    public object Find(Node arg, Context cx){
+    public object Find(L3.Node arg, Context cx){
         Debug.Log($"Find {arg} in {this}");
-        if(arg is Var){
+        if(arg is L3.Var){
             var obj   = this.value;
             var type  = obj.GetType();
-            var @var  = arg as Var;
+            var @var  = arg as L3.Var;
             var field = type.GetField(@var.value);
-            return new Object(field, obj);
+            // TODO suspicious referencing
+            return new FieldRef(field, obj);
         }
         if(arg is L3.Call){
             var obj   = this.value;
@@ -55,6 +56,6 @@ public partial class Object : Node, Expression, Assignable, Literal,
         throw new InvOp($"Cannot find {arg} in {this}");
     }
 
-    override public string TFormat() => "field " + field.Name;
+    //override public string TFormat() => "field " + field.Name;
 
 }}

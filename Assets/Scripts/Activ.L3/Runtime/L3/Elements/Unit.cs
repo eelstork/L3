@@ -5,11 +5,19 @@ namespace L3{
 public partial class Unit : AbstractBranch<Node>{
 
     public string ns = "";
-    public string deps;
+    public string deps = "";
+    public string @as = "";
     public bool isTest;
+    public string expectedError = "";
 
-    override public string TFormat()
-    => $"namespace: {ns}";
+    override public string TFormat(){
+        string str = null;
+        if(!ns.None()) str += $"namespace {ns}:";
+        if(!@as.None()) str += $", as {@as}:";
+        if(str == null) str = "unit:";
+        if(str.StartsWith(", ")) str = str.Substring(2);
+        return str;
+    }
 
      [EditorAction]
      public void AddUsing(){

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using L3;
 
-namespace L3{
+namespace R1{
 public class Scope{
 
     List<Node> nodes = new ();
+
+    public List<Node> _nodes => nodes;
 
     public void Add(Node arg){
         nodes.Add(arg);
@@ -22,11 +25,12 @@ public class Scope{
     public object[] Unwrap()
     => (from node in nodes select Unwrap(node)).ToArray();
 
+    // TODO remove if possible
     public object Unwrap(Node arg){
         switch(arg){
-            case Number    n: return n.value;
-            case LString   s: return s.value;
-            case L3.Object o: return o.value;
+            case Number   n: return n.value;
+            case LString  s: return s.value;
+            case FieldRef o: return o.value;
             case Variable x: return x.value;
             default: return arg;
         }

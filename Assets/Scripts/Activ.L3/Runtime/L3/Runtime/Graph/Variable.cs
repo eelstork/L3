@@ -1,9 +1,9 @@
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
+using L3;
 
-namespace L3{
-public partial class Variable : Node, Expression, Assignable, Named,
-                                Accessible{
+namespace R1{
+public partial class Variable : L3.Node, Assignable, Named, Accessible{
 
     L3.Field owner;
     public object value;
@@ -20,16 +20,16 @@ public partial class Variable : Node, Expression, Assignable, Named,
     public object Find(Node arg, Context cx){
         Debug.Log($"Find {arg} in {this} holding {value}");
         //throw new InvOp("Not imp");
-        if(arg is Var){
+        if(arg is L3.Var){
             var obj   = this.value;
             var type  = (obj as R1.Obj).GetClass();
-            var @var  = arg as Var;
+            var @var  = arg as L3.Var;
             var name = @var.value;
             if(type.HasField(name)){
-                return new R1.Obj.BoundProp(name, obj as R1.Obj);
+                return new R1.Obj.PropRef(name, obj as R1.Obj);
             }
             if(type.HasProp(name)){
-                return new R1.Obj.BoundProp(name, obj as R1.Obj);
+                return new R1.Obj.PropRef(name, obj as R1.Obj);
             }
             throw new InvOp($"{@var.value} not in {obj}");
         }

@@ -2,6 +2,7 @@ using UnityEngine;
 using static UnityEngine.Debug;
 using InvOp = System.InvalidOperationException;
 using L3;
+using R1;
 
 namespace R1.Op{
 public static class Sum{
@@ -25,8 +26,8 @@ public static class Sum{
     }
 
     static object Unwrap(object arg) => arg switch{
-        L3.Object x => x.value,
-        BoundProp p => p.value,
+        FieldRef x => x.value,
+        PropRef p => p.value,
         Literal l => l.value,
         //Vector3 v => v,
         //int n => n,

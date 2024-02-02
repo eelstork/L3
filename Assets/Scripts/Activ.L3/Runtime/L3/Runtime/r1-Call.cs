@@ -17,7 +17,7 @@ public static class Call{
         var node = cx.FindFunction(name);
         MethodInfo[] cs = null;
         if(node == null){
-            cs = ResolveCsFunc(name, target ?? cx, ca.args.Count);
+            cs = ResolveCsFunc(name, target ?? cx.pose, ca.args.Count);
             if(cs == null){
                 if(ca.opt){
                     return false;
@@ -36,7 +36,7 @@ public static class Call{
         //    sub.Add(cx.Step(arg as Node) as Node);
         //}
         if(cs != null && cs.Length > 0){  // (C#) native call
-            return CSharp.Invoke(cs, args, target ?? cx);
+            return CSharp.Invoke(cs, args, target ?? cx.pose);
         }else{                            // L3 call
             if(node == null) throw new InvOp(
                 $"Function not found {ca.function}"
@@ -66,8 +66,8 @@ public static class Call{
     }
 
     static MethodInfo[] ResolveCsFunc(
-        string name, object context, int count
-    ) => context.GetType().GetMethods()
+        string name, object target, int count
+    ) => target.GetType().GetMethods()
                         .Where(m => m.Name == name)
                         .Where(m => m.GetParameters().Length == count)
                         .ToArray();

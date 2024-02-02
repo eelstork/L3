@@ -14,19 +14,13 @@ public static class Var{
         // TODO this is not correct... may be in env and still null
         if(node != null){
             switch(node){
-                case Variable x:
-                    //cx.Log($"return value of {x}, {x.value}");
-                    return x.value;
-                case Arg x:
-                    return x.value;
+                case Variable x: return x.value;
+                case Arg      x: return x.value;
             }
             return node;
         }
-        //else{
-            //cx.Log($"{name} not in env");
-        //}
         // 2. Find the wanted variable in native object scope
-        var @out = cx.GetFieldOrPropertyValue(name, out bool found);
+        var @out = cx.pose.GetFieldOrPropertyValue(name, out bool found);
         if(found) return @out;
         else if(@var.opt) return false;
         else throw new InvOp(
@@ -50,21 +44,17 @@ public static class Var{
             return node;
         }
         // 2. Find the wanted variable in native object scope
-        var type = cx.GetType();
+        var type = cx.pose.GetType();
         var field = type.GetField(name);
         // TODO "Object here is poorly named"
-        if(field != null) return new Object(field, cx);
+        if(field != null) return new FieldRef(field, cx.pose);
         var prop = type.GetProperty(name);
-        if(prop != null) return new BoundProp(prop, cx);
+        if(prop != null) return new PropRef(prop, cx.pose);
         if(@var.opt){
             return false;
         }else throw new InvOp(
             $"No field or property matching {name}"
         );
     }
-
-    //static FieldInfo ResolveCsVar(string name, Context context)
-    //=> context.GetType().GetField(name);
-    //?? context.GetType().GetProperty(name);
 
 }}

@@ -4,18 +4,23 @@ using InvOp = System.InvalidOperationException;
 using R1;
 
 namespace L3{
-[ExecuteInEditMode]
-public class L3Component : MonoBehaviour, Context{
+public class L3TestEnv : Context{
 
-    public L3.L3Script main;
+    public L3Script main;
     public Env env;
-    public bool onDemand = true, runOnce;
     public Record record = new ();
-    public object pose;
+    public object pose = new Logger();
 
     Env Context.env => env;
-
     object Context.pose{ get => pose; set => pose = value; }
+
+    public L3TestEnv(L3Script main) => this.main = main;
+
+    public void Exec(){
+        try{
+            Exec(main.value);
+        }catch(System.Exception){ env.Dump(); throw; }
+    }
 
     public Node FindFunction(string name)
     => env.FindFunction(name) ?? FindFuncHere(name);
@@ -81,16 +86,6 @@ public class L3Component : MonoBehaviour, Context{
         return x;
     }
 
-    void Awake() => pose = this;
-
-    void Update(){
-        if(onDemand){
-            if(runOnce){ runOnce = false; Exec(main.value); }
-        }else{
-            Exec(main.value);
-        }
-    }
-
     void Exec(Unit unit){
         Activ.Util.Types.SetCustomTypes(TypeMap.types);
         record.frame = null;
@@ -100,17 +95,8 @@ public class L3Component : MonoBehaviour, Context{
         env.Exit();
     }
 
-    // TEMP FOR TESTING ONLY ----------------------------------------
-
-    public int index = 2;
-
-    public Transform target;
-
-    public void MoveTo(Transform target){
-        //Log($"Move to [{target}]");
+    class Logger{
+        public void Log(object arg) => UnityEngine.Debug.Log(arg);
     }
-
-    public void Log(object arg)
-    => UnityEngine.Debug.Log(arg);
 
 }}
