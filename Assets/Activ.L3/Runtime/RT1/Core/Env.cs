@@ -20,12 +20,12 @@ public class Env{
     }
 
     public void EnterScope(){
-        Log($"ENTER SCOPE => {frame.Count}");
+        //og($"ENTER SCOPE => {frame.Count}");
         frame.Push( new () );
     }
 
     public void ExitScope(){
-        Log($"EXIT SCOPE => {frame.Count}");
+        //og($"EXIT SCOPE => {frame.Count}");
         frame.Pop();
     }
 

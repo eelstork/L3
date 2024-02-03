@@ -22,18 +22,4 @@ public class Scope{
         return null;
     }
 
-    public object[] Unwrap()
-    => (from node in nodes select Unwrap(node)).ToArray();
-
-    // TODO remove if possible
-    public object Unwrap(Node arg){
-        switch(arg){
-            case Number   n: return n.value;
-            case LString  s: return s.value;
-            case FieldRef o: return o.value;
-            case Variable x: return x.value;
-            default: return arg;
-        }
-    }
-
 }}

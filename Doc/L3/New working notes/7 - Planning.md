@@ -44,6 +44,8 @@ We are then in a position to run, starting from the first virtual object: replac
 (1) Assume an agent wanting to have a meal at a given price, and within a given deadline.
 (2) Demonstrate using an auto-function to resolve the problem and implement the plan.
 
+Stretch: demonstrate using best first or A* vs breadth first search
+
 ## Summary
 
 (1) Auto functions prioritize virtual vs actual execution.
