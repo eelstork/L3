@@ -80,7 +80,7 @@ public class Env{
 
     Scope local => frame.Peek();
 
-    void Log(object arg)
-    => UnityEngine.Debug.Log(arg);
+    void Log(object arg){}
+    //=> UnityEngine.Debug.Log(arg);
 
 }}

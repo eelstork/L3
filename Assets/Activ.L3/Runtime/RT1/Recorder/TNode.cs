@@ -7,4 +7,7 @@ public interface TNode{
     bool Matches(string arg)
     => (this as object).ToString().Contains(arg);
 
+    bool Matches(string arg, object[] args);
+    //=> (this as object).ToString().Contains(arg);
+
 }

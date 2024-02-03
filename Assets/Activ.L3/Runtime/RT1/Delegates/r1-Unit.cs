@@ -11,7 +11,7 @@ public static class Unit{
     public static object Step(
         L3.Unit unit, Context cx, HashSet<Node> deps
     ){
-        cx.Log("u/" + unit);
+        //cx.Log("u/" + unit);
         // NOTE we do not enter the namespace. As a result
         // imported objects are available
         //cx.stack.Push(new Scope());

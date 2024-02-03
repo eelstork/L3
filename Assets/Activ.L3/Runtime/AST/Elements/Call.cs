@@ -5,6 +5,7 @@ namespace L3{
 public partial class Call : Branch, Expression{
 
     public string function = "";
+    public bool once;
     public bool opt = false;
 
     [Hierarchy]
@@ -26,7 +27,8 @@ public partial class Call : Branch, Expression{
     public void AddCall() => args.Add(new Call());
 
     override public string TFormat()
-    => (opt ? "opt " : null) + function + "(...)";
+    => (opt ? "opt " : null) + function + "(...) "
+    + (once ? "once" : null);
 
     override public Node[] children
     => args == null ? null

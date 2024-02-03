@@ -13,12 +13,19 @@ public class History : TNode{
     => records.Count == 0 ? null : records[0];
 
     public TNode[] children
-    => (from x in children select (TNode)x).ToArray();
+    => (from x in records select (TNode)x).ToArray();
 
     public void Add(Record arg) => records.Insert(0, arg);
 
     public bool Did(string arg) => Traversal.Find<TNode>(
         this, x => x.children, x => x.Matches(arg)
     );
+
+    public bool DidCall(string func, object[] args)
+    => Traversal.Find<TNode>(
+        this, x => x.children, x => x.Matches(func, args)
+    );
+
+    public bool Matches(string arg, object[] args) => false;
 
 }}

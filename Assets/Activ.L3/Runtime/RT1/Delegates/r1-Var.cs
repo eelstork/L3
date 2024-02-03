@@ -6,11 +6,11 @@ namespace R1{
 public static class Var{
 
     public static object Resolve(L3.Var @var, Context cx){
-        cx.Log("var/" + @var + "(resolve)");
+        //cx.Log("var/" + @var + "(resolve)");
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
         var node = cx.env.FindVar(name);
-        cx.Log($"{@var} in env as {node}");
+        //cx.Log($"{@var} in env as {node}");
         // TODO this is not correct... may be in env and still null
         if(node != null){
             switch(node){
@@ -29,7 +29,7 @@ public static class Var{
     }
 
     public static object Refer(L3.Var @var, Context cx){
-        cx.Log("var-ref/" + @var + "(refer)");
+        //cx.Log("var-ref/" + @var + "(refer)");
         var name = @var.value;
         // 1. Find the wanted variable in scope, if possible
         var node = cx.env.FindVar(name);

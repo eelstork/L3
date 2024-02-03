@@ -5,6 +5,7 @@ namespace R1{
 public interface Context{
 
     Env env { get; }
+    History history { get; }
     object pose { get; set; }
 
     Node FindFunction(string name);

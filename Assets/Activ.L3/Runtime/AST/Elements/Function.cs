@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Activ.Util;
 
 namespace L3{
 public partial class Function : Branch, Dec, Named{
 
+    public bool auto;
     public string type = "void";
     public string name = "";
     public List<Parameter> parameters;
@@ -32,7 +34,7 @@ public partial class Function : Branch, Dec, Named{
     }
 
     override public string TFormat(){
-        var str = type + " " + name;
+        var str = auto.@as("auto") + type._() + name;
         if(parameters == null)
             return str + "()";
         else

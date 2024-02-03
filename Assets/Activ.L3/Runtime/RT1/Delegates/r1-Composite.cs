@@ -45,13 +45,13 @@ public static class Composite{
     }
 
     public static object Block(Co co, Context cx){
-        cx.Log("blk/" + co);
+        //cx.Log("blk/" + co);
         foreach(var k in co.nodes) cx.Step(k as Node);
         return null;
     }
 
     public static object AccessRef(Co co, Context cx){
-        cx.Log("access-ref/" + co);
+        //cx.Log("access-ref/" + co);
         var first = co.nodes[0] as Node;
         if(first == null){
             throw new InvOp($"{co.nodes[0]} is not a node");
@@ -78,7 +78,7 @@ public static class Composite{
     }
 
     public static object Access(Co co, Context cx){
-        cx.Log("access/" + co);
+        //cx.Log("access/" + co);
         var X = cx.Step(co.nodes[0] as Node);
         for(var i = 1; i < co.nodes.Count; i++){
             var Y = co.nodes[i];
@@ -103,7 +103,7 @@ public static class Composite{
     }
 
     public static object Assign(Co co, Context cx){
-        cx.Log("assign/" + co);
+        //cx.Log("assign/" + co);
         var n = co.nodes.Count;
         int i = n - 1;
         object val = cx.Step(co.nodes[i] as Node);
@@ -130,7 +130,7 @@ public static class Composite{
     }
 
     public static object Sel(Co co, Context cx){
-        cx.Log("sel/" + co + ": " + co.nodes.Count);
+        //cx.Log("sel/" + co + ": " + co.nodes.Count);
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);
@@ -143,7 +143,7 @@ public static class Composite{
     }
 
     public static object Seq(Co co, Context cx){
-        cx.Log("seq/" + co);
+        //cx.Log("seq/" + co);
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);
@@ -153,7 +153,7 @@ public static class Composite{
     }
 
     public static object Sum(Co co, Context cx){
-        cx.Log("sum/" + co);
+        //cx.Log("sum/" + co);
         object x = null;
         foreach(var k in co.nodes){
             var y = cx.Step(k as Node);
@@ -163,7 +163,7 @@ public static class Composite{
     }
 
     public static object Eq(Co co, Context cx){
-        cx.Log("eq/" + co);
+        //cx.Log("eq/" + co);
         var x = cx.Step(co.nodes[0] as Node);
         for(var i = 1; i < co.nodes.Count; i++){
             var k = co.nodes[i];
@@ -178,7 +178,7 @@ public static class Composite{
     }
 
     public static object Uneq(Co co, Context cx){
-        cx.Log("eq/" + co);
+        //cx.Log("eq/" + co);
         var x = cx.Step(co.nodes[0] as Node);
         for(var i = 1; i < co.nodes.Count; i++){
             var k = co.nodes[i];
@@ -190,7 +190,7 @@ public static class Composite{
     }
 
     public static object True(Co co, Context cx){
-        cx.Log("eq/" + co);
+        //cx.Log("eq/" + co);
         foreach(var k in co.nodes){
             var x = cx.Step(k as Node);
             if(!true.Equals(x)) return false;
@@ -199,7 +199,7 @@ public static class Composite{
     }
 
     public static object False(Co co, Context cx){
-        cx.Log("eq/" + co);
+        //cx.Log("eq/" + co);
         foreach(var k in co.nodes){
             var x = cx.Step(k as Node);
             if(!false.Equals(x)) return false;
@@ -208,7 +208,7 @@ public static class Composite{
     }
 
     public static object Act(Co co, Context cx){
-        cx.Log("act/" + co);
+        //cx.Log("act/" + co);
         object val = null;
         foreach(var k in co.nodes){
             val = cx.Step(k as Node);

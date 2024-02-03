@@ -6,7 +6,7 @@ namespace R1{
 public static class Dec{
 
     public static object Step(L3.Dec dec, Context cx){
-        cx.Log("dec/" + dec);
+        //x.Log("dec/" + dec);
         if(!(dec is Node)){
             throw new InvOp($"Not a node: {dec}");
         }

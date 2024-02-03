@@ -12,9 +12,6 @@ public class Process : Context{
     public Record record;
     public object pose = new Logger();
 
-    Env Context.env => env;
-    object Context.pose{ get => pose; set => pose = value; }
-
     public Process(){}
 
     public Process(L3Script root) => this.root = root;
@@ -98,6 +95,12 @@ public class Process : Context{
         Step(unit);
         env.Exit();
     }
+
+    // <Context> ----------------------------------------------
+
+    Env Context.env => env;
+    object Context.pose{ get => pose; set => pose = value; }
+    History Context.history => history;
 
     class Logger{
         public void Log(object arg) => UnityEngine.Debug.Log(arg);
