@@ -1,0 +1,17 @@
+{
+    "name": "activ.l3",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7cfc138365e8742eea14a9af3c33088c",
+        "GUID:8c244818380d140208daa44ecf0ce55c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
