@@ -45,7 +45,6 @@ public static class Composite{
     }
 
     public static object Block(Co co, Context cx){
-        //cx.Log("blk/" + co);
         foreach(var k in co.nodes) cx.Step(k as Node);
         return null;
     }
