@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using InvOp = System.InvalidOperationException;
-using System.Linq;
+using System.Linq; using Activ.Util;
 
 namespace Experimental{
 public class Stack0{
@@ -21,12 +21,6 @@ public class Stack0{
         return false;
     }
 
-    public string Dump(){
-        var z = "stack\n";
-        foreach(var f in s.Reverse()) f.Dump(ref z, 1);
-        return z;
-    }
-
     public object this[object key]{
         get{
             foreach(var x in f) if(x.ContainsKey(key)) return x[key];
@@ -37,21 +31,23 @@ public class Stack0{
 
     Frame f => s.Peek(); Block b => f.Peek();
 
-    class Frame : Stack<Block>{
-        public void Dump(ref string z, int d){
-            z += new string('-', d * 2) + "frame\n";
-            foreach(var b in this.Reverse()) b.Dump(ref z, d + 1);
-        }
-    }
+    class Frame : Stack<Block>{}
 
-    class Block : Dictionary<object, object>{
-        public void Dump(ref string z, int d){
-            z += new string('-', d * 2) + "block\n";
-            foreach(var kv in this){
-                z += new string('-', (d + 1) * 2)
-                     + $"{kv.Key}: {kv.Value}\n";
-            }
+    class Block : Dictionary<object, object>{}
+
+    // --------------------------------------------------------------
+
+    public string Dump(){
+        var z = "stack\n"; foreach(var f in s.Reverse()) Dmpf(f, 1);
+
+        void Dmpf(Frame f, int d){
+            z += "frame\n".Tabs(d);
+            foreach(var b in f.Reverse()) Dmpb(b, d + 1);
         }
+        void Dmpb(Block b, int d){
+            z += "block\n".Tabs(d); foreach(var kv in b)
+                z += $"{kv.Key}: {kv.Value}\n".Tabs(d + 1);
+        } return z;
     }
 
 }}
