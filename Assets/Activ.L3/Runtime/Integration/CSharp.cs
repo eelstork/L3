@@ -44,16 +44,17 @@ public static class CSharp{
         return output;
     }
 
-    public static object Invoke(
+    public static (Type type, object value) Invoke(
         Method[] group, object[] args, object target
     ){
+        if(group.Length == 0) throw new InvOp("Empty method group");
         foreach(var method in group){
             //try{
                 var output = method.Invoke(target, args);
                 //if(output != null){
                 //    Log($"Value type [{output.GetType()}]");
                 //}
-                return output;
+                return (method.ReturnType, output);
             //}catch()
         }
         throw new InvOp("Could not call method");

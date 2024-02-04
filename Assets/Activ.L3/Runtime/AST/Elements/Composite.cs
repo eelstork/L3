@@ -10,6 +10,7 @@ public partial class Composite : Branch, Expression{
     };
 
     public Type type;
+    public bool ordered;
     public string name = "";
 
     [Hierarchy]

@@ -21,4 +21,7 @@ public interface Context{
     void Log(string arg)
     => UnityEngine.Debug.Log(arg);
 
+    void SetIndex(L3.Composite arg, int i);
+    int GetIndex(L3.Composite arg);
+
 }}

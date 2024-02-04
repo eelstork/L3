@@ -7,17 +7,11 @@ using UnityEngine;
 using static L3.Statuses;
 
 namespace R1{
-public static class Composite{
+public static partial class Composite{
 
     public static object Ref(Co co, Context cx){
         var output = co.type switch{
             access => AccessRef(co, cx),
-            //act => Act(co, cx),
-            //assign => Assign(co, cx),
-            //block => Block(co, cx),
-            //sel => Sel(co, cx),
-            //seq => Seq(co, cx),
-            //sum => Sum(co, cx),
             _ => throw new InvOp($"Cannot ref: {co.type}")
         };
         return output;
@@ -128,29 +122,6 @@ public static class Composite{
         }
     }
 
-    public static object Sel(Co co, Context cx){
-        //cx.Log("sel/" + co + ": " + co.nodes.Count);
-        object val = null;
-        foreach(var k in co.nodes){
-            val = cx.Step(k as Node);
-            if(IsDone(val) || IsCont(val)){
-                Debug.Log($"Exit selector {co.name} cause {val}");
-                return val;
-            }
-        }
-        return val;
-    }
-
-    public static object Seq(Co co, Context cx){
-        //cx.Log("seq/" + co);
-        object val = null;
-        foreach(var k in co.nodes){
-            val = cx.Step(k as Node);
-            if(IsFailing(val) || IsCont(val)) return val;
-        }
-        return val;
-    }
-
     public static object Sum(Co co, Context cx){
         //cx.Log("sum/" + co);
         object x = null;
@@ -204,16 +175,6 @@ public static class Composite{
             if(!false.Equals(x)) return false;
         }
         return true;
-    }
-
-    public static object Act(Co co, Context cx){
-        //cx.Log("act/" + co);
-        object val = null;
-        foreach(var k in co.nodes){
-            val = cx.Step(k as Node);
-            if(IsCont(val)) return val;
-        }
-        return val;
     }
 
 }}

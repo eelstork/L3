@@ -96,6 +96,17 @@ public class Process : Context{
         env.Exit();
     }
 
+    Dictionary<Composite, int> state = new ();
+
+    public void SetIndex(Composite arg, int i){
+        state[arg] = i;
+    }
+
+    public int GetIndex(Composite arg){
+        if(state.ContainsKey(arg)) return state[arg];
+        else return 0;
+    }
+
     // <Context> ----------------------------------------------
 
     Env Context.env => env;

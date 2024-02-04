@@ -30,9 +30,20 @@ public static class Call{
             Function f
                 => CallFunction(f, cx, target, args),
             MethodInfo[] m
-                => CSharp.Invoke(m, args, target ?? cx.pose),
+                => DoCsInvoke(m, args, target ?? cx.pose),
             _ => throw new InvOp($"Not callable: {call}")
         };
+    }
+
+    static object DoCsInvoke(
+        MethodInfo[] group, object[] args, object target
+    ){
+        var output = CSharp.Invoke(group, args, target);
+        if(output.type.Equals(typeof(void))){
+            return Token.@void;
+        }else{
+            return output.value;
+        }
     }
 
     static object CallFunction(
