@@ -10,9 +10,7 @@ public class Stack0{
     public Stack0(){ EnterFrame(); }
 
     public void EnterFrame(){ s.Push(new Frame()); EnterBlock();}
-
     public void ExitFrame () => s.Pop();
-
     public void EnterBlock() => f.Push( new Block() );
     public void ExitBlock () => f.Pop();
 
@@ -39,7 +37,6 @@ public class Stack0{
 
     public string Dump(){
         var z = "stack\n"; foreach(var f in s.Reverse()) Dmpf(f, 1);
-
         void Dmpf(Frame f, int d){
             z += "frame\n".Tabs(d);
             foreach(var b in f.Reverse()) Dmpb(b, d + 1);
