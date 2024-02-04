@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "activ.util",
-        "activ.data"
+        "activ.data",
+        "activ.l3"
     ],
     "includePlatforms": [
         "Editor"
