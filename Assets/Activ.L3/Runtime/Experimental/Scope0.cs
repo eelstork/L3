@@ -3,47 +3,47 @@ using InvOp = System.InvalidOperationException;
 using System.Linq; using Activ.Util;
 
 namespace Experimental{
-public class Stack0{
+public class Stack0 : Stack<Stack0.Scope>{
 
-    Stack<Frame> s = new ();
+    public Stack0() => EnterFrame();
 
-    public Stack0(){ EnterFrame(); }
-
-    public void EnterFrame(){ s.Push(new Frame()); EnterBlock();}
-    public void ExitFrame () => s.Pop();
-    public void EnterBlock() => f.Push( new Block() );
-    public void ExitBlock () => f.Pop();
+    public void EnterFrame() => Push( new Scope(clear: false) );
+    public void ExitFrame () => Pop();
+    public void EnterBlock() => Push( new Scope(clear: true) );
+    public void ExitBlock () => Pop();
 
     public bool Exists(object key){
-        foreach(var x in f) if(x.ContainsKey(key)) return true;
-        return false;
+        foreach(var scope in this){
+            if(scope.ContainsKey(key)) return true;
+            if(!scope.clear) return false;
+        } return false;
     }
 
     public object this[object key]{
         get{
-            foreach(var x in f) if(x.ContainsKey(key)) return x[key];
-            throw new InvOp($"Not found: {key}");
+            int i = 0;
+            foreach(var scope in this){
+                if(scope.ContainsKey(key)) return scope[key];
+                if(!scope.clear) return false;
+                i++;
+            } throw new InvOp($"Not found: {key}");
         }
-        set => b[key] = value;
+        set => Peek()[key] = value;
     }
 
-    Frame f => s.Peek(); Block b => f.Peek();
-
-    class Frame : Stack<Block>{}
-
-    class Block : Dictionary<object, object>{}
+    public class Scope : Dictionary<object, object>{
+        public readonly bool clear;
+        public Scope(bool clear) => this.clear = clear;
+    }
 
     // --------------------------------------------------------------
 
     public string Dump(){
-        var z = "stack\n"; foreach(var f in s.Reverse()) Dmpf(f, 1);
-        void Dmpf(Frame f, int d){
-            z += "frame\n".Tabs(d);
-            foreach(var b in f.Reverse()) Dmpb(b, d + 1);
-        }
-        void Dmpb(Block b, int d){
-            z += "block\n".Tabs(d); foreach(var kv in b)
-                z += $"{kv.Key}: {kv.Value}\n".Tabs(d + 1);
+        var z = "stack\n";
+        foreach(var scope in this.Reverse()){
+            z += scope.clear ? "block\n" : "frame\n";
+            foreach(var kv in scope)
+                z += $"{kv.Key}: {kv.Value}\n".Tabs(1);
         } return z;
     }
 

@@ -42,4 +42,4 @@ public class Stack0{
 
 At first glance this implementation may look flawed. When overriding a variable inside a black, then looking up the same, do we get a value from the parent block? However that is not the case. Iterating a stack goes last to first, similar to repeatedly popping the stack.
 
-Another issue, which may be dismissed as an implementation quirk, but does feel grating: we can only define variables inside blocks, not frames or the stack itself. This becomes visible when dumping the stack.
+Another issue, which may be dismissed as an implementation quirk, but does feel grating: we can only define variables inside blocks, not frames or the stack itself. This becomes visible when dumping the stack. Since this quirk does not sit, let's refactor.
