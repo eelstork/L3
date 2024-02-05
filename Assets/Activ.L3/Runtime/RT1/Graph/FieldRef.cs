@@ -56,6 +56,6 @@ public class FieldRef : L3.Node, Assignable, Accessible{
         throw new InvOp($"Cannot find {arg} in {this}");
     }
 
-    //override public string TFormat() => "field " + field.Name;
+    //override public string TFormat(bool ex) => "field " + field.Name;
 
 }}

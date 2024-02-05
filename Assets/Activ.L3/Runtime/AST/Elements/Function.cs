@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Activ.Util;
+using InvOp = System.InvalidOperationException;
 
 namespace L3{
 public partial class Function : Branch, Dec, Named{
@@ -7,6 +8,7 @@ public partial class Function : Branch, Dec, Named{
     public bool auto;
     public string type = "void";
     public string name = "";
+    public string via = "";
     public List<Parameter> parameters;
     [Hierarchy]
     public Node expression;
@@ -29,16 +31,23 @@ public partial class Function : Branch, Dec, Named{
         expression = null;
     }
 
+    override public void ReplaceChild(Node x, Node y){
+        if(expression != x) throw new InvOp();
+        expression = y;
+        y.SetParent(this);
+    }
+
     public Function(string name){
         this.name = name;
     }
 
-    override public string TFormat(){
+    override public string TFormat(bool ex){
         var str = auto.@as("auto") + type._() + name;
         if(parameters == null)
-            return str + "()";
+            str += " ()";
         else
-            return str + "(" + string.Join(", ", parameters) + ")";
+            str += " (" + string.Join(", ", parameters) + ")";
+        return via.None() ? str : str + " via " + via;
     }
 
     [EditorAction]
@@ -57,6 +66,6 @@ public partial class Function : Branch, Dec, Named{
         expression = new Call();
     }
 
-    override public string ToString() => TFormat();
+    override public string ToString() => TFormat(false);
 
 }}

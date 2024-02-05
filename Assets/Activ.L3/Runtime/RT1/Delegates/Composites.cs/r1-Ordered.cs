@@ -1,9 +1,6 @@
-//using System.Reflection;
 using L3; using Co = L3.Composite;
 using static L3.Composite.Type;
 using static L3.Token;
-//using InvOp = System.InvalidOperationException;
-//using UnityEngine;
 using static L3.Statuses;
 
 namespace R1{

@@ -19,8 +19,11 @@ public partial class New : Branch, Expression{
     [EditorAction]
     public void AddVar() => args.Add(new Var());
 
-    override public string TFormat()
-    => (opt ? "opt " : null) + "new " +  type + "(...)";
+    override public string TFormat(bool ex){
+        var pstr = ex ? " (...)"
+                      : $" ({Call.FormatParams(children)})";
+        return (opt ? "opt " : null) + "new "+ type + pstr;
+    }
 
     override public Node[] children
     => args == null ? null
@@ -31,5 +34,11 @@ public partial class New : Branch, Expression{
 
      override public void AddChild(Node child)
      => args.Add((Expression)child);
+
+     override public void ReplaceChild(Node x, Node y){
+         var i = args.IndexOf(x as Expression);
+         args[i] = y as Expression;
+         y.SetParent(this);
+     }
 
 }}

@@ -3,7 +3,7 @@ public class Class : AbstractBranch<Node>, Dec, Named{
 
     public string name = "";
 
-    override public string TFormat()
+    override public string TFormat(bool ex)
     => $"class {name}";
 
     string Named.name => name;

@@ -54,8 +54,13 @@ public partial class Composite : Branch, Expression{
         nodes.Add(new New());
     }
 
-    override public string TFormat()
-    => type + ": " + name;
+    override public string TFormat(bool ex){
+        if(ex || children == null) return type + ": " + name;
+        var c = (from x in children select x.TFormat(ex: false));
+        var prefix = type is Type.access ? "." : " " + childPrefix;
+        var str = string.Join( prefix, c);
+        return str;
+    }
 
     override public void AddChild(Node child){
         if(nodes == null) nodes = new ();
@@ -65,6 +70,12 @@ public partial class Composite : Branch, Expression{
     override public void DeleteChild(Node child){
         if(nodes == null) return;
         nodes.Remove((Expression)child);
+    }
+
+    override public void ReplaceChild(Node x, Node y){
+        var i = nodes.IndexOf(x as Expression);
+        nodes[i] = y as Expression;
+        y.SetParent(this);
     }
 
     override public Node[] children

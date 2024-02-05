@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine; using UnityEditor;
 using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
+using Activ.Util;
 using L3;
+using static L3.Composite.Type;
 
 namespace L3.Editor{
 public class GraphEd{
 
-    GUIStyle nodeStyle;
+    GUIStyle nodeStyle, expButtonStyle;
     Vector3 scroll;
     L3Script target;
 
@@ -18,25 +21,34 @@ public class GraphEd{
         EGL.EndScrollView();
     }
 
+    bool IsExpanded(Node arg) => arg switch{
+        Branch br => expanded.GetValue(br, DefaultState(br)),
+        _ => false
+    };
+
+    Dictionary<Branch, bool> expanded = new ();
+
     void Draw(Node node, string prefix, int depth, out bool del){
         DrawNode(node, prefix, depth, out del);
         switch(node){
-            case Branch branch:
-                var children = branch.children;
+            case Branch br:
+                if(!expanded.GetValue(br, DefaultState(br))) return;
+                var children = br.children;
                 if(children == null) return;
-                prefix = branch.childPrefix;
+                prefix = br.childPrefix;
                 Node toDelete = null;
                 for(var i = 0; i < children.Length; i++){
                     var child = children[i];
+                    child.SetParent(br);
                     Draw(
                         child,
-                        i == 0 ? null : branch.childPrefix,
+                        i == 0 ? null : br.childPrefix,
                         depth + 1, out bool del1
                     );
                     if(del1) toDelete = child;
                 }
                 if(toDelete != null){
-                    branch.DeleteChild(toDelete);
+                    br.DeleteChild(toDelete);
                     EditorUtility.SetDirty(target);
                 }
                 break;
@@ -44,15 +56,22 @@ public class GraphEd{
         }
     }
 
-    static Texture2D tex;
+    static Texture2D tex, hoverTex;
 
     void DrawNode(Node client, string prefix, int tabs, out bool del){
-        var label = prefix + client.TFormat();
+        var label = prefix + client.TFormat(IsExpanded(client));
         BeginHorizontal();
         Space(tabs * 8 * 4);
-        if(Button(label, nodeStyle)){
-            NodeEditor.Edit(client);
+        if(client is Branch){
+            var br = client as Branch;
+            var exp = expanded.GetValue(br, DefaultState(br));
+            if( Button( exp ? "-" : "+", expButtonStyle, Width(20)) ){
+                expanded[br] = !exp;
+            }
+        }else{
+            Button(" ", expButtonStyle, Width(20));
         }
+        if(Button(label, nodeStyle)) NodeEditor.Edit(client);
         if(tabs > 0){
             Button("↑", Width(20));
             Button("↓", Width(20));
@@ -63,9 +82,34 @@ public class GraphEd{
         EndHorizontal();
     }
 
+    bool DefaultState(Branch br) => br switch{
+        Class => true,
+        Composite x when x.type == block => true,
+        Composite x when x.type == sel => true,
+        Composite x when x.type == seq => true,
+        Composite x when x.type == act => true,
+        Unit => true,
+        _ => false
+    };
+
     void CreateStyles(){
         //if(nodeStyle != null) return;
-        tex = MakeTex(new Color(0.1f, 0.1f, 0.1f, 0.3f));
+        var hover = Color.yellow;
+        expButtonStyle = MakeStyle(
+            new Color(0.1f, 0.1f, 0.1f, 0.1f), Color.gray, hover
+        );
+        nodeStyle = MakeStyle(
+            new Color(0.1f, 0.1f, 0.1f, 0.2f), null, hover
+        );
+    }
+
+    GUIStyle MakeStyle(
+        Color bg, Color? textColor = null, Color? hoverCol = null
+    ){
+        tex = MakeTex(bg);
+        if(hoverCol != null){
+            hoverTex = MakeTex(hoverCol.Value);
+        }else hoverTex = tex;
         var s = new GUIStyle(GUI.skin.button);
         s.border = new RectOffset(0, 0, 0, 0);
         s.alignment = TextAnchor.MiddleLeft;
@@ -73,9 +117,14 @@ public class GraphEd{
         s.normal.scaledBackgrounds = new Texture2D[]{ tex };
         s.onActive.background = tex;
         s.onFocused.background = tex;
-        s.onHover.background = tex;
+        s.onHover.background = hoverTex;
+        s.onHover.scaledBackgrounds = new Texture2D[]{ hoverTex };
         s.onNormal.background = tex;
-        nodeStyle = s;
+        if(textColor.HasValue){
+            s.normal.textColor = textColor.Value;
+            s.hover.textColor = Color.yellow;
+        }
+        return s;
     }
 
     Texture2D MakeTex(Color col){

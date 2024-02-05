@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using InvOp = System.InvalidOperationException;
 
 namespace L3{
 public partial class AbstractBranch<T> : Branch{
@@ -24,6 +25,10 @@ public partial class AbstractBranch<T> : Branch{
      override public void AddChild(Node child){
          if(nodes == null) nodes = new ();
          nodes.Add((T)(object)child);
+     }
+
+     override public void ReplaceChild(Node x, Node y){
+         throw new InvOp();
      }
 
 }}

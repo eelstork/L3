@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine; using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
 using Field = System.Reflection.FieldInfo;
+using GL = UnityEngine.GUILayout;
 
 public class ObjectInspector{
 
@@ -50,7 +51,8 @@ public class ObjectInspector{
         if(type == null) return;
         BeginHorizontal();
         foreach(var method in type.GetMethods()){
-            if(IsEditorAction(method) && Button(ActionName(method.Name))){
+            if(IsEditorAction(method)
+            && Button(ActionName(method.Name), GL.ExpandWidth(false))){
                 method.Invoke(arg, null);
                 didUseAction = true;
             }

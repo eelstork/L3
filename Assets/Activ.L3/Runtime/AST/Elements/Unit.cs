@@ -11,7 +11,7 @@ public partial class Unit : AbstractBranch<Node>{
     public bool isTest;
     public string expectedError = "";
 
-    override public string TFormat(){
+    override public string TFormat(bool ex){
         string str = null;
         if(!ns.None()) str += $"namespace {ns}:";
         if(!@as.None()) str += $", as {@as}:";

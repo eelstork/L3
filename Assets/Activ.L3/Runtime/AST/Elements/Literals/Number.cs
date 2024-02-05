@@ -5,7 +5,7 @@ public partial class Number : Node, Expression, Literal{
 
     object Literal.value => value;
 
-    override public string TFormat() => value.ToString();
+    override public string TFormat(bool ex) => value.ToString();
 
     public static implicit operator int(Number self)
     => (int)self.value;

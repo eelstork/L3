@@ -54,6 +54,6 @@ public partial class PropRef : L3.Node, R1.Assignable, R1.Accessible{
         throw new InvOp($"Cannot find {arg} in {this}");
     }
 
-    //override public string TFormat() => "prop " + prop.Name;
+    //override public string TFormat(bool ex) => "prop " + prop.Name;
 
 }}
