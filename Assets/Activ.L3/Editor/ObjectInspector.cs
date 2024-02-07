@@ -85,7 +85,7 @@ public class ObjectInspector{
     }
 
     bool IsEditorAction(MethodInfo arg)
-    => Attribute.IsDefined(arg, typeof(EditorActionAttribute));
+    => Attribute.IsDefined(arg, typeof(edaAttribute));
 
     bool IsHidden(Field arg)
     => Attribute.IsDefined(arg, typeof(HideInInspector))

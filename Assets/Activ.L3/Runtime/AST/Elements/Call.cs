@@ -13,20 +13,15 @@ public partial class Call : Branch, Expression{
     [Hierarchy]
     public List<Expression> args = new ();
 
-    [EditorAction]
-    public void AddString() => args.Add(new LString());
+    [eda] public void AddVar() => args.Add(new Var());
 
-    [EditorAction]
-    public void AddNumber() => args.Add(new Number());
+    [eda] public void AddString() => args.Add(new LString());
 
-    [EditorAction]
-    public void AddComposite() => args.Add(new Composite());
+    [eda] public void AddNumber() => args.Add(new Number());
 
-    [EditorAction]
-    public void AddVar() => args.Add(new Var());
+    [eda] public void AddComposite() => args.Add(new Composite());
 
-    [EditorAction]
-    public void AddCall() => args.Add(new Call());
+    [eda] public void AddCall() => args.Add(new Call());
 
     override public string TFormat(bool ex){
         var pstr = ex ? " (...)"

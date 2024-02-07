@@ -11,7 +11,7 @@ public partial class Var : Node, Expression{
     override public string ToString()
     => $"L3.Var{{{value}, opt: {opt}}}";
 
-    [EditorAction]
+    [eda]
     public void Call(){
         Log("Should make into a call");
         if(parent == null) LogWarning("NO PARENT");

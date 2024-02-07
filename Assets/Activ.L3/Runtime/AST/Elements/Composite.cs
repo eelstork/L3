@@ -18,37 +18,37 @@ public partial class Composite : Branch, Expression{
 
     public void Delete(){}
 
-    [EditorAction]
+    [eda]
     public void AddCall(){
         if(nodes == null) nodes = new ();
         nodes.Add(new Call());
     }
 
-    [EditorAction]
+    [eda]
     public void AddComposite(){
         if(nodes == null) nodes = new ();
         nodes.Add(new Composite());
     }
 
-    [EditorAction]
+    [eda]
     public void AddVar(){
         if(nodes == null) nodes = new ();
         nodes.Add(new Var());
     }
 
-    [EditorAction]
+    [eda]
     public void AddNum(){
         if(nodes == null) nodes = new ();
         nodes.Add(new Number());
     }
 
-    [EditorAction]
+    [eda]
     public void AddField(){
         if(nodes == null) nodes = new ();
         nodes.Add(new Field());
     }
 
-    [EditorAction]
+    [eda]
     public void AddNew(){
         if(nodes == null) nodes = new ();
         nodes.Add(new New());

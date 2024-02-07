@@ -19,11 +19,11 @@ public class Class : AbstractBranch<Node>, Dec, Named{
 
     public bool HasProp(string name) => false;
 
-    [EditorAction]
+    [eda]
     public void AddField()
     => AddChild(new Field());
 
-    [EditorAction]
+    [eda]
     public void AddFunction()
     => AddChild(new Function());
 

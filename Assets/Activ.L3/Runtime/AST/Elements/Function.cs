@@ -50,18 +50,18 @@ public partial class Function : Branch, Dec, Named{
         return via.None() ? str : str + " via " + via;
     }
 
-    [EditorAction]
+    [eda]
     public void AddParameter(){
         if(parameters == null) parameters = new ();
         parameters.Add(new ());
     }
 
-    [EditorAction]
+    [eda]
     public void UseComposite(){
         expression = new Composite();
     }
 
-    [EditorAction]
+    [eda]
     public void UseCall(){
         expression = new Call();
     }

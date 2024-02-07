@@ -9,9 +9,10 @@ using static L3.Composite.Type;
 namespace L3.Editor{
 public class GraphEd{
 
-    GUIStyle nodeStyle, expButtonStyle;
+    GUIStyle nodeStyle, expButtonStyle, activeNodeStyle;
     Vector3 scroll;
     L3Script target;
+    Node current;
 
     public void OnGUI(L3Script target){
         this.target = target;
@@ -71,7 +72,9 @@ public class GraphEd{
         }else{
             Button(" ", expButtonStyle, Width(20));
         }
-        if(Button(label, nodeStyle)) NodeEditor.Edit(client);
+        if(Button(label,
+                  client == current ? activeNodeStyle : nodeStyle)
+                 ) NodeEditor.Edit(current = client);
         if(tabs > 0){
             Button("↑", Width(20));
             Button("↓", Width(20));
@@ -100,6 +103,9 @@ public class GraphEd{
         );
         nodeStyle = MakeStyle(
             new Color(0.1f, 0.1f, 0.1f, 0.2f), null, hover
+        );
+        activeNodeStyle = MakeStyle(
+            new Color(0.3f, 0.1f, 0.1f, 0.5f), null, hover
         );
     }
 

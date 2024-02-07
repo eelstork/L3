@@ -10,13 +10,13 @@ public partial class New : Branch, Expression{
     [Hierarchy]
     public List<Expression> args = new ();
 
-    [EditorAction]
+    [eda]
     public void AddString() => args.Add(new LString());
 
-    [EditorAction]
+    [eda]
     public void AddNumber() => args.Add(new Number());
 
-    [EditorAction]
+    [eda]
     public void AddVar() => args.Add(new Var());
 
     override public string TFormat(bool ex){

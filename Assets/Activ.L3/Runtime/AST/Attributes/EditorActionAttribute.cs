@@ -5,4 +5,4 @@ using System;
     Inherited = false,
     AllowMultiple = false
 )]
-public class EditorActionAttribute : Attribute {}
+public class edaAttribute : Attribute {}
