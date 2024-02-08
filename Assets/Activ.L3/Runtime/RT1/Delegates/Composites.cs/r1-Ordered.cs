@@ -2,11 +2,13 @@ using L3; using Co = L3.Composite;
 using static L3.Composite.Type;
 using static L3.Token;
 using static L3.Statuses;
+using Activ.Util;
 
 namespace R1{
 public static partial class Composite{
 
     public static object OrderedSeq(Co co, Context cx){
+        if(co.nodes.Empty()) return status.done;
         //cx.Log($"seq/{co} in context {cx}");
         var index = cx.GetIndex(co);
         var node = co.nodes[index];

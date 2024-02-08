@@ -77,15 +77,37 @@ public static class Call{
         var name = ca.function;
         var func = cx.FindFunction(name);
         if(func != null) return func;
-        var csfunc = ResolveCsFunc(
+        MethodInfo[] csfunc;
+        if(ca.opt) csfunc = ResolveCsFunc(
+            name, target ?? cx.pose, ca.args.Count
+        ); else csfunc = MustResolveCsFunc(
             name, target ?? cx.pose, ca.args.Count
         );
-        if(csfunc != null) return csfunc;
-        if(ca.opt){
-            return false;
-        }else throw new InvOp(
-            $"No func or C# method matching {name}"
+        // TODO returning false when opt looks ambiguous
+        if(csfunc != null && csfunc.Length > 0) return csfunc;
+        else return false;
+        //if(ca.opt){
+        //    return false;
+        //}else throw new InvOp(
+        //    $"No func or C# method matching {name} in {target ?? cx.pose}"
+        //);
+    }
+
+    static MethodInfo[] MustResolveCsFunc(
+        string name, object target, int count
+    ){
+        var presel = target.GetType().GetMethods()
+                           .Where(m => m.Name == name)
+                           .ToArray();
+        if(presel.Length == 0) throw new InvOp(
+            $"No method matching {name} in {target}"
         );
+        presel = presel.Where(m => m.GetParameters().Length == count)
+                       .ToArray();
+        if(presel.Length == 0) throw new InvOp(
+            $"Bad param count with {name} in {target}"
+        );
+        return presel;
     }
 
     static MethodInfo[] ResolveCsFunc(

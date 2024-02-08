@@ -13,6 +13,14 @@ public partial class Composite : Branch, Expression{
     public bool ordered;
     public string name = "";
 
+    public Composite(){}
+
+    public Composite(Composite.Type type, Node[] children){
+        this.type = type;
+        foreach(var k in children) AddChild(k);
+        //this.children = children;
+    }
+
     [Hierarchy]
     public List<Expression> nodes;
 

@@ -14,20 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreReadErrors: 0
   readError: 
-  xml: <L3Script><value t="Unit"><ns t="String"></ns><isTest t="Boolean">True</isTest><expectedError
-    t="String"></expectedError><nodes t="List"><Class><name t="String">Range</name><nodes
-    t="List"><Field><type t="String">int</type><name t="String">min</name></Field><Field><type
-    t="String">int</type><name t="String">max</name></Field></nodes><expanded t="Boolean">False</expanded></Class><Composite><type
-    t="Type">assign</type><name t="String"></name><nodes t="List"><Field><type t="String">Range</type><name
-    t="String">range</name></Field><New><type t="String">Range</type><opt t="Boolean">False</opt><args
-    t="List" /><expanded t="Boolean">False</expanded></New></nodes><expanded t="Boolean">False</expanded></Composite><Call><function
-    t="String">Log</function><opt t="Boolean">False</opt><args t="List"><Var><value
+  xml: <L3Script><value t="Unit"><ns t="String"></ns><deps t="String"></deps><as
+    t="String"></as><isTest t="Boolean">True</isTest><expectedError t="String"></expectedError><nodes
+    t="List"><Class><name t="String">Range</name><nodes t="List"><Field><type t="String">int</type><name
+    t="String">min</name></Field><Field><type t="String">int</type><name t="String">max</name></Field></nodes><expanded
+    t="Boolean">False</expanded></Class><Composite><type t="Type">assign</type><ordered
+    t="Boolean">False</ordered><name t="String"></name><nodes t="List"><Field><type
+    t="String">Range</type><name t="String">range</name></Field><New><type t="String">Range</type><opt
+    t="Boolean">False</opt><args t="List" /><expanded t="Boolean">False</expanded></New></nodes><expanded
+    t="Boolean">False</expanded></Composite><Call><function t="String">Log</function><once
+    t="Boolean">False</once><opt t="Boolean">False</opt><args t="List"><Var><value
     t="String">range</value><opt t="Boolean">False</opt></Var></args><expanded t="Boolean">False</expanded></Call><Composite><type
-    t="Type">assign</type><name t="String"></name><nodes t="List"><Composite><type
-    t="Type">access</type><name t="String"></name><nodes t="List"><Var><value t="String">range</value><opt
-    t="Boolean">False</opt></Var><Var><value t="String">min</value><opt t="Boolean">False</opt></Var></nodes><expanded
-    t="Boolean">False</expanded></Composite><Number><value t="Single">-5</value></Number></nodes><expanded
-    t="Boolean">False</expanded></Composite><Call><function t="String">Log</function><opt
-    t="Boolean">False</opt><args t="List"><Var><value t="String">range</value><opt
-    t="Boolean">False</opt></Var></args><expanded t="Boolean">False</expanded></Call></nodes><expanded
-    t="Boolean">False</expanded></value></L3Script>
+    t="Type">assign</type><ordered t="Boolean">False</ordered><name t="String"></name><nodes
+    t="List"><Composite><type t="Type">access</type><ordered t="Boolean">False</ordered><name
+    t="String"></name><nodes t="List"><Var><value t="String">range</value><opt t="Boolean">False</opt></Var><Var><value
+    t="String">min</value><opt t="Boolean">False</opt></Var></nodes><expanded t="Boolean">False</expanded></Composite><Number><value
+    t="Single">-5</value></Number></nodes><expanded t="Boolean">False</expanded></Composite><Call><function
+    t="String">Log</function><once t="Boolean">False</once><opt t="Boolean">False</opt><args
+    t="List"><Var><value t="String">range</value><opt t="Boolean">False</opt></Var></args><expanded
+    t="Boolean">False</expanded></Call></nodes><expanded t="Boolean">False</expanded></value></L3Script>

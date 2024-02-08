@@ -10,8 +10,11 @@ public partial class Call : Branch, Expression{
     public bool once;
     public bool opt = false;
 
-    [Hierarchy]
-    public List<Expression> args = new ();
+    [Hierarchy] public List<Expression> args = new ();
+
+    public Call(){}
+
+    public Call(string funcname) => function = funcname;
 
     [eda] public void AddVar() => args.Add(new Var());
 

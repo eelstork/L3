@@ -15,5 +15,9 @@ MonoBehaviour:
   ignoreReadErrors: 0
   readError: 
   xml: <L3Script><value t="Unit"><ns t="String"></ns><deps t="String"></deps><as
-    t="String"></as><isTest t="Boolean">False</isTest><expectedError t="String"></expectedError><nodes
-    t="List" /><expanded t="Boolean">False</expanded></value></L3Script>
+    t="String">Patrol</as><isTest t="Boolean">False</isTest><expectedError t="String"></expectedError><nodes
+    t="List"><Composite><type t="Type">seq</type><ordered t="Boolean">True</ordered><name
+    t="String"></name><nodes t="List"><Call><function t="String">Move</function><once
+    t="Boolean">False</once><opt t="Boolean">False</opt><args t="List"><Var><value
+    t="String"></value><opt t="Boolean">False</opt></Var></args><expanded t="Boolean">False</expanded></Call></nodes><expanded
+    t="Boolean">False</expanded></Composite></nodes><expanded t="Boolean">False</expanded></value></L3Script>

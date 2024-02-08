@@ -6,6 +6,9 @@ public partial class Var : Node, Expression{
     public string value = "";
     public bool opt = false;
 
+    public Var(){}
+    public Var(string val) => value = val;
+
     override public string TFormat(bool ex) => value;
 
     override public string ToString()

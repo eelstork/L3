@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine; using UnityEditor;
 using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
+using GL = UnityEngine.GUILayout;
 using Activ.Util;
 using L3;
 using static L3.Composite.Type;
@@ -13,6 +14,7 @@ public class GraphEd{
     Vector3 scroll;
     L3Script target;
     Node current;
+    StatementBuilder statementBuilder = new ();
 
     public void OnGUI(L3Script target){
         this.target = target;
@@ -20,6 +22,7 @@ public class GraphEd{
         scroll = EGL.BeginScrollView(scroll);
         Draw(target.value, prefix: null, depth: 0, out bool _);
         EGL.EndScrollView();
+        statementBuilder.OnGUI(target, current as Branch);
     }
 
     bool IsExpanded(Node arg) => arg switch{
@@ -74,7 +77,7 @@ public class GraphEd{
         }
         if(Button(label,
                   client == current ? activeNodeStyle : nodeStyle)
-                 ) NodeEditor.Edit(current = client);
+                 ) L3NodeInspector.Edit(current = client);
         if(tabs > 0){
             Button("↑", Width(20));
             Button("↓", Width(20));

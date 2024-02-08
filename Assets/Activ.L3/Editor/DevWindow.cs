@@ -16,7 +16,7 @@ public class DevWindow : EditorWindow{
 
     [MenuItem("Window/L3/Editor")]
     public static Self ShowWindow()
-    => instance = GetWindow<Self>("L3 Editor");
+    => instance = GetWindow<Self>("L3 Graph Editor");
 
     void OnGUI(){
         if(!hasTestReport) MainUI();
@@ -40,7 +40,7 @@ public class DevWindow : EditorWindow{
             allowSceneObjects: false
         ) as L3Script;
         if(target == null) return;
-        if(target != prevTarget) NodeEditor.Edit(target.value);
+        if(target != prevTarget) L3NodeInspector.Edit(target.value);
         Space(8);
         editor.OnGUI(target);
     }

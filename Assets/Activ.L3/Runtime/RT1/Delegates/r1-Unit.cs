@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
+using System; using System.Collections.Generic;
 using System.Reflection;
-using L3;
 using UnityEngine;
-
+using Activ.Util; using L3;
 
 namespace R1{
 public static class Unit{
@@ -16,17 +14,22 @@ public static class Unit{
         // imported objects are available
         //cx.stack.Push(new Scope());
         ImportUnits(unit, cx, deps);
-        if(!string.IsNullOrEmpty(unit.@as)){
-            var type = Activ.Util.Types.Find(unit.@as);
-            cx.pose = Activator.CreateInstance(type);
-            //ebug.Log($"Will pose as {unit.@as}, resolved as [{cx.pose}] via [{type}]");
-        }else{
-            //ebug.Log($"Not posing");
-        }
+        Pose(unit, cx);
         if(unit.nodes != null){
             foreach(var k in unit.nodes) cx.Step(k);
         }        //cx.stack.Pop();
         return null;
+    }
+
+    static void Pose(L3.Unit unit, Context cx){
+        if(unit.@as.None()) return;
+        var pose = cx.pose.GetType().Name;
+        if(unit.@as == pose){
+            Debug.Log($"Already posing as {pose}"); return;
+        }
+        var type = Activ.Util.Types.Find(unit.@as);
+        cx.pose = Activator.CreateInstance(type);
+        Debug.Log($"Posing as '{unit.@as}': [{cx.pose}] via [{type}]");
     }
 
     static void Import(
