@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Activ.Util;
 
 namespace L3{
 public partial class Composite : Branch, Expression{
@@ -63,7 +64,9 @@ public partial class Composite : Branch, Expression{
     }
 
     override public string TFormat(bool ex){
-        if(ex || children == null) return type + ": " + name;
+        if(ex || children == null){
+            return (ordered ? "o-" : null) + type + ": " + name;
+        }
         var c = (from x in children select x.TFormat(ex: false));
         var prefix = type is Type.access ? "." : " " + childPrefix;
         var str = string.Join( prefix, c);

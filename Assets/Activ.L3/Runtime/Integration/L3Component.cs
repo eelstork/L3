@@ -5,8 +5,9 @@ namespace L3{
 public class L3Component : MonoBehaviour{
 
     public L3.L3Script main;
-    public bool onDemand = true, runOnce;
+    public bool onDemand = true, step;
     Process proc;
+    public string status;
 
     public R1.History history => proc?.history;
     public R1.Record record => proc?.record;
@@ -18,17 +19,23 @@ public class L3Component : MonoBehaviour{
         proc = new Process();
     }
 
-    void Update(){
+    protected virtual void Update(){
         if(willRun) Run(main.value);
-        runOnce = false;
+        step = false;
     }
 
     void Run(Unit unit){
         proc.root = main;
         proc.pose = this;
-        proc.Exec();
+        status = proc.Exec().ToString();
     }
 
-    bool willRun => !onDemand || runOnce;
+    bool willRun{ get{
+        if(Application.isPlaying){
+            return !onDemand || step;
+        }else{
+            return onDemand && step;
+        }
+    }}
 
 }}

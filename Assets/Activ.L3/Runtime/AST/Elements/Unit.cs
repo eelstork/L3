@@ -7,11 +7,13 @@ public partial class Unit : AbstractBranch<Node>{
     public string ns = "";
     public string deps = "";
     public string @as = "";
+    public bool once;
     public bool isTest;
     public string expectedError = "";
 
     override public string TFormat(bool ex){
         string str = null;
+        if(once) str += "once";
         if(!ns.None()) str += $"namespace {ns}:";
         if(!@as.None()) str += $", as {@as}:";
         if(str == null) str = "unit:";

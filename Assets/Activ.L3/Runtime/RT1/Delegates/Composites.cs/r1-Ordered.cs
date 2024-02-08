@@ -13,8 +13,10 @@ public static partial class Composite{
         var index = cx.GetIndex(co);
         var node = co.nodes[index];
         var val = cx.Step(node as Node);
+        var count = co.nodes.Count;
         if(IsDone(val)){
             cx.SetIndex(co, (index + 1) % co.nodes.Count );
+            if(index < count - 1) return cont;
         }else if(IsFailing(val)){
             cx.SetIndex(co, 0);
         }

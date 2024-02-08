@@ -15,17 +15,19 @@ public static class Unit{
         //cx.stack.Push(new Scope());
         ImportUnits(unit, cx, deps);
         Pose(unit, cx);
+        object value = null;
         if(unit.nodes != null){
-            foreach(var k in unit.nodes) cx.Step(k);
-        }        //cx.stack.Pop();
-        return null;
+            foreach(var k in unit.nodes) value = cx.Step(k);
+        }
+        return value;
     }
 
     static void Pose(L3.Unit unit, Context cx){
         if(unit.@as.None()) return;
         var pose = cx.pose.GetType().Name;
         if(unit.@as == pose){
-            Debug.Log($"Already posing as {pose}"); return;
+            //Debug.Log($"Already posing as {pose}");
+            return;
         }
         var type = Activ.Util.Types.Find(unit.@as);
         cx.pose = Activator.CreateInstance(type);

@@ -11,16 +11,20 @@ public class Process : Context{
     public History history = new ();
     public Record record;
     public object pose = new Logger();
+    public object output;
+    public bool stopped;
 
     public Process(){}
 
     public Process(L3Script root) => this.root = root;
 
-    public void Exec(){
+    public object Exec(){
+        if(stopped) return "stopped";
         try{
             record = new ();
-            Exec(root.value);
+            var value = Exec(root.value);
             history.Add(record);
+            return value;
         }catch(System.Exception){ env.Dump(); throw; }
     }
 
@@ -52,7 +56,7 @@ public class Process : Context{
                 Composite co => R1.Composite.Step(co, this),
                 Call      ca => R1.Call.Invoke(ca, this, null),
                 New       nw => R1.New.Invoke(nw, this),
-                Unit      un => R1.Unit.Step(un, this, new ()),
+                Unit      un => RunUnit(un),
                 Literal   li => li.value,
                 L3.Var    va => R1.Var.Resolve(va, this),
                 // TODO if the below is Ref, this cannot be Step
@@ -66,6 +70,14 @@ public class Process : Context{
             record.ExitWithError(exp, ex);
             throw;
         }
+    }
+
+    object RunUnit(L3.Unit un){
+        output = R1.Unit.Step(un, this, new ());
+        if(L3.Statuses.IsDone(output)){
+            if(un.once) stopped = true;
+        }
+        return output;
     }
 
     public object Ref(Node exp){
@@ -87,13 +99,14 @@ public class Process : Context{
         return x;
     }
 
-    void Exec(L3.Unit unit){
+    object Exec(L3.Unit unit){
         Activ.Util.Types.SetCustomTypes(TypeMap.types);
         record.frame = null;
         if(env == null) env = new ();
         env.Enter();
-        Step(unit);
+        var value = Step(unit);
         env.Exit();
+        return value;
     }
 
     Dictionary<Composite, int> state = new ();
