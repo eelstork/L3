@@ -8,6 +8,7 @@ namespace R1{
 public static partial class Composite{
 
     public static object OrderedSeq(Co co, Context cx){
+        // TODO - no real justification for this even after noop
         if(co.nodes.Empty()) return status.done;
         //cx.Log($"seq/{co} in context {cx}");
         var index = cx.GetIndex(co);
@@ -28,8 +29,10 @@ public static partial class Composite{
         var index = cx.GetIndex(co);
         var node = co.nodes[index];
         var val = cx.Step(node as Node);
+        var count = co.nodes.Count;
         if(IsFailing(val)){
             cx.SetIndex(co, (index + 1) % co.nodes.Count );
+            if(index < count - 1) return cont;
         }else if(IsDone(val)){
             cx.SetIndex(co, 0);
         }
@@ -41,8 +44,10 @@ public static partial class Composite{
         var index = cx.GetIndex(co);
         var node = co.nodes[index];
         var val = cx.Step(node as Node);
+        var count = co.nodes.Count;
         if(IsFailing(val) || IsDone(val)){
             cx.SetIndex(co, (index + 1) % co.nodes.Count );
+            if(index < count - 1) return cont;
         }
         return val;
     }

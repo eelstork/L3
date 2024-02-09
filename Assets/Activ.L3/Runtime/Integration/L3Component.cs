@@ -26,7 +26,7 @@ public class L3Component : MonoBehaviour{
 
     void Run(Unit unit){
         proc.root = main;
-        proc.pose = this;
+        proc._pose = this;
         status = proc.Exec().ToString();
     }
 

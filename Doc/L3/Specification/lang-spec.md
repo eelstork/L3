@@ -158,7 +158,7 @@ A function declaration consists in a name, optionally typed parameters and an op
 
 Functions may define additional blocks;
 
-### steady tasks
+### Steady tasks
 
 Often, a task requires working memory. In this cases we need the task to exist across frames. While this may be achieved through delegating to consolidated task objects, this approach may be tedious.
 
@@ -312,8 +312,56 @@ Prospective notifications are emitted when an auto function generates a plan. In
 
 Iteratively, agents may use prospective notifications to refine individual plans; this approach may be used either in adversarial or collaborative contexts.
 
-## Appendix A - Attributes
+## Appendix A - Required features
+
+### Post-casting
+
+Cast a type to an interface, either at compile time, or runtime, without the type itself explicitly declaring membership to the interface.
+
+Reason why this is useful: because it is often the case that a developer "see" a useful interface after third party code has shipped.
+
+In typical cases a developer simply want to reuse a design which exists in a library, but has not been formalized through an interface. The result is having to switch/wrap the original types, which is either ugly, or wasteful.
+
+### Existential and potential clauses
+
+Existential clauses mandate or negate the existence of objects, function calls, members, namespaces and types.
+
+Within the runtime, existential clauses avoid the hassle of having to
+- manually maintain mirrored graphs
+- inline notifications to associate calls with other calls in a systematic manner.
+
+At compile time, existential clauses extend the concept of interface:
+- Through interfaces, programmers adopt requirements; however stubbing interfaces is a job IDEs are taking care of, in the best case.
+- Good design often systematically associates types, without the type associations being formally mandated; as such good design is synonymous with drudgery, which is both time consuming and error prone.
+- Therefore options are needed through which existential clauses mandate the existence of types though specified nomenclatures; mechanical resolution is required to materialize types and members, as opposed to (well, in addition of) compilers grumbling when things are missing.
+- The above requirement implies annotating missing implementations, so that machine agents can quickly walk developers through "fill in" sessions.
+
+Needless to say, MVC and its many avatars provide an example of how architectural patterns "work" for software, but contour an automation void which needs to be filled.
+
+Another example of drudgery around both static and type associations is seen in the runtime/elements dissociation in the L3 implementation itself:
+- The design is articulate and regular. Sure, we reserve the option to make exceptions, only proving that "there is a rule".
+- There is no lightweight solution to aligning types at runtime (using, of all things, a switch).
+
+Negative clauses are relatively straightforward, it's about simply just saying "don't do this". At runtime negative clauses can be combined with positive clauses to refine mirror graphs.
+
+Potential clauses help extending libraries without mandating extensions. They may be useful to keep balls rolling, but also not viewed as a necessity.
+
+### Rethink the meaning of "static"
+
+Static is essentially a good idea gone wrong, with developers often going with "masking" strategies through patterns (such as the singleton) which tend to onboard the bad, mentors ignoring the appeal, and language design altogether sitting on its thumbs.
+
+### Parametric loops
+
+Parametric loops allow covering parameter ranges within function calls, applying the "content first" principle to domain traversals.
+This approach is already represented, for example in the NUnit library.
+Parametric ranges may be explicit (such as "(0, n)") or implicitly determined through passing collections in lieu of singletons.
+
+## Appendix B - Attributes
 
 [memoize] - applied to a function (?or a class), indicates that the target operates on a "same input, same output" basis and is suitable for memoization.
 
 [alias n.n] - applied to a function (? or a class) indicates that the target will tolerate a lag up to n.n time units, assuming **same-looking** input.
+
+## Appendix C - notices of interest.
+
+Horn clauses [PENDING DEV]

@@ -4,14 +4,16 @@ using L3;
 namespace R1{
 public class Env{
 
-    Stack<Stack<Scope>> store = new ();
+    Stack<CallFrame> store = new ();
     R1.Obj @object;
 
-    public void Enter(){
+    public object pose{
+        get => frame.pose; set => frame.pose = value;
+    }
+
+    public void Enter(object pose){
         store.Clear();
-        var frame = new Stack<Scope>();
-        frame.Push(new());
-        store.Push(frame);
+        store.Push(new CallFrame( pose ));
         @object = null;
     }
 
@@ -29,12 +31,8 @@ public class Env{
         frame.Pop();
     }
 
-    public void EnterCall(Scope arg, object target){
-        if(target is R1.Obj) @object = target as R1.Obj;
-        var stk = new Stack<Scope>();
-        stk.Push(arg);
-        store.Push(stk);
-    }
+    public void EnterCall(Scope arg, object target)
+    => store.Push( new CallFrame(arg, target as R1.Obj) );
 
     public void ExitCall(){
         store.Pop();
@@ -76,7 +74,7 @@ public class Env{
         UnityEngine.Debug.Log("STORE\n" + str);
     }
 
-    Stack<Scope> frame => store.Peek();
+    CallFrame frame => store.Peek();
 
     Scope local => frame.Peek();
 

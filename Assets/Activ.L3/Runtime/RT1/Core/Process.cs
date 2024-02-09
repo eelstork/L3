@@ -10,13 +10,15 @@ public class Process : Context{
     public Env env;
     public History history = new ();
     public Record record;
-    public object pose = new Logger();
+    public object _pose;
     public object output;
     public bool stopped;
 
     public Process(){}
 
     public Process(L3Script root) => this.root = root;
+
+    public object pose => env.pose;
 
     public object Exec(){
         if(stopped) return "stopped";
@@ -103,7 +105,7 @@ public class Process : Context{
         Activ.Util.Types.SetCustomTypes(TypeMap.types);
         record.frame = null;
         if(env == null) env = new ();
-        env.Enter();
+        env.Enter(_pose);
         var value = Step(unit);
         env.Exit();
         return value;
@@ -123,11 +125,7 @@ public class Process : Context{
     // <Context> ----------------------------------------------
 
     Env Context.env => env;
-    object Context.pose{ get => pose; set => pose = value; }
+    object Context.pose{ get => env.pose; set => _pose = value; }
     History Context.history => history;
-
-    class Logger{
-        public void Log(object arg) => UnityEngine.Debug.Log(arg);
-    }
 
 }}

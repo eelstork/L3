@@ -94,6 +94,12 @@ In the patrol example, the intended motion is *relative*. There is no way to imp
 
 NOTE: as implemented `Move()` is not suitable for stateless operation. Though a corner case, it is interesting (if perhaps disappointing) to note that switching between stateful and stateless modes can have unexpected consequences.
 
+## Would memory nodes work better?
+
+## A less naive model
+
+
+
 ## Summary and conclusion
 
 (1) Use an ordered sequence when attempting to queue actions "for sake".
