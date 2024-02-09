@@ -125,7 +125,12 @@ public class Process : Context{
     // <Context> ----------------------------------------------
 
     Env Context.env => env;
-    object Context.pose{ get => env.pose; set => _pose = value; }
+
+    object Context.pose{
+        get => env.pose;
+        set{ _pose = value; if(env != null) env.pose = value; }
+    }
+
     History Context.history => history;
 
 }}

@@ -10,11 +10,7 @@ public class PlayerController3D : MonoBehaviour{
     public float force;
     public float peak;
     public v3 F0;
-    //[Range(0.1f, 2f)]
-    //public float response = 1f;
-    //[Range(0.0001f, 1f)]
-    //public float tightness = 0.1f;
-    //public float clamp = 1f;
+    public float responseTime = 0.1f;
 
     void FixedUpdate(){
         x = Input.GetAxis("Horizontal");
@@ -31,7 +27,8 @@ public class PlayerController3D : MonoBehaviour{
         //}
         force = F0.magnitude;
         if(force > peak) peak = force;
-        rb.AddForce(F0, ForceMode.Impulse);
+        var dt = Time.fixedDeltaTime;
+        rb.AddForce(F0 / (responseTime * (Mathf.Sqrt(1f + currentSpeed)) ), ForceMode.Force);
     }
 
     Rigidbody rb => GetComponent<Rigidbody>();

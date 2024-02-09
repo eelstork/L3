@@ -96,9 +96,40 @@ NOTE: as implemented `Move()` is not suitable for stateless operation. Though a 
 
 ## Would memory nodes work better?
 
+There's about two ways we can leverage memory nodes. Essentially we can do it by storing state on the client side, or we can store it host side (the host language). I'm interested in having the Move function be a memory node, because it can be intuitive. That is, we can distinguish "move x m to the right" from "move to the right at speed x", with one being clearly a relative statement (move to the right *relative to where you are now*), another being an immediate statement.
+
+## Memory nodes on the host side
+
+Okay, so let's assume the memory node is host side. In which case we're not going to use an ordered sequence. We rely on memory nodes instead, right? Also, file this under benefits, because it's much more intuitive.
+
+Being a stateless sequence we're going to iterate all nodes up to cont, at each BT call: let's simplify the sequence a bit
+
+```
+1. right
+2. up
+3. left
+```
+
+Then initally we start traversing node 1. As before the host initially set a target, then keeps returning cont until the target is reached. Finally we "tick" the task. But the problem is, all the steps are described by the one same function on the host side. So we iterate again, "Move" is ticked, meaning that in fact, all the steps are conflated. In this scenario we're going to iterate one step to the right, then all calls to move are going to skip. Fail.
+
+What we *can* do, is add an attribute to Move(), like this:
+
+[Mm] status Move(...);
+
+This allows the client to know that Move() is a memory node. Then upon completing Move, we're going to tick the task. But, unless we cloned the whole tree, we still need a hook to identify this node. So what we can do is apply site binding on the client side, and mark the node ticked. In this case, we have a stateless sequence, however when exiting the sequence we still need to reiterate (probably the savviest, as we might also queue memory nodes for clearing, but then we'd be doing it for naught in most cases) and untick all memory nodes.
+
+So what if control (which reiterates from the top) navigates away from the patrol sequence, then returns to it? Well, I would argue that the most intuitive behavior in this case would be resuming the memory node - the last open node, right where we left it. Therefore:
+
+- default 1: if the composite exits, untick the memory nodes.
+- default 2: if the composite is not traversed, do nothing (leave memory nodes ticked)
+
+## Memory nodes on the client side
+
 ## A less naive model
 
+## Keeping responsiveness
 
+## Can we have an API which behaves intuitively either in stateful or stateless "mode"
 
 ## Summary and conclusion
 

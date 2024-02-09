@@ -50,6 +50,7 @@ public class Env{
     Node Find(string name){
         foreach(var z in frame){
             var output = z.Find(name);
+            // TODO its value may be null
             if(output != null) return output;
         }
         return @object?.Find(name);
