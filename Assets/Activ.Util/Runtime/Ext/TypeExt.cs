@@ -6,6 +6,7 @@ using Mem = System.Reflection.MemberInfo;
 using Met = System.Reflection.MethodInfo;
 using Fie = System.Reflection.FieldInfo;
 using Pro = System.Reflection.PropertyInfo;
+using InvOp = System.InvalidOperationException;
 
 public static class TypeExt{
 
@@ -23,6 +24,23 @@ public static class TypeExt{
             //UnityEngine.Debug.Log($"{self} does not accept {arg}");
             return false;
         }
+    }
+
+    public static MethodInfo[] FindMethodGroup(
+        this Type self, string name, object target, int count
+    ){
+        var presel = self.GetMethods()
+                         .Where(m => m.Name == name)
+                         .ToArray();
+        if(presel.Length == 0) throw new InvOp(
+            $"No method matching {name} in {target}"
+        );
+        presel = presel.Where(m => m.GetParameters().Length == count)
+                       .ToArray();
+        if(presel.Length == 0) throw new InvOp(
+            $"Bad param count with {name} in {target}"
+        );
+        return presel;
     }
 
     public static IEnumerable<Met> DecMethods(this Type self) => (

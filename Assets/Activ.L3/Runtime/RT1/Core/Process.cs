@@ -30,8 +30,12 @@ public class Process : Context{
         }catch(System.Exception){ env.Dump(); throw; }
     }
 
-    public Node FindFunction(string name)
-    => env.FindFunction(name) ?? FindFuncHere(name);
+    public object CallFunction(
+        object target, string name, object[] args
+    ) => env.CallFunction(target, name, args, this);
+
+    //public Node FindFunction(string name)
+    //=> env.FindFunction(name) ?? FindFuncHere(name);
 
     public Node FindFuncHere(string name){
         var unit = root.value;

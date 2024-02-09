@@ -8,13 +8,10 @@ using static UnityEngine.Debug;
 namespace R1{
 public static class Call{
 
-    // NOTE - target may be null
     public static object Invoke(
         L3.Call ca, Context cx, object target
     ){
-        // Resolve callable object
-        var call = Res(ca, cx, target);
-        // Resolve arguments
+        // Evaluate arguments
         var args = new object[ca.args.Count];
         for(var i = 0; i < args.Length; i++){
             args[i] = cx.Step(ca.args[i] as Node);
@@ -25,96 +22,7 @@ public static class Call{
             if(cx.history.DidCall(ca.function, args))
                 return null;
         }
-        // Invoke function
-        return call switch{
-            Function f
-                => CallFunction(f, cx, target, args),
-            MethodInfo[] m
-                => DoCsInvoke(m, args, target ?? cx.pose),
-            _ => throw new InvOp($"Not callable: {call}")
-        };
+        return cx.CallFunction(target, ca.function, args);
     }
-
-    static object DoCsInvoke(
-        MethodInfo[] group, object[] args, object target
-    ){
-        var output = CSharp.Invoke(group, args, target);
-        if(output.type.Equals(typeof(void))){
-            return Token.@void;
-        }else{
-            return output.value;
-        }
-    }
-
-    static object CallFunction(
-        Function func, Context cx, object target, object[] args
-    ){
-        var sub = new Scope();
-        // Load arguments into the subscope
-        for(int i = 0; i < args.Length; i++){
-            //ebug.Log($"Build arg {i} for {ca.function} with params [{func.parameters}]");
-            var arg = new Arg(func.parameters[i].name, args[i]);
-            sub.Add(arg);
-        }
-        cx.env.EnterCall(sub, target);
-        //Debug.Log($"CALL simple function: [{node}]");
-        var content = func.expression as Node;
-        object output;
-        if(content != null){
-            output = cx.Step(content);
-        }else{
-            if(func.auto){
-                return Solver.Find(func.type, args);
-            }
-            output = Token.@void;
-        }
-        // Exit subscope and return the output
-        cx.env.ExitCall();
-        return output;
-    }
-
-    static object Res(L3.Call ca, Context cx, object target){
-        var name = ca.function;
-        var func = cx.FindFunction(name);
-        if(func != null) return func;
-        MethodInfo[] csfunc;
-        if(ca.opt) csfunc = ResolveCsFunc(
-            name, target ?? cx.pose, ca.args.Count
-        ); else csfunc = MustResolveCsFunc(
-            name, target ?? cx.pose, ca.args.Count
-        );
-        // TODO returning false when opt looks ambiguous
-        if(csfunc != null && csfunc.Length > 0) return csfunc;
-        else return false;
-        //if(ca.opt){
-        //    return false;
-        //}else throw new InvOp(
-        //    $"No func or C# method matching {name} in {target ?? cx.pose}"
-        //);
-    }
-
-    static MethodInfo[] MustResolveCsFunc(
-        string name, object target, int count
-    ){
-        var presel = target.GetType().GetMethods()
-                           .Where(m => m.Name == name)
-                           .ToArray();
-        if(presel.Length == 0) throw new InvOp(
-            $"No method matching {name} in {target}"
-        );
-        presel = presel.Where(m => m.GetParameters().Length == count)
-                       .ToArray();
-        if(presel.Length == 0) throw new InvOp(
-            $"Bad param count with {name} in {target}"
-        );
-        return presel;
-    }
-
-    static MethodInfo[] ResolveCsFunc(
-        string name, object target, int count
-    ) => target.GetType().GetMethods()
-                        .Where(m => m.Name == name)
-                        .Where(m => m.GetParameters().Length == count)
-                        .ToArray();
 
 }}

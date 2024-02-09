@@ -8,7 +8,7 @@ public interface Context{
     History history { get; }
     object pose { get; set; }
 
-    Node FindFunction(string name);
+    object CallFunction(object target, string name, object[] args);
 
     object Instantiate(Class clss);
 

@@ -13,6 +13,14 @@ public class Scope{
         nodes.Add(arg);
     }
 
+    public Function FindFunction(string @func){
+        foreach(var x in nodes){
+            var named = x as Named;
+            if(x is Function && named.name == @func)
+            { return x as Function; }
+        } return null;
+    }
+
     public ValueHolder FindValueHolder(string @var){
         foreach(var x in nodes){
             var named = x as Named;
