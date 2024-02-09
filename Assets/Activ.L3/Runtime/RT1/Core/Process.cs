@@ -34,9 +34,7 @@ public class Process : Context{
         object target, string name, object[] args
     ) => env.CallFunction(target, name, args, this);
 
-    //public Node FindFunction(string name)
-    //=> env.FindFunction(name) ?? FindFuncHere(name);
-
+    // TODO probably not used; needs replacement
     public Node FindFuncHere(string name){
         var unit = root.value;
         foreach(var x in unit.children){
@@ -101,6 +99,12 @@ public class Process : Context{
     public object Instantiate(Class clss){
         record.Enter(clss);
         var x = new R1.Obj(clss);
+        // TODO hackish... prevents initial assignment failure when
+        // running from an explicit constructor.
+        foreach(var k in clss.children){ switch(k){ case Field f:
+            if(x.map == null) x.map = new ();
+            x.map[f.name] = 0; break;
+        }}
         record.Exit(clss, value: x);
         return x;
     }

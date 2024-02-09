@@ -1,4 +1,4 @@
-using System.Reflection;
+using System.Collections.Generic; using System.Reflection;
 using InvOp = System.InvalidOperationException;
 using L3;
 using System.Linq;
@@ -12,8 +12,8 @@ public static class Call{
         L3.Call ca, Context cx, object target
     ){
         // Evaluate arguments
-        var args = new object[ca.args.Count];
-        for(var i = 0; i < args.Length; i++){
+        var n = ca.args.Count; var args = new object[n];
+        for(var i = 0; i < n; i++){
             args[i] = cx.Step(ca.args[i] as Node);
         }
         if(ca.once){
@@ -23,6 +23,14 @@ public static class Call{
                 return null;
         }
         return cx.CallFunction(target, ca.function, args);
+    }
+
+    public static object[] BuildArgs(List<Expression> @in, Context cx){
+        var n = @in.Count; var args = new object[n];
+        for(var i = 0; i < n; i++){
+            //Debug.Log($"Build arg, where {@in[i]} of type {@in[i].GetType()}");
+            args[i] = cx.Step(@in[i] as Node);
+        } return args;
     }
 
 }}

@@ -17,11 +17,16 @@ public static class New{
 
     public static object NewObject(L3.New nw, Context cx){
         var name = nw.type;
-        // TODO more likely, this is retrieving the class def...
-        var node = cx.env.FindConstructor(name);
-        if(node == null) return null;
-        // TODO constructors not supported now...
-        return cx.Instantiate(node as Class);
+        var @class = cx.env.FindType(name);
+        if(@class == null) return null;
+        var i = cx.Instantiate(@class);
+        if(nw.argcount > 0){
+            var cst = @class.FindConstructor(nw.argcount);
+            cx.env.CallL3Func( // TODO status as output?
+                i, cst, R1.Call.BuildArgs(nw.args, cx), cx
+            );
+        }
+        return i;
     }
 
     public static object NewCsObject(L3.New nw, Context cx){

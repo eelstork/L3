@@ -14,8 +14,10 @@ public partial class Function : Branch, Dec, Named{
     public Node expression;
 
     public Function(){
-        name = "Bar";
+        name = "???";
     }
+
+    public int paramcount => parameters?.Count ?? 0;
 
     string Named.name => name;
 

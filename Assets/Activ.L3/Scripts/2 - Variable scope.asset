@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ignoreReadErrors: 0
   readError: 
-  xml: <L3Script><value t="Unit"><ns t="String">Axis</ns><deps t="String"></deps><isTest
-    t="Boolean">True</isTest><expectedError t="String">No field or property matching
-    x</expectedError><nodes t="List"><Composite><type t="Type">block</type><name
-    t="String"></name><nodes t="List"><Composite><type t="Type">assign</type><name
+  xml: '<L3Script><value t="Unit"><ns t="String">Axis</ns><deps t="String"></deps><as
+    t="String"></as><once t="Boolean">False</once><isTest t="Boolean">True</isTest><expectedError
+    t="String">Variable not in scope: x</expectedError><nodes t="List"><Composite><type
+    t="Type">block</type><ordered t="Boolean">False</ordered><name t="String"></name><nodes
+    t="List"><Composite><type t="Type">assign</type><ordered t="Boolean">False</ordered><name
     t="String"></name><nodes t="List"><Field><type t="String">int</type><name t="String">x</name></Field><Number><value
     t="Single">10</value></Number></nodes><expanded t="Boolean">False</expanded></Composite></nodes><expanded
-    t="Boolean">False</expanded></Composite><Call><function t="String">Log</function><opt
-    t="Boolean">False</opt><args t="List"><Var><value t="String">x</value><opt t="Boolean">False</opt></Var></args><expanded
-    t="Boolean">False</expanded></Call></nodes><expanded t="Boolean">False</expanded></value></L3Script>
+    t="Boolean">False</expanded></Composite><Call><function t="String">Log</function><once
+    t="Boolean">False</once><opt t="Boolean">False</opt><args t="List"><Var><value
+    t="String">x</value><opt t="Boolean">False</opt></Var></args><expanded t="Boolean">False</expanded></Call></nodes><expanded
+    t="Boolean">False</expanded></value></L3Script>'
