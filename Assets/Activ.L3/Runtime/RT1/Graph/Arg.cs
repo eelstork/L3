@@ -1,5 +1,5 @@
 namespace R1{
-public class Arg : L3.Node, Named{
+public class Arg : L3.Node, Named, ValueHolder{
 
     public string name;
     public object value;
@@ -10,5 +10,7 @@ public class Arg : L3.Node, Named{
         this.name = name;
         this.value = val;
     }
+
+    object ValueHolder.value => value;
 
 }}

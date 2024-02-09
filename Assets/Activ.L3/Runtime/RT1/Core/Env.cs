@@ -4,12 +4,10 @@ using L3;
 namespace R1{
 public class Env{
 
-    Stack<CallFrame> store = new ();
-    R1.Obj @object;
+    Stack<CallFrame> store = new (); R1.Obj @object;
 
-    public object pose{
-        get => frame.pose; set => frame.pose = value;
-    }
+    public object pose
+    { get => frame.pose; set => frame.pose = value; }
 
     public void Enter(object pose){
         store.Clear();
@@ -17,27 +15,16 @@ public class Env{
         @object = null;
     }
 
-    public void Exit(){
-        store.Pop();
-    }
+    public void Exit() => store.Pop();
 
-    public void EnterScope(){
-        //og($"ENTER SCOPE => {frame.Count}");
-        frame.Push( new () );
-    }
+    public void EnterScope() => frame.Push( new () );
 
-    public void ExitScope(){
-        //og($"EXIT SCOPE => {frame.Count}");
-        frame.Pop();
-    }
+    public void ExitScope() => frame.Pop();
 
     public void EnterCall(Scope arg, object target)
     => store.Push( new CallFrame(arg, target as R1.Obj) );
 
-    public void ExitCall(){
-        store.Pop();
-        @object = null;
-    }
+    public void ExitCall(){ store.Pop(); @object = null; }
 
     public void Def(Node arg) => local.Add(arg);
 
@@ -47,14 +34,11 @@ public class Env{
 
     public Node FindConstructor(string name) => Find(name);
 
-    Node Find(string name){
-        foreach(var z in frame){
-            var output = z.Find(name);
-            // TODO its value may be null
-            if(output != null) return output;
-        }
-        return @object?.Find(name);
-    }
+    public object GetVariableValue(string @var, bool opt)
+    => frame.GetValue(@var, opt);
+
+    public object Reference(string @var, bool opt)
+    => frame.Reference(@var, opt);
 
     public void Dump(){
         var str = "";
@@ -75,11 +59,21 @@ public class Env{
         UnityEngine.Debug.Log("STORE\n" + str);
     }
 
+    // TODO remove if possible
+    Node Find(string name){
+        foreach(var z in frame){
+            var output = z.Find(name);
+            if(output != null) return output;
+        }
+        return @object?.Find(name);
+
+    }
+
     CallFrame frame => store.Peek();
 
     Scope local => frame.Peek();
 
-    void Log(object arg){}
+    //void Log(object arg){}
     //=> UnityEngine.Debug.Log(arg);
 
 }}

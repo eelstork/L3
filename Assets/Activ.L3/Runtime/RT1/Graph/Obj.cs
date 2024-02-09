@@ -21,11 +21,15 @@ public class Obj : Accessible{
         return Find(@variable.value);
     }
 
+    // TODO remove if possible
     public object Ref(Node arg, Context cx){
         var @variable = (L3.Var)arg;
         return new PropRef(@variable.value, this);
     }
 
+    public object Ref(string @var) => new PropRef(@var, this);
+
+    // TODO incorrect; R1.Obj do not contain nodes.
     public Node Find(string name){
         if(map.ContainsKey(name)){
             return map[name] as Node;

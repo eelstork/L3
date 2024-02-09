@@ -3,7 +3,8 @@ using UnityEngine;
 using L3;
 
 namespace R1{
-public partial class Variable : L3.Node, Assignable, Named, Accessible{
+public partial class Variable : L3.Node, Assignable, Named,
+                                Accessible, ValueHolder{
 
     L3.Field owner;
     public object value;
@@ -13,6 +14,8 @@ public partial class Variable : L3.Node, Assignable, Named, Accessible{
     public Variable(L3.Field owner){
         this.owner = owner;
     }
+
+    object ValueHolder.value => value;
 
     public void Assign(object value)
     => this.value = value;
