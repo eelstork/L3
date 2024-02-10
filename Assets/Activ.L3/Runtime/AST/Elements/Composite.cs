@@ -6,8 +6,7 @@ namespace L3{
 public partial class Composite : Branch, Expression{
 
     public enum Type{
-        block, sel, seq, act, assign, access, sum, eq, uneq,
-        @true, @false
+        block, sel, seq, act, assign, access, sum, eq, uneq
     };
 
     public Type type;
@@ -19,7 +18,6 @@ public partial class Composite : Branch, Expression{
     public Composite(Composite.Type type, Node[] children){
         this.type = type;
         foreach(var k in children) AddChild(k);
-        //this.children = children;
     }
 
     [Hierarchy]
@@ -102,8 +100,6 @@ public partial class Composite : Branch, Expression{
          Type.sum => "+ ",
          Type.eq => "== ",
          Type.uneq => "≠ ",
-         Type.@true => "T ",
-         Type.@false => "F ",
          _ => null
      };
 

@@ -6,12 +6,12 @@ Initially, our BT is like this:
 
 ```
 Brew():
-1    AddWater(kettle)
+1    Add(water, kettle)
 2    && Boil(kettle)
-3    && AddCoffee(pot)
-4    && AddWater(kettle, pot)
+3    && Add(coffee, pot)
+4    && AddFrom(kettle, pot)
 5    && Wait(60)
-6    && Pour(kettle, cup)
+6    && Pour(pot, cup)
 ```
 
 ## The stateful model

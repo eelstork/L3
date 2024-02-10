@@ -1,9 +1,8 @@
 using System.Reflection;
-using L3; using Co = L3.Composite;
-using static L3.Composite.Type;
-using static L3.Token;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
+using L3; using Co = L3.Composite;
+using static L3.Composite.Type; using static L3.Token;
 using static L3.Statuses;
 
 namespace R1{
@@ -30,8 +29,6 @@ public static partial class Composite{
             sum => Sum(co, cx),
             eq => Eq(co, cx),
             uneq => Uneq(co, cx),
-            @true => True(co, cx),
-            @false => False(co, cx),
             _ => throw new InvOp($"Unknown composite: {co.type}")
         };
         if(scoping) cx.env.ExitScope();
@@ -155,24 +152,6 @@ public static partial class Composite{
             var y = cx.Step(k as Node);
             if(x == y) return false;
             x = y;
-        }
-        return true;
-    }
-
-    public static object True(Co co, Context cx){
-        //cx.Log("eq/" + co);
-        foreach(var k in co.nodes){
-            var x = cx.Step(k as Node);
-            if(!true.Equals(x)) return false;
-        }
-        return true;
-    }
-
-    public static object False(Co co, Context cx){
-        //cx.Log("eq/" + co);
-        foreach(var k in co.nodes){
-            var x = cx.Step(k as Node);
-            if(!false.Equals(x)) return false;
         }
         return true;
     }

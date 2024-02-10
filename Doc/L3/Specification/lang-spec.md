@@ -142,15 +142,45 @@ A label and description may be associated with a composite expression.
 Descriptions are used for commenting; the first line in a description may not exceed N characters.
 Labels may be used to dynamically replace composite expressions in a running L3 program.
 
-## Temporal clauses
+## Temporal clauses and retrospective access
 
-A temporal clause is used to confirm a prior outcome. The general form is:
+Temporal clauses may be used to either confirm prior outcomes or fence execution conditionally
 
 ```
-did X (n times) (since Y | in the past [time]) (enter/exit/fail)
+did ... since ...
 ```
 
-NOTE: temporal clauses are somewhat provisional; the main reason they are considered (instead of just accessing the execution record) is because referring past function calls without language support is ugly, and loses type safety.
+
+```
+once since ... did ...
+once per ...
+```
+
+As a parameter modifier used in conjuction with `once` or `n times`, `per ...` may be used to efficiently relate actions to specific arguments. Example
+
+```
+// Who's here?
+Person p = GetPerson(nearby, seeingMe: true, friend: true);
+// Greet pals once per day
+Greet(p once per day);
+```
+
+Retrospective access is used to dereference past outcomes:
+
+```
+CALL{ when }
+```
+
+*when* may refer a tick, in which case a value of zero means "at the current iteration", "1" means, at the prior iteration, and so forth.
+
+```
+var current = GetPrice();
+var justNow = current[0]  // same value as 'current'
+var backTicked = current[1] // prior iteration
+var past = current{ 10 days ago };
+var delta = past - current
+Log("That's {delta} less than days ago, what a deal!")
+```
 
 ## Functions
 
@@ -352,9 +382,18 @@ Static is essentially a good idea gone wrong, with developers often going with "
 
 ### Parametric loops
 
-Parametric loops allow covering parameter ranges within function calls, applying the "content first" principle to domain traversals.
-This approach is already represented, for example in the NUnit library.
+Parametric loops cover parameter ranges within function calls, applying the "content first" principle to domain traversals.
+(Similar to range attributes in NUnit)
 Parametric ranges may be explicit (such as "(0, n)") or implicitly determined through passing collections in lieu of singletons.
+
+```
+// implied range (friends is a collection)
+Send(newYearGreetingCard, friends);  
+// With a list of lists
+Sort(lists); // sorting the list
+// Sort each list, not the parent list
+Sort(all lists)
+```
 
 ## Appendix B - Attributes
 
