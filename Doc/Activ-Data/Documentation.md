@@ -1,1 +1,0 @@
-# Activ data documentation
