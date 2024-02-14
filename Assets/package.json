@@ -1,0 +1,26 @@
+{
+  "name": "com.activ.l3",
+  "version": "0.0.0",
+  "displayName": "L3 for Unity",
+  "description": "Dynamic Object Language for Game AI",
+  "unity": "2021.3",
+  "keywords": [
+    "ai",
+    "behaviour",
+    "behavior",
+    "control",
+    "goap",
+    "language",
+    "oop",
+    "planning"
+  ],
+  "author": {
+    "name": "T.E.A de Souza",
+    "email": "active.behaviours@gmail.com",
+    "url": "https://github.com/eelstork/l3u"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/eelstork/l3u.git"
+  }
+}

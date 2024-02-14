@@ -1,5 +1,5 @@
 {
-    "name": "tests",
+    "name": "activ.l3u.tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
