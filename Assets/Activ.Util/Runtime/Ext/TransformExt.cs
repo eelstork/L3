@@ -5,6 +5,26 @@ using T = UnityEngine.Transform;
 namespace Activ.Util{
 public static class TransformExt{
 
+    public static bool HasLOS(this T self, T arg){
+        var P = self.position;
+        var u = arg.position - P;
+        var dist = u.magnitude;
+        var didHit = Physics.Raycast(P, u, out RaycastHit hit, dist);
+        if(!didHit) return true;
+        // TODO sometimes an object has several colliders
+        if(hit.collider == arg.GetComponent<Collider>()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static bool IsPhysical(this T self)
+    => self.GetComponent<Rigidbody>();
+
+    public static bool IsPhysical(this T self, out Rigidbody rb)
+    => rb = self.GetComponent<Rigidbody>();
+
     public static bool MoveTo(
         this T self, v3 P, float speed, out bool didFail
     ){
