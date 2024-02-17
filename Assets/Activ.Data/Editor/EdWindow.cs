@@ -1,17 +1,18 @@
 using UnityEngine; using UnityEditor;
 using static UnityEngine.GUILayout;
 using EGL = UnityEditor.EditorGUILayout;
+using Self = Activ.Data.EdWindow;
 
 namespace Activ.Data{
 public class EdWindow : EditorWindow{
 
     public UnityEngine.Object target;
     Ed ed = new ();
-    public static EdWindow instance;
+    public static Self instance;
 
     [MenuItem("Window/Activ.Data")]
-    public static EdWindow ShowWindow()
-    => instance = GetWindow<EdWindow>("L3 Graph");
+    public static Self ShowWindow()
+    => instance = GetWindow<Self>("L3 Graph");
 
     void OnGUI(){
         target = EGL.ObjectField(

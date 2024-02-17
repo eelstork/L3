@@ -1,9 +1,32 @@
-using UnityEngine;
-using v3 = UnityEngine.Vector3;
+using InvOp = System.InvalidOperationException;
+using UnityEngine; using v3 = UnityEngine.Vector3;
 using T = UnityEngine.Transform;
 
 namespace Activ.Util{
 public static class TransformExt{
+
+    public static T JoinedObject(this T self){
+        var joint = self.GetComponent<FixedJoint>();
+        if(joint == null) return null;
+        return joint.connectedBody.transform;
+    }
+
+    public static bool IsTouching(this T self, T arg){
+        var b0 = self.GetComponent<Collider>().bounds;
+        var b1 = arg.GetComponent<Collider>().bounds;
+        if(b0.Intersects(b1)) return true;
+        if(self.Has<Rigidbody>())
+            return self.IsTouchingAssumingSelfRB(arg);
+        else if(arg.Has<Rigidbody>())
+            return arg.IsTouchingAssumingSelfRB(self);
+        throw new InvOp($"Neither {self} nor {arg} have rigidbod");
+    }
+
+    static bool IsTouchingAssumingSelfRB(this T self, T arg){
+        var t = self.GetComponent<CollisionTracker>();
+        if(!t) t = self.gameObject.AddComponent<CollisionTracker>();
+        return t.IsContacting(arg, @unsafe: true);
+    }
 
     public static bool HasLOS(this T self, T arg){
         var P = self.position;
@@ -17,6 +40,13 @@ public static class TransformExt{
         }else{
             return false;
         }
+    }
+
+    public static bool IsNonPhysical(this T self){
+        var rb = self.GetComponent<Rigidbody>();
+        if(!rb) return true;
+        if(rb.isKinematic) return true;
+        return false;
     }
 
     public static bool IsPhysical(this T self)
@@ -49,6 +79,11 @@ public static class TransformExt{
             self.position += u;
             return false;
         }
+    }
+
+    public static void SetKinematic(this T self, bool flag=true){
+        var rb = self.GetComponent<Rigidbody>();
+        rb.isKinematic = flag;
     }
 
     public static bool HasLOS(this T self, v3 dir, float dist){
