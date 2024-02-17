@@ -1,24 +1,29 @@
-//using System;
 using System.Collections.Generic;
-using Node = System.Object;
 
 namespace Activ.Util.Rec{
-public class Frame{
+public class Frame<T>{
 
-    public Frame parent;
-    public List<Frame> children;
-    public Node node;
+    public Frame<T> parent;
+    public List<Frame<T>> children;
+    public T node;
     public System.Exception error;
     public object value;
     public int depth;
 
-    public Frame(Node x, Frame parent){
+    public Frame(T x, Frame<T> parent){
         this.node = x; this.parent = parent;
         depth = parent == null ? 0 : parent.depth + 1;
     }
 
-    public void Add(Frame child)
+    public void Add(Frame<T> child)
     => (children ?? (children = new ())).Add(child);
 
+    override public string ToString(){
+        var str = node.ToString();
+        return value == null ? str
+             : $"[{value}] {str}";
+    }
+
     int childCount => children?.Count ?? 0;
+
 }}
