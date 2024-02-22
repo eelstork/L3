@@ -4,11 +4,30 @@ using q4 = UnityEngine.Quaternion;
 
 public static class Vector3Ext{
 
-    public static v3? QuadXZ(this v3 u){
-        if(abs(u.x) > abs(u.z)) return u.x > 0f ? v3.right  : v3.left;
-        if(abs(u.z) > abs(u.x)) return u.z > 0f ? v3.forward: v3.back;
-        return null;
-        float abs(float x) => x < 0 ? -x : x;
+    public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
+
+    public static v3 HalfwayTo(this v3 σ, v3 τ) => (σ + τ) / 2f;
+
+    public static bool HasClearLOS(
+        this v3 self, v3 target
+    ){
+        var u = target - self;
+        bool didHit = Physics.Raycast(
+            self, u, out RaycastHit hit, u.magnitude
+        ); return !didHit;
+    }
+
+    public static bool HasClearPath(
+        this v3 self, v3 target, float radius
+    ){
+        // NOTE - if we start too close to an obstacle,
+        // spherecast will assume we are inside the obstacle
+        // and 'let us out'; we do not want this to happen.
+        if(!self.HasClearLOS(target)) return false;
+        var u = target - self;
+        bool didHit = Physics.SphereCast(
+            self, radius, u, out RaycastHit hit, u.magnitude
+        ); return !didHit;
     }
 
     public static v3 JagXZ(this v3 u){
@@ -17,10 +36,6 @@ public static class Vector3Ext{
         return new (u.x, 0, u.z);
         float abs(float x) => x < 0 ? -x : x;
     }
-
-    public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
-
-    public static v3 HalfwayTo(this v3 σ, v3 τ) => (σ + τ) / 2f;
 
     public static v3 Left(this v3 σ)
     => new v3(-σ.z, 0, σ.x).normalized;
@@ -64,15 +79,16 @@ public static class Vector3Ext{
 
     public static v3 MoveUp(this v3 σ, float h) => σ + v3.up * h;
 
+    /*
     public static string Name(this v3 x){
         x = x.Planar();
         return (x.Equals(v3.forward)) ? "north":
                (x.Equals(v3.back)   ) ? "south":
                (x.Equals(v3.right)  ) ? "east" :
                (x.Equals(v3.left)   ) ? "west" : x.ToString();
-   }
+   }*/
 
-    public static string Name2(this v3 x){
+    public static string Name(this v3 x){
         x = x.Planar();
         return (x == v3.forward) ? "north":
                (x == v3.back   ) ? "south":
@@ -82,6 +98,13 @@ public static class Vector3Ext{
 
     public static v3 Planar(this v3 σ)
     => new v3(σ.x, 0f, σ.z);
+
+    public static v3? QuadXZ(this v3 u){
+        if(abs(u.x) > abs(u.z)) return u.x > 0f ? v3.right  : v3.left;
+        if(abs(u.z) > abs(u.x)) return u.z > 0f ? v3.forward: v3.back;
+        return null;
+        float abs(float x) => x < 0 ? -x : x;
+    }
 
     public static v3 Right(this v3 σ)
     => new v3(σ.z, 0, -σ.x).normalized;
@@ -94,28 +117,6 @@ public static class Vector3Ext{
 
     public static v3 Rotate(this v3 σ, float angle, v3 axis)
     => q4.AngleAxis(angle, axis) * σ;
-
-    public static bool HasClearLOS(
-        this v3 self, v3 target
-    ){
-        var u = target - self;
-        bool didHit = Physics.Raycast(
-            self, u, out RaycastHit hit, u.magnitude
-        ); return !didHit;
-    }
-
-    public static bool HasClearPath(
-        this v3 self, v3 target, float radius
-    ){
-        // NOTE - if we start too close to an obstacle,
-        // spherecast will assume we are inside the obstacle
-        // and 'let us out'; we do not want this to happen.
-        if(!self.HasClearLOS(target)) return false;
-        var u = target - self;
-        bool didHit = Physics.SphereCast(
-            self, radius, u, out RaycastHit hit, u.magnitude
-        ); return !didHit;
-    }
 
     public static Transform Under(this v3 self, float dist = 5f){
         // NOTE - if we start too close to an obstacle,
@@ -141,5 +142,9 @@ public static class Vector3Ext{
         hit = rh.point;
         return rh.collider.transform;
     }
+
+    public static v3 WithX(this v3 u, float x) => new (x, u.y, u.z);
+    public static v3 WithY(this v3 u, float y) => new (u.x, y, u.z);
+    public static v3 WithZ(this v3 u, float z) => new (u.x, u.y, z);
 
 }
