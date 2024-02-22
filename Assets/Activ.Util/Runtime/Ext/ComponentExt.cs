@@ -7,6 +7,9 @@ public static class ComponentExt{
     public static T Add<T>(this Component self) where T: Component
     => self.gameObject.AddComponent<T>();
 
+    public static T Get<T>(this Component self)
+    => self.GetComponent<T>();
+
     public static bool Has<T>(this Component self) where T : Component
     => self.GetComponent<T>();
 
