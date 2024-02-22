@@ -4,6 +4,9 @@ using T = UnityEngine.Transform;
 namespace Activ.Util{
 public static class ComponentExt{
 
+    public static T Add<T>(this Component self) where T: Component
+    => self.gameObject.AddComponent<T>();
+
     public static bool Has<T>(this Component self) where T : Component
     => self.GetComponent<T>();
 

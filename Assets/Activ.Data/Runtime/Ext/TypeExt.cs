@@ -1,6 +1,7 @@
 using System; using System.Reflection;
 using InvOp = System.InvalidOperationException;
 
+namespace Activ.Util{
 public static class TypeExt{
 
     public static bool HasDefaultConstructor(this Type self){
@@ -26,4 +27,4 @@ public static class TypeExt{
     => (gcount = self.GetGenericArguments().Length) == 0
        ? self.Name : self.Name.Split('`')[0];
 
-}
+}}
