@@ -3,10 +3,12 @@ using UnityEngine; using v3 = UnityEngine.Vector3; using Activ.Util;
 namespace Activ.Util.Generative{
 [ExecuteInEditMode] public class Lattice : MonoBehaviour{
 
+    public enum UpdatePolicy{ None, Now, Often }
+
     public int count = 3;
     public float scale = 1f, massScaling = 1f;
     public GameObject prefab; public string instanceName;
-    public bool updateNow;
+    public UpdatePolicy updatePolicy;
     public bool updateOnGameStart;
 
     void Start(){
@@ -16,13 +18,20 @@ namespace Activ.Util.Generative{
     }
 
     void Update(){
-        if(updateNow){ transform.Clear(); Generate(); }
-        updateNow = false;
+        if(Application.isPlaying) return;
+        switch(updatePolicy){
+            case UpdatePolicy.Now: DoUpdate(UpdatePolicy.None); break;
+            case UpdatePolicy.Often: DoUpdate(updatePolicy); break;
+        }
+        void DoUpdate(UpdatePolicy next)
+        { transform.Clear(); Generate(); updatePolicy = next; }
     }
 
     void Generate(){
         if(!prefab) return;
-        var halfsize = count/2f; var orig = - v3.one * halfsize;
+        // NOTE: shifting origin by -0.5 compensates a block's
+        // half-width assuming block size one.
+        var halfsize = count / 2f; var orig = - v3.one * (halfsize - 0.5f);
         for(var x = 0; x < count; x++)
             for(var y = 0; y < count; y++)
                 for(var z = 0; z < count; z++) Generate(x, y, z, orig);

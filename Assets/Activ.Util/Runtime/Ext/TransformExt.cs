@@ -48,11 +48,25 @@ public static class TransformExt{
         }
     }
 
-    public static bool HasLOS(this T self, v3 dir, float dist){
+    public static bool HasLOS(
+        this T self, v3 dir, out T collider, float dist
+    ){
         var didHit = UnityEngine.Physics.Raycast(
             self.position, dir, out RaycastHit hit, dist
         );
-        return !didHit;
+        if(didHit){ collider = hit.collider.transform; return false; }
+        else{ collider = null; return true; }
+    }
+
+    public static bool HasLOS(
+        this T self, v3 dir, float dist, bool debugDraw=false
+    ){
+        v3 P = self.position; RaycastHit hit;
+        var didHit = Physics.Raycast(P, dir, out hit, dist);
+        if(debugDraw) Debug.DrawRay(
+            P, dir.normalized * dist,
+            didHit ? Color.red : Color.green
+        ); return !didHit;
     }
 
     public static bool IsCoaxial(
@@ -95,6 +109,20 @@ public static class TransformExt{
         var t = self.GetComponent<CollisionTracker>();
         if(!t) t = self.gameObject.AddComponent<CollisionTracker>();
         return t.IsContacting(arg, @unsafe: true);
+    }
+
+    public static bool IsUnder(
+        this T self, Collision arg, float maxAngle=45f
+    ){
+        var n = arg.contactCount;
+        if(n == 0) return false;
+        var P = self.position;
+        for(var i = 0; i < n; i++){
+            var u = arg.GetContact(i).point - P;
+            var angle = v3.Angle(v3.down, u);
+            if(angle > maxAngle) return false;
+        }
+        return true;
     }
 
     public static bool IsNonPhysical(this T self){
@@ -239,6 +267,33 @@ public static class TransformExt{
         }
     }
 
+    public static void MakeYAxisPointUp(this Transform self)
+    => AxisUp.Y(self);
+
+    /*
+    public static void MakeYAxisPointUp(this Transform self){
+        var X = v3.Angle(self.right, v3.up);
+        var Y = v3.Angle(self.up, v3.up);
+        var Z = v3.Angle(self.forward, v3.up);
+        if(Y < X && Y < Z && Y < 80) return;
+        //ebug.Log("Rotate around Z axis (90)");
+        self.Rotate(0, 0, 90);
+        Y = v3.Angle(self.up, v3.up);
+        //ebug.Log($"Y is now at {Y:0} degs from Up");
+        if(Y > 80){
+            //ebug.Log("Rotate around Z axis (180)");
+            self.Rotate(0, 0, 180);
+        }
+        //ebug.Log("Rotate around X axis (90)");
+        self.Rotate(90, 0, 0);
+        Y = v3.Angle(self.up, v3.up);
+        //ebug.Log($"Y is now at {Y:0} degs from Up");
+        if(Y > 80){
+            //ebug.Log("Rotate around X axis (180)");
+            self.Rotate(180, 0, 0);
+        }
+    }*/
+
     public static float POrient2(  // call in FixedUpdate
         this Transform self, Transform target, float latency = 0.2f
     ){
@@ -300,11 +355,28 @@ public static class TransformExt{
         return c;
     }
 
+    public static float Redress(  // call in FixedUpdate
+        this Transform self, float latency = 0.2f
+    ){
+        var rb = self.Rb();
+        var u = v3.Cross(self.up, v3.up);
+        var w = rb.angularVelocity;
+        u -= w;
+        rb.AddTorque(u * rb.mass / latency);
+        var a = v3.Angle(self.up, v3.up);
+        return a;
+    }
+
     public static Rigidbody Rb(this T self)
     => self.GetComponent<Rigidbody>();
 
     public static void SetKinematic(this T self, bool flag=true)
     => self.Rb().isKinematic = flag;
+
+    public static T Under(this T self) => self.position.Under();
+
+    public static T Under(this T self, float radius)
+    => self.position.Under(radius);
 
     public static void UnlockAll(this T self)
     => self.Rb().constraints = RigidbodyConstraints.None;

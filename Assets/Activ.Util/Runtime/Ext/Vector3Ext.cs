@@ -1,8 +1,15 @@
 using UnityEngine;
 using v3 = UnityEngine.Vector3;
 using q4 = UnityEngine.Quaternion;
+using InvOp = System.InvalidOperationException;
 
 public static class Vector3Ext{
+
+    public static (v3 left, v3 right) Alternative(this v3 u, v3 up){
+        var left = v3.Cross(u, up).normalized;
+        var right = v3.Cross(u, -up).normalized;
+        return (left, right);
+    }
 
     public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
 
@@ -79,15 +86,6 @@ public static class Vector3Ext{
 
     public static v3 MoveUp(this v3 σ, float h) => σ + v3.up * h;
 
-    /*
-    public static string Name(this v3 x){
-        x = x.Planar();
-        return (x.Equals(v3.forward)) ? "north":
-               (x.Equals(v3.back)   ) ? "south":
-               (x.Equals(v3.right)  ) ? "east" :
-               (x.Equals(v3.left)   ) ? "west" : x.ToString();
-   }*/
-
     public static string Name(this v3 x){
         x = x.Planar();
         return (x == v3.forward) ? "north":
@@ -95,6 +93,13 @@ public static class Vector3Ext{
                (x == v3.right  ) ? "east" :
                (x == v3.left   ) ? "west" : x.ToString();
    }
+
+   public static v3 NextCard(this v3 x)
+   => (x == v3.forward) ? v3.right:
+      (x == v3.right  ) ? v3.back:
+      (x == v3.back   ) ? v3.left:
+      (x == v3.left   ) ? v3.forward:
+      throw new InvOp($"Bad card {x}");
 
     public static v3 Planar(this v3 σ)
     => new v3(σ.x, 0f, σ.z);
@@ -119,11 +124,20 @@ public static class Vector3Ext{
     => q4.AngleAxis(angle, axis) * σ;
 
     public static Transform Under(this v3 self, float dist = 5f){
-        // NOTE - if we start too close to an obstacle,
-        // spherecast will assume we are inside the obstacle
-        // and 'let us out'; we do not want this to happen.
         bool didHit = Physics.Raycast(
             self, v3.down, out RaycastHit hit, dist
+        );
+        if(!didHit) return null;
+        return hit.collider.transform;
+    }
+
+    public static Transform Under(
+        this v3 self, float radius, float dist = 5f
+    ){
+        // NOTE - starting too close to an obstacle, spherecast will
+        // assume we are inside the obstacle and 'let us out'...
+        bool didHit = Physics.SphereCast(
+            self, radius, v3.down, out RaycastHit hit, dist
         );
         if(!didHit) return null;
         return hit.collider.transform;
