@@ -1,4 +1,5 @@
 using Random = UnityEngine.Random;
+using System.Collections.Generic;
 
 namespace Activ.Util{
 public static class ArrayExt{

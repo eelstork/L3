@@ -235,7 +235,7 @@ public static class TransformExt{
         }else{
             u = u.normalized * speed;
         }
-        Debug.DrawLine(self.position, P, Color.white);
+        Debug.DrawLine(self.position, P, Color.yellow);
         var rb = self.Rb();
         var v = u - rb.velocity;
         rb.AddForce(v * scalar * rb.mass / latency);
@@ -259,7 +259,7 @@ public static class TransformExt{
         return (a0 + a1) / 2f;
     }
 
-    static v3 ClosestAxis(this Transform s, v3 u){
+    public static v3 ClosestAxis(this Transform s, v3 u){
         var v = s.right; var a = v3.Angle(u, s.right);
         C(-s.right); C(s.up); C(-s.up); C(s.forward); C(-s.forward);
         return v; void C(v3 w){
@@ -356,12 +356,11 @@ public static class TransformExt{
     }
 
     public static float Redress(  // call in FixedUpdate
-        this Transform self, float latency = 0.2f
+        this Transform self, float speed, float latency = 0.2f
     ){
         var rb = self.Rb();
-        var u = v3.Cross(self.up, v3.up);
-        var w = rb.angularVelocity;
-        u -= w;
+        var u = v3.Cross(self.up, v3.up) * speed
+              - rb.angularVelocity;
         rb.AddTorque(u * rb.mass / latency);
         var a = v3.Angle(self.up, v3.up);
         return a;
@@ -373,9 +372,10 @@ public static class TransformExt{
     public static void SetKinematic(this T self, bool flag=true)
     => self.Rb().isKinematic = flag;
 
-    public static T Under(this T self) => self.position.Under();
+    public static T Under(this T self, float dist=5f)
+    => self.position.Under(dist);
 
-    public static T Under(this T self, float radius)
+    public static T UnderWithRadius(this T self, float radius)
     => self.position.Under(radius);
 
     public static void UnlockAll(this T self)
