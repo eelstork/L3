@@ -24,6 +24,10 @@ public static class StringExt{
     public static string DQuoted(this string x)
     => "\"" + x + "\"";
 
+    public static string RemoveFirst(this string x, out char c){
+        c = x[0]; return x.Substring(1);
+    }
+
     public static string SQuoted(this string x)
     => "'" + x + "'";
 
