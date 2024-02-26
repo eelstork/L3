@@ -55,11 +55,15 @@ public static class Unit{
     static void ImportUnits(
         L3.Unit unit, Context cx, HashSet<Node> deps
     ){
+        #if UNITY_EDITOR
         var modules = Activ.Util.Assets.FindAll<L3Script>();
         if(unit.deps == null) return;
         foreach(var x in unit.deps.Split(",")){
             Import(x, modules, cx, deps);
         }
+        #else
+        Debug.LogError("Currently cannot import units in builds");
+        #endif
     }
 
 

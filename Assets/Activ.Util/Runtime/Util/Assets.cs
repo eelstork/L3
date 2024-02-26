@@ -1,6 +1,5 @@
-using UnityEngine;
-using UnityEditor;
-using System.Linq;
+#if UNITY_EDITOR
+using UnityEngine; using UnityEditor; using System.Linq;
 using static UnityEditor.AssetDatabase;
 
 namespace Activ.Util{
@@ -29,3 +28,4 @@ public static class Assets{
     => LoadAssetAtPath<T>(GUIDToAssetPath(guid));
 
 }}
+#endif
