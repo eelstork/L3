@@ -7,13 +7,14 @@ namespace Activ.Util{
 
     public float target = 1f;
     public float lerp = 0.1f;
+    public bool enabled = true;
 
     public ValueInterpolator(float t, float l){
         target = t; lerp = l;
     }
 
-    public float Tween(ref float val)
-    => val = Mathf.Lerp(val, target, lerp);
+    public float Tween(ref float val) => enabled ?
+        val = Mathf.Lerp(val, target, lerp) : val;
 
     public static implicit operator ValueInterpolator(float val)
     => new ValueInterpolator(val, 0.1f);

@@ -375,6 +375,9 @@ public static class TransformExt{
     public static T Under(this T self, float dist=5f)
     => self.position.Under(dist);
 
+    public static X Under<X>(this T self, float dist=5f)
+    => self.position.Under<X>(dist: dist);
+
     public static T UnderWithRadius(this T self, float radius)
     => self.position.Under(radius);
 

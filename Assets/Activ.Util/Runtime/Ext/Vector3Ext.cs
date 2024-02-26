@@ -123,6 +123,12 @@ public static class Vector3Ext{
     public static v3 Rotate(this v3 σ, float angle, v3 axis)
     => q4.AngleAxis(angle, axis) * σ;
 
+    public static C Under<C>(this v3 self, float dist=5f){
+        var x = self.Under(dist: dist);
+        if(!x) return default(C);
+        return x.GetComponent<C>();
+    }
+
     public static Transform Under(this v3 self, float dist=5f){
         bool didHit = Physics.Raycast(
             self, v3.down, out RaycastHit hit, dist
