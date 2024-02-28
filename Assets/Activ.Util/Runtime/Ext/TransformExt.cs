@@ -23,8 +23,8 @@ public static class TransformExt{
           self.right, self.forward, - self.right, - self.forward
     };
 
-    public static void Clear(this T self){
-        if(Application.isPlaying){
+    public static void Clear(this T self, bool immediate=false){
+        if(Application.isPlaying && !immediate){
             foreach(T k in self) Object.Destroy(k.gameObject);
         }else{
             for(var i = self.childCount - 1; i >= 0 ; i--){

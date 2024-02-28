@@ -20,6 +20,13 @@ public static class Vector3Ext{
 
     public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
 
+    public static v3 FromCSV(string arg){
+        var v = arg.Split(',');
+        return new v3(
+            float.Parse(v[0]), float.Parse(v[1]), float.Parse(v[2])
+        );
+    }
+
     public static v3 HalfwayTo(this v3 σ, v3 τ) => (σ + τ) / 2f;
 
     public static bool HasClearLOS(
@@ -142,6 +149,9 @@ public static class Vector3Ext{
 
     public static v3 Rotate(this v3 σ, float angle, v3 axis)
     => q4.AngleAxis(angle, axis) * σ;
+
+    public static string ToCSV2(this v3 u)
+    => u.x + "," + u.y + "," + u.z;
 
     public static C Under<C>(this v3 self, float dist=5f){
         var x = self.Under(dist: dist);
