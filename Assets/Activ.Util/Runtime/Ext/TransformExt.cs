@@ -18,6 +18,11 @@ public static class TransformExt{
         return delta > maxH ? 0f : delta;
     }
 
+    public static v3[] Cardinals(this T self)
+    => new v3[]{
+          self.right, self.forward, - self.right, - self.forward
+    };
+
     public static void Clear(this T self){
         if(Application.isPlaying){
             foreach(T k in self) Object.Destroy(k.gameObject);
@@ -34,17 +39,37 @@ public static class TransformExt{
         return u.normalized;
     }
 
-    public static bool HasLOS(this T self, T arg){
+    public static C Find<C>(this T self, v3 dir, float dist){
+        var that = self.Find(dir, dist);
+        if(!that) return default(C);
+        return that.GetComponent<C>();
+    }
+
+    public static T Find(this T self, v3 dir, float dist){
+        var didHit = UnityEngine.Physics.Raycast(
+            self.position, dir, out RaycastHit hit, dist
+        ); return didHit ? hit.collider.transform : null;
+    }
+
+    public static Transform FindPlayer(this T self)
+    => GameObject.FindWithTag("Player").transform;
+
+    public static bool HasLOS(this T self, T arg)
+    => self.HasLOS(arg, out T _);
+
+    public static bool HasLOS(this T self, T arg, out T obstruction){
         var P = self.position;
         var u = arg.position - P;
         var dist = u.magnitude;
         var didHit = UnityEngine.Physics.Raycast(P, u, out RaycastHit hit, dist);
-        if(!didHit) return true;
+        if(!didHit){
+            obstruction = null; return true;
+        }
         // TODO sometimes an object has several colliders
         if(hit.collider == arg.GetComponent<Collider>()){
-            return true;
+            obstruction = null; return true;
         }else{
-            return false;
+            obstruction = hit.collider.transform; return false;
         }
     }
 
@@ -67,6 +92,12 @@ public static class TransformExt{
             P, dir.normalized * dist,
             didHit ? Color.red : Color.green
         ); return !didHit;
+    }
+
+    public static void Impel(this T self, v3 dir, float rnd=0f, float scalar=1f){
+        var u = UnityEngine.Random.insideUnitSphere * rnd;
+        var v = (dir + u) * scalar;
+        self.Rb().AddForce(v, ForceMode.Impulse);
     }
 
     public static bool IsCoaxial(
@@ -239,6 +270,30 @@ public static class TransformExt{
         var rb = self.Rb();
         var v = u - rb.velocity;
         rb.AddForce(v * scalar * rb.mass / latency);
+        return d;
+    }
+
+    public static float PMove(  // call in FixedUpdate
+        this Transform self, Transform target, v3 offset,
+        out v3 force,
+        float latency=0.06f, float speed=10,
+        float decayDist=0.2f, bool relativePos=true, float scalar=1f
+    ){
+        // Move it
+        v3 P = relativePos ? target.TransformPoint(offset)
+                           : target.position + offset;
+        var u = (P - self.position);
+        var d = u.magnitude;
+        if(d < decayDist){
+            u = u.normalized * speed * d / decayDist;
+        }else{
+            u = u.normalized * speed;
+        }
+        Debug.DrawLine(self.position, P, Color.yellow);
+        var rb = self.Rb();
+        var v = u - rb.velocity;
+        force = v * scalar * rb.mass / latency;
+        rb.AddForce(force);
         return d;
     }
 

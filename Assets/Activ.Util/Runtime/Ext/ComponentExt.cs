@@ -13,6 +13,12 @@ public static class ComponentExt{
     public static bool Has<T>(this Component self) where T : Component
     => self.GetComponent<T>();
 
+    public static T Req<T>(this Component self) where T: Component{
+        var c = self.GetComponent<T>();
+        if(c != null) return c;
+        return self.gameObject.AddComponent<T>();
+    }
+
     public static bool Within(this Component self, float dist, T of)
     => self.Dist(of) < dist;
 

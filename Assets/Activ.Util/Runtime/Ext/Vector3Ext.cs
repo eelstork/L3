@@ -5,6 +5,13 @@ using InvOp = System.InvalidOperationException;
 
 public static class Vector3Ext{
 
+    public static v3[] cardinals
+    => new v3[]{ v3.right, v3.forward, v3.left, v3.back };
+
+    public static v3[] octo => new v3[]{
+        v3.right, v3.up, v3.forward, v3.left, v3.down, v3.back
+    };
+
     public static (v3 left, v3 right) Alternative(this v3 u, v3 up){
         var left = v3.Cross(u, up).normalized;
         var right = v3.Cross(u, -up).normalized;
@@ -103,6 +110,19 @@ public static class Vector3Ext{
 
     public static v3 Planar(this v3 σ)
     => new v3(σ.x, 0f, σ.z);
+
+    public static void PointSameAs(this v3 self, v3 other){
+        var angle = v3.Angle(self, other);
+        if(angle > 90f){
+            self.x = - self.x;
+            self.y = - self.y;
+            self.z = - self.z;
+        }
+        angle = v3.Angle(self, other);
+        if(angle > 90f){
+            Debug.LogError("point same as failed");
+        }
+    }
 
     public static v3? QuadXZ(this v3 u){
         if(abs(u.x) > abs(u.z)) return u.x > 0f ? v3.right  : v3.left;
