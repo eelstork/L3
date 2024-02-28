@@ -439,8 +439,8 @@ public static class TransformExt{
     public static void UnlockAll(this T self)
     => self.Rb().constraints = RigidbodyConstraints.None;
 
-    public static void UnlockRot(this T self)
-    => self.Rb().constraints = RigidbodyConstraints.FreezePosition;
+    //public static void UnlockRot(this T self)
+    //=> self.Rb().constraints = RigidbodyConstraints.FreezePosition;
 
     public static Transform View(this T self){
         var view = self.GetChild(0);
