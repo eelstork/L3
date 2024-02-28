@@ -18,7 +18,7 @@ public class IO<Src, Dst, A, K, V, N>{
     }
 
     public void Convert(Src arg, Dst parent){
-        Log($"Convert {arg} => {parent}");
+        //og($"Convert {arg} => {parent}");
         var props = reader.Props(arg);
         if(props != null) foreach(var prop in props){
             var kv = reader.Map(prop);
