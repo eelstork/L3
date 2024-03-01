@@ -10,6 +10,11 @@ public static class ComponentExt{
     public static T Get<T>(this Component self)
     => self.GetComponent<T>();
 
+    public static T Own<T>(this Component self)
+    => self.GetComponent<T>()
+       ?? self.GetComponentInChildren<T>()
+       ?? self.GetComponentInParent<T>();
+
     public static bool Has<T>(this Component self) where T : Component
     => self.GetComponent<T>();
 

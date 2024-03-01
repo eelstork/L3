@@ -1,4 +1,5 @@
 using UnityEngine;
+using InvOp = System.InvalidOperationException;
 
 namespace Activ.Util{
 public static class StringExt{
@@ -23,6 +24,10 @@ public static class StringExt{
 
     public static string DQuoted(this string x)
     => "\"" + x + "\"";
+
+    public static char OneLetter(this string arg)
+    => arg.Length == 1 ? arg[0]
+    : throw new InvOp($"Expecting one letter, found [{arg}]");
 
     public static string RemoveFirst(this string x, out char c){
         c = x[0]; return x.Substring(1);

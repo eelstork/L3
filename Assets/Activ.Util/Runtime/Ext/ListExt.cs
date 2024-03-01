@@ -4,6 +4,9 @@ using System.Collections.Generic;
 namespace Activ.Util{
 public static class ListExt{
 
+    public static T Any<T>(this IList<T> self)
+    => self[UnityEngine.Random.Range(0, self.Count)];
+
     public static List<T> Clean<T>(this List<T> self){
         for(var i = self.Count - 1; i >= 0; i--){
             if(self[i] == null || self[i].Equals(null)){

@@ -239,6 +239,12 @@ public static class TransformExt{
         return Q;
     }
 
+    public static T NextSibling(this Transform self){
+        var i = self.GetSiblingIndex() + 1;
+        if(self.parent == null) return null;
+        return self.parent.GetChild(i % self.parent.childCount);
+    }
+
     public static void PMoveAndOrient(  // call in FixedUpdate
         this Transform self, Transform target, v3 offset,
         float latency = 0.06f, float speed = 10,
