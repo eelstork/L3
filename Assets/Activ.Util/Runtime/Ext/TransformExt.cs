@@ -1,6 +1,7 @@
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
 using v3 = UnityEngine.Vector3;
+using q4 = UnityEngine.Quaternion;
 using T = UnityEngine.Transform;
 using static UnityEngine.Mathf;
 
@@ -35,6 +36,12 @@ public static class TransformExt{
 
     public static v3 Dir(this T self, T arg, bool planar){
         var u = arg.position - self.position;
+        if(planar) u.y = 0f;
+        return u.normalized;
+    }
+
+    public static v3 Dir(this T self, v3 arg, bool planar){
+        var u = arg - self.position;
         if(planar) u.y = 0f;
         return u.normalized;
     }
@@ -393,6 +400,21 @@ public static class TransformExt{
         return collider.bounds.Radius(planar);
     }
 
+    public static void RandomRotX(this T self, float degs){
+        self.localEulerAngles =
+            new (-degs + Random.value * degs * 2, 0f, 0f);
+    }
+
+    public static void RandomRotY(this T self, float degs){
+        self.localEulerAngles =
+            new (0f, -degs + Random.value * degs * 2, 0f);
+    }
+
+    public static void RandomRotZ(this T self, float degs){
+        self.localEulerAngles =
+            new (0f, 0f, -degs + Random.value * degs * 2);
+    }
+
     public static C Reachable<C>(
         this T self, float angle=0f,
         float h=0.75f, float r=0.5f, float dist=1.6f
@@ -432,6 +454,15 @@ public static class TransformExt{
 
     public static void SetKinematic(this T self, bool flag=true)
     => self.Rb().isKinematic = flag;
+
+    public static void Tween(
+        this T self, params System.Func<v3>[] waypoints
+    ) => self.Add<FTween>().Init(waypoints);
+
+    public static void TweenPosRot(
+        this T self, System.Action onEnd,
+        params System.Func<(v3, q4)>[] waypoints
+    ) => self.Add<FTweenPosRot>().Init(onEnd, waypoints);
 
     public static T Under(this T self, float dist=5f)
     => self.position.Under(dist);
