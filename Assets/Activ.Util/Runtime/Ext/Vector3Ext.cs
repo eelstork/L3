@@ -27,7 +27,22 @@ public static class Vector3Ext{
         return (left, right);
     }
 
+    public static v3 Closest(this v3[] self, v3 u, float threshold){
+        if(u.magnitude < threshold) return v3.zero;
+        var max = float.MaxValue; var sel = v3.zero;
+        foreach(var v in self){
+            var a = v3.Angle(u, v); if(a < max){ sel = v; max = a; }
+        } return sel;
+    }
+
     public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
+
+    public static v3[] FigureOf(int n, float degs = 0f){
+        var A = new v3[n]; for(var i = 0; i < n; i++){
+            var a = degs * Mathf.Deg2Rad + Mathf.PI * 2f * i / n;
+            A[i] = new (Mathf.Cos(a), 0f, Mathf.Sin(a));
+        } return A;
+     }
 
     public static v3 FromCSV(string arg){
         var v = arg.Split(',');
