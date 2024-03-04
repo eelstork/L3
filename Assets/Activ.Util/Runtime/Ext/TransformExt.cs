@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
 using v3 = UnityEngine.Vector3;
@@ -7,6 +8,9 @@ using static UnityEngine.Mathf;
 
 namespace Activ.Util{
 public static class TransformExt{
+
+    public static T Above(this T self, float dist=5f)
+    => self.position.Above(dist);
 
     public static float AheadStep(this T arg, float maxH = 0.2f){
         var P = arg.position
@@ -101,6 +105,21 @@ public static class TransformExt{
         ); return !didHit;
     }
 
+    public static void SetKinematic<C>(
+        this IEnumerable<C> self, bool flag
+    ) where C : Component{
+        foreach(var k in self) k.transform.SetKinematic(flag);
+    }
+
+    public static void Impel<C>(
+        this IEnumerable<C> self, v3 F
+    ) where C : Component{
+        foreach(var k in self) k.transform.Impel(F);
+    }
+
+    public static void Impel(this T self, v3 F)
+    => self.Rb().AddForce(F, ForceMode.Impulse);
+
     public static void Impel(this T self, v3 dir, float rnd=0f, float scalar=1f){
         var u = UnityEngine.Random.insideUnitSphere * rnd;
         var v = (dir + u) * scalar;
@@ -175,6 +194,16 @@ public static class TransformExt{
 
     public static bool IsPhysical(this T self, out Rigidbody rb)
     => rb = self.GetComponent<Rigidbody>();
+
+    public static bool IsAbove<C>(this T self, List<C> args)
+    where C : Component
+    {
+        foreach(var k in args){
+            var above = k.transform.Above();
+            if(above == self) return true;
+        }
+        return false;
+    }
 
     public static T JoinedObject(this T self){
         var joint = self.GetComponent<FixedJoint>();

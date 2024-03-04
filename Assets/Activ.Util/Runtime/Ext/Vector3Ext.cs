@@ -12,6 +12,15 @@ public static class Vector3Ext{
         v3.right, v3.up, v3.forward, v3.left, v3.down, v3.back
     };
 
+    public static Transform Above(this v3 self, float dist=5f){
+        bool didHit = Physics.Raycast(
+            self, v3.up, out RaycastHit hit, dist
+        );
+        Debug.DrawRay(self, v3.up * dist, Color.magenta);
+        if(!didHit) return null;
+        return hit.collider.transform;
+    }
+
     public static (v3 left, v3 right) Alternative(this v3 u, v3 up){
         var left = v3.Cross(u, up).normalized;
         var right = v3.Cross(u, -up).normalized;
