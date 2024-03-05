@@ -11,7 +11,8 @@ public static class Angles{
 
         public static int CameraStop16(Camera cam=null){
             var angle = (float)CameraAngle(cam);
-            return (int)Mathf.Round((angle / 360) * 16);
+            var stop = (int)Mathf.Round((angle / 360) * 16);
+            return stop % 16;
         }
 
         public static int CameraAngle(Camera cam=null){
