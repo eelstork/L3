@@ -30,4 +30,7 @@ public static class ComponentExt{
     public static float Dist(this Component self, T arg)
     => (self.transform.position - arg.position).magnitude;
 
+    public static float Dist(this Component self, Vector3 arg)
+    => (self.transform.position - arg).magnitude;
+
 }}
