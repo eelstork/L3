@@ -14,9 +14,13 @@ public class TargetInterpolator: MonoBehaviour, IPoint3{
 
     Vector3 IPoint3.position => current;
 
-    void Start() => current = start.position;
+    void Start(){
+        if(start == null) return;
+        current = start.position;
+    }
 
     void Update(){
+        if(start == null || end == null) return;
         current = v3.Lerp(current, end.position, smooth);
         smoothInterp.Tween(ref smooth);
     }

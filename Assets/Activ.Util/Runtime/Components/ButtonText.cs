@@ -7,6 +7,7 @@ public class ButtonText : MonoBehaviour{
     public string text;
     public bool useObjectName=false;
     public Color color = Color.black;
+    public bool applyColor = true;
 
     void Start(){
         if(Application.isPlaying) DestroyImmediate(this);
@@ -16,7 +17,7 @@ public class ButtonText : MonoBehaviour{
         if(useObjectName) text = gameObject.name;
         var ui = transform.GetComponentInChildren<Text>();
         if(text.None()) text = ui.text; else ui.text = text;
-        ui.color = color;
+        if(applyColor) ui.color = color;
     }
 
 }}
