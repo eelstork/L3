@@ -10,10 +10,24 @@ public static class ComponentExt{
     public static T Get<T>(this Component self)
     => self.GetComponent<T>();
 
-    public static T Own<T>(this Component self)
-    => self.GetComponent<T>()
-       ?? self.GetComponentInChildren<T>()
-       ?? self.GetComponentInParent<T>();
+    public static T Own<T>(this Component self, bool up=false){
+        T c; bool OK() => c != null;
+        c = self.GetComponent<T>();             if(OK()) return c;
+        c = self.GetComponentInChildren<T>();   if(OK()) return c;
+        if(up){
+            c = self.GetComponentInParent<T>(); if(OK()) return c;
+        }
+        Debug.LogError(
+            $"Expected own {typeof(T)} (up: {up}) in {self}", self
+        ); return default(T);
+    }
+
+    public static T Owning<T>(this Component self, bool up=false){
+        var c = self.GetComponentInParent<T>();
+        if(c != null ) return c; else Debug.LogError(
+            $"Expected owning {typeof(T)} from {self}", self
+        ); return default(T);
+    }
 
     public static bool Has<T>(this Component self) where T : Component
     => self.GetComponent<T>();

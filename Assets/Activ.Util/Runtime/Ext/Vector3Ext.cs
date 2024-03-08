@@ -16,7 +16,7 @@ public static class Vector3Ext{
         bool didHit = Physics.Raycast(
             self, v3.up, out RaycastHit hit, dist
         );
-        Debug.DrawRay(self, v3.up * dist, Color.magenta);
+        //ebug.DrawRay(self, v3.up * dist, Color.magenta);
         if(!didHit) return null;
         return hit.collider.transform;
     }
@@ -187,7 +187,7 @@ public static class Vector3Ext{
         bool didHit = Physics.Raycast(
             self, v3.down, out RaycastHit hit, dist
         );
-        Debug.DrawRay(self, v3.down * dist, Color.magenta);
+        //ebug.DrawRay(self, v3.down * dist, Color.magenta);
         if(!didHit){
             //Debug.Break();
             return null;
