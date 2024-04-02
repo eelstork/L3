@@ -5,6 +5,27 @@ using static UnityEditor.AssetDatabase;
 namespace Activ.Util{
 public static class Assets{
 
+    // Create folder in assets (recursive)
+    // Differences with AssetDatabase.CreateFolder()
+    // - 'Assets/' is assumed. Therefore CreateFolder("Content")
+    // will create the 'Assets/Content' directory.
+    // - Will not create 'Dir 1' if 'Dir' already exists
+    public static void MakeDir(string path){
+        path = path.Trim();
+        if(string.IsNullOrEmpty(path)) return;
+        var dirs = path.Split('/');
+        var parent = "Assets";
+        foreach(var dir in dirs){
+            //ebug.Log($"Create dir {parent}");
+            if(!System.IO.Directory.Exists(parent)){
+                AssetDatabase.CreateFolder(parent, dir);
+            }else{
+                //ebug.Log($"Already exists: {parent}");
+            }
+            parent += "/" + dir;
+        }
+    }
+
     public static T FindEditorResource<T>(string key=null)
     where T : Object{
         var name = EditorPrefs.GetString(key);

@@ -27,13 +27,8 @@ public static class Vector3Ext{
         return (left, right);
     }
 
-    public static v3 Closest(this v3[] self, v3 u, float threshold){
-        if(u.magnitude < threshold) return v3.zero;
-        var max = float.MaxValue; var sel = v3.zero;
-        foreach(var v in self){
-            var a = v3.Angle(u, v); if(a < max){ sel = v; max = a; }
-        } return sel;
-    }
+    public static float CSum(this v3 self)
+    => self.x + self.y + self.z;
 
     public static float Dist(this v3 σ, v3 τ) => v3.Distance(σ, τ);
 
@@ -142,6 +137,19 @@ public static class Vector3Ext{
     public static v3 Planar(this v3 σ)
     => new v3(σ.x, 0f, σ.z);
 
+    public static v3? Project(
+        this v3 P, float maxDist, float maxAngle
+    ){
+        var didHit = Physics.Raycast(
+            P, v3.down, out RaycastHit hit, maxDist
+        );
+        Debug.DrawRay(P, v3.down * maxDist, Color.cyan);
+        if(!didHit) return null;
+        var angle = v3.Angle(hit.normal, v3.up);
+        if(angle > maxAngle) return null;
+        return hit.point.Round(3);
+    }
+
     public static void PointSameAs(this v3 self, v3 other){
         var angle = v3.Angle(self, other);
         if(angle > 90f){
@@ -154,6 +162,12 @@ public static class Vector3Ext{
             Debug.LogError("point same as failed");
         }
     }
+
+    public static v3 Round(this v3 self, int n) => new (
+        (float) System.Math.Round(self.x, n),
+        (float) System.Math.Round(self.y, n),
+        (float) System.Math.Round(self.z, n)
+    );
 
     public static v3? QuadXZ(this v3 u){
         if(abs(u.x) > abs(u.z)) return u.x > 0f ? v3.right  : v3.left;
@@ -173,6 +187,13 @@ public static class Vector3Ext{
 
     public static v3 Rotate(this v3 σ, float angle, v3 axis)
     => q4.AngleAxis(angle, axis) * σ;
+
+    public static v3 RotateDegsTowards(
+        this v3 self, v3 other, float degsPerSecond
+    ){
+        var angle = degsPerSecond * Mathf.Deg2Rad * Time.deltaTime;
+        return v3.RotateTowards(self, other, angle, 1f);
+    }
 
     public static string ToCSV2(this v3 u)
     => u.x + "," + u.y + "," + u.z;

@@ -225,6 +225,46 @@ public static class TransformExt{
     public static void LockY(this T self)
     => self.Rb().constraints = RigidbodyConstraints.FreezePositionY;
 
+    public static void LookAt(this T self, T target, bool planar){
+        var u = self.Dir(target, planar: planar);
+        self.LookAt(u);
+    }
+
+    public static bool MoveTo(
+        this T self, v3 P, v3 dir, float speed, float degsPerSecond
+    ){
+        var vec = P - self.position;
+        var dist = vec.magnitude;
+        var step = Time.deltaTime * speed;
+        if(step > dist){
+            self.position = P;
+            if(dir != v3.zero) self.forward = dir;
+            return true;
+        }else{
+            var vec1 = new v3(vec.x, 0f, vec.z);
+            var u = vec.normalized * step;
+            self.position += u;
+            if(dir != v3.zero) self.forward
+                = self.forward.RotateDegsTowards(dir, degsPerSecond);
+            return false;
+        }
+    }
+
+    public static bool MoveTo(this T self, v3 P, float speed){
+        var vec = P - self.position;
+        var dist = vec.magnitude;
+        var step = Time.deltaTime * speed;
+        if(step > dist){
+            self.position = P;
+            return true;
+        }else{
+            var vec1 = new v3(vec.x, 0f, vec.z);
+            var u = vec.normalized * step;
+            self.position += u; self.forward = u.Planar();
+            return false;
+        }
+    }
+
     public static bool MoveTo(
         this T self, v3 P, float speed, out bool didFail
     ){

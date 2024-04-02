@@ -1,19 +1,20 @@
 using System; using System.Collections.Generic;
 using InvOp = System.InvalidOperationException;
+using Activ.Util;
 
 namespace Activ.Graphs{
-public class BFS1{
+public class StaticSearch{
 
     public static T[] Find<T>(
-        Func<T, T[]> graph, T root, Func<T, bool> isGoal,
-        int maxIter = 24
+        T root, Func<T, IEnumerable<T>> graph, Func<T, bool> isGoal,
+        out int iter, Comparison<T> cmp=null, int maxIter = 24
     ){
         var visited = new HashSet<T>();
         var parent = new Dictionary<T, T>();
-        var q = new Queue<T>();
+        var q = new List<T>();
         visited.Add(root);
         q.Enqueue(root);
-        var iter = 0;
+        iter = 0;
         while(q.Count > 0){
             var v = q.Dequeue();
             if(isGoal(v)){
@@ -26,7 +27,7 @@ public class BFS1{
                 if(visited.Contains(w)) continue;
                 visited.Add(w);
                 parent[w] = v;
-                q.Enqueue(w);
+                q.Enqueue(w, cmp);
             }
             if(iter ++ >= maxIter) break;
         }

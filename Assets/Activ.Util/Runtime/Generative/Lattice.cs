@@ -32,8 +32,8 @@ namespace Activ.Util.Generative{
         // NOTE: shifting origin by -0.5 compensates a block's
         // half-width assuming block size one.
         var halfsize = count / 2f; var orig = - v3.one * (halfsize - 0.5f);
-        for(var x = 0; x < count; x++)
-            for(var y = 0; y < count; y++)
+        for(var y = count - 1; y >= 0; y--)
+            for(var x = 0; x < count; x++)
                 for(var z = 0; z < count; z++) Generate(x, y, z, orig);
     }
 

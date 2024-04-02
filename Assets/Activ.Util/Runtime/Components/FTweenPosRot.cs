@@ -17,7 +17,7 @@ public class FTweenPosRot : MonoBehaviour{
 
     void Update(){
         offset += Time.deltaTime;
-        while(offset > 1f){
+        while(offset > 1f && waypoints.Count > 1){
             waypoints.RemoveAt(0);
             offset -= 1f;
         }
