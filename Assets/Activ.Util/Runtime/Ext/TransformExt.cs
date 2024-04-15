@@ -231,23 +231,38 @@ public static class TransformExt{
     }
 
     public static bool MoveTo(
-        this T self, v3 P, v3 dir, float speed, float degsPerSecond
+        this T self, v3 P, v3 dir, float speed,
+        float degsPerSecond, float breakAngle, bool log=false
     ){
         var vec = P - self.position;
         var dist = vec.magnitude;
         var step = Time.deltaTime * speed;
         if(step > dist){
             self.position = P;
-            if(dir != v3.zero) self.forward = dir;
-            return true;
+            if(dir != v3.zero){
+                Log($"Adjust forward ({degsPerSecond}) and snap ({step} > {dist})", log, self);
+                self.forward = dir;
+                return true;
+            }else{
+                Log($"Snap ({step} > {dist})", log, self);
+                return true;
+            }
         }else{
             var vec1 = new v3(vec.x, 0f, vec.z);
             var u = vec.normalized * step;
             self.position += u;
-            if(dir != v3.zero) self.forward
-                = self.forward.RotateDegsTowards(dir, degsPerSecond);
+            Log($"Moved {self} by {u} (step: {step})", log, self);
+            if(dir != v3.zero){
+                self.forward
+                = self.forward.RotateDegsTowards(dir, degsPerSecond, breakAngle);
+            }
             return false;
         }
+    }
+
+    static void Log(string arg, bool log, Transform self){
+        if(!log) return;
+        Debug.Log(arg + " @f:" + Time.frameCount , self);
     }
 
     public static bool MoveTo(this T self, v3 P, float speed){

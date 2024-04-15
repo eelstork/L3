@@ -27,6 +27,15 @@ public static class Vector3Ext{
         return (left, right);
     }
 
+    public static v3 Bezier(this v3 p0, v3 p1, v3 p2, float t) {
+		var s = 1f - t;
+		return s * s * p0 + 2f * s * t * p1 + t * t * p2;
+    }
+
+    // NOTE: Derivative; not a normal vector
+    public static v3 BezierDv (this v3 p0, v3 p1, v3 p2, float t)
+    => (1f - t) * (p1 - p0) + t * (p2 - p1);
+
     public static float CSum(this v3 self)
     => self.x + self.y + self.z;
 
@@ -195,6 +204,18 @@ public static class Vector3Ext{
         return v3.RotateTowards(self, other, angle, 1f);
     }
 
+    public static v3 RotateDegsTowards(
+        this v3 self, v3 other, float degsPerSecond, float breakAngle
+    ){
+        var delta = v3.Angle(self, other);
+        if(delta < breakAngle){
+            var angle = degsPerSecond * Mathf.Deg2Rad * Time.deltaTime;
+            return v3.RotateTowards(self, other, angle, 1f);
+        }else{
+            return other;
+        }
+    }
+
     public static string ToCSV2(this v3 u)
     => u.x + "," + u.y + "," + u.z;
 
@@ -242,6 +263,7 @@ public static class Vector3Ext{
         return rh.collider.transform;
     }
 
+    public static v3 WithXZ(this v3 u, v3 v) => new (v.x, u.y, v.z);
     public static v3 WithX(this v3 u, float x) => new (x, u.y, u.z);
     public static v3 WithY(this v3 u, float y) => new (u.x, y, u.z);
     public static v3 WithZ(this v3 u, float z) => new (u.x, u.y, z);
