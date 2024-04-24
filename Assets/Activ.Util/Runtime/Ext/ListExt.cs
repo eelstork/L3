@@ -50,10 +50,19 @@ public static class ListExt{
         } self.Insert(0, arg);
     }
 
+    public static T First<T>(this IList<T> self)
+    => self[0];
+
+    public static T Forelast<T>(this IList<T> self)
+    => self[self.Count - 2];
+
     public static string Format<T>(this List<T> self){
         var str = string.Join(", ", self);
         return "{" + str + "}";
     }
+
+    public static bool Empty(this IList self)
+    => self == null || self.Count == 0;
 
     public static List<T> FindAllOrDefault<T>(
         this List<T> self, Predicate<T> cond
@@ -62,8 +71,13 @@ public static class ListExt{
         return @out.Count == 0 ? null : @out;
     }
 
-    public static bool Empty(this IList self)
-    => self == null || self.Count == 0;
+    public static bool Has(this IList self, int atLeast){
+        if(self == null && atLeast > 0) return false;
+        return self.Count >= atLeast;
+    }
+
+    public static T Last<T>(this IList<T> self)
+    => self[self.Count - 1];
 
     public static T MinBy<T>(
         this IEnumerable<T> self, Func<T, float> func
@@ -86,5 +100,14 @@ public static class ListExt{
             var y = func(x); if(y > max){ @sel = x; max = y; }
         } return @sel;
     }
+
+    public static void SetFirst<T>(this List<T> self, T arg)
+    => self[0] = arg;
+
+    public static void SetForelast<T>(this List<T> self, T arg)
+    => self[self.Count - 2] = arg;
+
+    public static void SetLast<T>(this List<T> self, T arg)
+    => self[self.Count - 1] = arg;
 
 }}

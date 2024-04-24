@@ -13,12 +13,12 @@ public static class Vector3ArrayExt{
     }
 
     public static v3[] Smooth(
-        this v3[] self, int count=1, int fromIndex = 1
+        this v3[] self, int count=1, int from = 1, int to = 1
     ){
         if(self.Length < 3) return self;
         var buf = new v3[self.Length];
-        for(var i = 0; i < count; i++){
-            self.SafeSmooth(buf, fromIndex);
+        for(var i = 0; i < count - to; i++){
+            self.SafeSmooth(buf, from, to);
         } return self;
     }
 
@@ -30,17 +30,19 @@ public static class Vector3ArrayExt{
         System.Array.Copy(buf, 1, self, 1, n - 2);
     }
 
-    static void SafeSmooth(this v3[] self, v3[] buf, int fromIndex){
+    static void SafeSmooth(
+        this v3[] self, v3[] buf, int from, int to
+    ){
         var n = self.Length;
-        for(var i = fromIndex; i < n - 1; i++){
+        for(var i = from; i < n - to; i++){
             v3 A = self[i - 1], B = self[i], C = self[i + 1];
             var B1 = (A + B + C) / 3;
             buf[i] = Blocked(A, B1) || Blocked(B1, C) ? B : B1;
         }
         // NOTE - smooth only applies to [fromIndex, lastIndex - 1]
         // therefore we need to copy unprocessed elements
-        var len = n - 1 - fromIndex;
-        System.Array.Copy(buf, fromIndex, self, fromIndex, len);
+        var len = n - from - to;
+        System.Array.Copy(buf, from, self, from, len);
     }
 
     static bool Blocked(v3 A, v3 B){

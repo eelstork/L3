@@ -16,4 +16,7 @@ public static class QuaternionExt{
     public static string ToCSV(this q4 q)
     => q.x + "," + q.y + "," + q.z + "," + q.w;
 
+    public static float CSum(this q4 q)
+    => q.x + q.y + q.z + q.w;
+
 }
