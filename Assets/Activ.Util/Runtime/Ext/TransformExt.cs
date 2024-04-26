@@ -524,6 +524,11 @@ public static class TransformExt{
     public static Rigidbody Rb(this T self)
     => self.GetComponent<Rigidbody>();
 
+    public static void Set(this T self, Ray ray){
+        self.position = ray.origin;
+        self.forward = ray.direction;
+    }
+
     public static void SetKinematic(this T self, bool flag=true)
     => self.Rb().isKinematic = flag;
 

@@ -227,6 +227,8 @@ public static class Vector3Ext{
         }
     }
 
+    public static Vector2 ToV2(this v3 u) => new (u.x, u.z);
+
     public static string ToCSV2(this v3 u)
     => u.x + "," + u.y + "," + u.z;
 
