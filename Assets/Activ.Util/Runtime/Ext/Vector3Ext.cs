@@ -146,6 +146,17 @@ public static class Vector3Ext{
     public static v3 Planar(this v3 σ)
     => new v3(σ.x, 0f, σ.z);
 
+    public static v3? Project(this v3 P){
+        var didHit = Physics.Raycast(
+            P, v3.down, out RaycastHit hit
+        );
+        //Debug.DrawRay(P, v3.down * maxDist, Color.cyan);
+        if(!didHit) return null;
+        return hit.point;
+    }
+
+    // TODO move to pathfinding lib, signature is too specific for
+    // utils
     public static v3? Project(
         this v3 P, float maxDist, float maxAngle
     ){

@@ -3,6 +3,9 @@ using v3 = UnityEngine.Vector3;
 
 public static class Vector2Ext{
 
+    public static v3 ToV3(this v2 σ)
+    => new v3(σ.x, 0f, σ.y);
+
     public static v3 XYtoXZ(this v2 σ)
     => new v3(σ.x, 0f, σ.y);
 

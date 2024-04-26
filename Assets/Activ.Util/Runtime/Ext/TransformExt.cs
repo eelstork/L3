@@ -38,6 +38,14 @@ public static class TransformExt{
         }
     }
 
+    public static v3 ClosestAxis(this Transform s, v3 u){
+        var v = s.right; var a = v3.Angle(u, s.right);
+        C(-s.right); C(s.up); C(-s.up); C(s.forward); C(-s.forward);
+        return v; void C(v3 w){
+            var b = v3.Angle(u, w); if(b < a){ v = w; a = b; }
+        }
+    }
+
     public static v3 Dir(this T self, T arg, bool planar){
         var u = arg.position - self.position;
         if(planar) u.y = 0f;
@@ -103,6 +111,12 @@ public static class TransformExt{
             P, dir.normalized * dist,
             didHit ? Color.red : Color.green
         ); return !didHit;
+    }
+
+    public static float Height(this T self){
+        var c = self.GetComponentInChildren<Collider>();
+        if(c){ var h = c.bounds.Height(); if(h > 0) return h; }
+        return self.GetComponentInChildren<Renderer>().bounds.Height();
     }
 
     public static void SetKinematic<C>(
@@ -411,40 +425,14 @@ public static class TransformExt{
         return (a0 + a1) / 2f;
     }
 
-    public static v3 ClosestAxis(this Transform s, v3 u){
-        var v = s.right; var a = v3.Angle(u, s.right);
-        C(-s.right); C(s.up); C(-s.up); C(s.forward); C(-s.forward);
-        return v; void C(v3 w){
-            var b = v3.Angle(u, w); if(b < a){ v = w; a = b; }
-        }
+    public static float Radius(this T self){
+        var c = self.GetComponentInChildren<Collider>();
+        if(c){ var r = c.bounds.Radius(); if(r > 0) return r; }
+        return self.GetComponentInChildren<Renderer>().bounds.Radius();
     }
 
     public static void MakeYAxisPointUp(this Transform self)
     => AxisUp.Y(self);
-
-    /*
-    public static void MakeYAxisPointUp(this Transform self){
-        var X = v3.Angle(self.right, v3.up);
-        var Y = v3.Angle(self.up, v3.up);
-        var Z = v3.Angle(self.forward, v3.up);
-        if(Y < X && Y < Z && Y < 80) return;
-        //ebug.Log("Rotate around Z axis (90)");
-        self.Rotate(0, 0, 90);
-        Y = v3.Angle(self.up, v3.up);
-        //ebug.Log($"Y is now at {Y:0} degs from Up");
-        if(Y > 80){
-            //ebug.Log("Rotate around Z axis (180)");
-            self.Rotate(0, 0, 180);
-        }
-        //ebug.Log("Rotate around X axis (90)");
-        self.Rotate(90, 0, 0);
-        Y = v3.Angle(self.up, v3.up);
-        //ebug.Log($"Y is now at {Y:0} degs from Up");
-        if(Y > 80){
-            //ebug.Log("Rotate around X axis (180)");
-            self.Rotate(180, 0, 0);
-        }
-    }*/
 
     public static float POrient2(  // call in FixedUpdate
         this Transform self, Transform target, float latency = 0.2f

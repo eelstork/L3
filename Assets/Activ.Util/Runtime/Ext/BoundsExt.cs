@@ -2,6 +2,12 @@ using UnityEngine;
 
 public static class BoundsExt{
 
+    public static float Height(this Bounds self)
+    => self.size.y;
+
+    public static float Radius(this Bounds self)
+    => Mathf.Max(self.extents.x, self.extents.z);
+
     public static float Radius(this Bounds self, bool planar){
         var e = self.extents;
         var r = e.x;
