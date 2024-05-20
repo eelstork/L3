@@ -24,32 +24,6 @@ public static class Draw{
         Debug.DrawLine(R, end, col, duration);
     }
 
-    public static void Pie(
-        v3 center, v3 direction, float radius, float angle,
-        Color col, int segPer360 = 24
-    ){
-        direction.y = 0f;
-        direction = direction.normalized * radius;
-        int n = (int) ((angle * segPer360) / 360f);
-        if(n < 2) n = 2;
-        var α = 2 * angle / n;
-        //Debug.Log($"Segments: {n}, α: {α:0.0}");
-        //Debug.Break();
-        var r = Quaternion.AngleAxis(-angle, v3.up);
-        var s = Quaternion.AngleAxis( α, v3.up);
-        var u = r * direction;
-        var C = center + v3.up * 0.05f;
-        Debug.DrawRay(C, u, col);
-        for(int i = 0; i < n; i++){
-            var v = s * u;
-            Debug.DrawLine(C + u, C + v, col);
-            u = v;
-            if(i == n - 1){
-                Debug.DrawRay(C, u, col);
-            }
-        }
-    }
-
     public static void Rect(
         v3 min, v3 max, Color col, float duration=0f
     ){
@@ -97,6 +71,30 @@ public static class Draw{
         }
     }
 
+    public static void Pie(
+        v3 center, v3 direction, float radius, float angle,
+        Color col, int segPer360 = 24
+    ){
+        direction.y = 0f;
+        direction = direction.normalized * radius;
+        int n = (int) ((angle * segPer360) / 360f);
+        if(n < 2) n = 2;
+        var α = 2 * angle / n;
+        var r = Quaternion.AngleAxis(-angle, v3.up);
+        var s = Quaternion.AngleAxis( α, v3.up);
+        var u = r * direction;
+        var C = center + v3.up * 0.05f;
+        Debug.DrawRay(C, u, col);
+        for(int i = 0; i < n; i++){
+            var v = s * u;
+            Debug.DrawLine(C + u, C + v, col);
+            u = v;
+            if(i == n - 1){
+                Debug.DrawRay(C, u, col);
+            }
+        }
+    }
+
     public static void PointXZ(
         v3 pos, Color col, float s=0.05f, float offset=0.02f,
         float duration=0f
@@ -109,12 +107,6 @@ public static class Draw{
         );
     }
 
-/*
-    public static void Path(UnityEngine.AI.NavMeshPath path, Params p){
-        if(p == null || !p.lines) return;
-        Path(path, p.color, p.duration, p.offset, p.points, p.pointColor);
-    }
-*/
     public static void Path(
         UnityEngine.AI.NavMeshPath path,
         Color col, float duration=0f, float yOffset=0.05f,
@@ -127,6 +119,19 @@ public static class Draw{
                 path.corners[i + 1] + up, col,
                 duration
             );
+        }
+    }
+
+    public static void Path(
+        Transform path, bool loop = false, Color? col = null
+    ){
+        if(path == null) return;
+        var P = path.LastChild().position;
+        foreach(Transform child in path){
+            var Q = child.position;
+            if(col == null) Debug.DrawLine(P, Q);
+            else Debug.DrawLine(P, Q, col.Value);
+            P = Q;
         }
     }
 
@@ -157,6 +162,21 @@ public static class Draw{
         }
     }
 
+    public static void Path<T>(
+        IEnumerable<T> path,
+        System.Func<T, v3> conv,
+        System.Func<T, Color> colfunc,
+        float duration=0f
+    ){
+        v3? P = null;
+        foreach(var elem in path){
+            var Q = conv(elem) + v3.up * 0.01f;
+            var col = colfunc(elem);
+            if(P.HasValue) Debug.DrawLine(P.Value, Q, col, duration);
+            P = Q;
+        }
+    }
+
     public static void Poly(
         v3[] points, Color col, float duration=0f
     ){
@@ -167,20 +187,3 @@ public static class Draw{
     }
 
 }}
-
-/*
-namespace Activ.Util{
-public static class Draw{
-
-    public static void Path(
-        IEnumerable<v3> path, Color col, float offset = 0.01f
-    ){
-        v3? P = null; foreach(var Q in path){
-            if(P.HasValue) Debug.DrawLine(
-                P.Value + v3.up * offset, Q, col
-            ); P = Q;
-        }
-    }
-
-}}
-*/

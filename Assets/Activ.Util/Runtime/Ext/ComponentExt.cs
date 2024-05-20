@@ -10,6 +10,9 @@ public static class ComponentExt{
     public static T Get<T>(this Component self)
     => self.GetComponent<T>();
 
+    public static string Name(this Component self)
+    => self.gameObject.name;
+
     public static T Own<T>(this Component self, bool up=false){
         T c; bool OK() => c != null;
         c = self.GetComponent<T>();             if(OK()) return c;
@@ -40,6 +43,9 @@ public static class ComponentExt{
 
     public static bool Within(this Component self, float dist, T of)
     => self.Dist(of) < dist;
+
+    public static float PlanarDist(this Component self, T arg)
+    => (self.transform.position - arg.position).Planar().magnitude;
 
     public static float Dist(this Component self, T arg)
     => (self.transform.position - arg.position).magnitude;

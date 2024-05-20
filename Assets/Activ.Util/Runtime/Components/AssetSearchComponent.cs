@@ -1,12 +1,14 @@
 using System.IO;
 using System.Linq;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
-
+#endif
 namespace Activ.Util{
 [ExecuteInEditMode]
 public class AssetSearchComponent : MonoBehaviour{
 
+    #if UNITY_EDITOR
     [Header("Input")]
     public string filter;
     public string[] folders;
@@ -35,5 +37,6 @@ public class AssetSearchComponent : MonoBehaviour{
         id += trimPaths ? 1 : 0;
         return id;
     }}
-
+    #endif
+    
 }}

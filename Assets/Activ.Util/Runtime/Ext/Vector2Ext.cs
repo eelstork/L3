@@ -13,6 +13,15 @@ public static class Vector2Ext{
     public static v3 Div(this v2 a, v2 b)
     => new (a.x / b.x, a.y / b.y);
 
+    public static v2 RotateTowards(
+        this v2 self, v2 other, float maxRadiansDelta
+    ){
+        var angle = v2.Angle(self, other);
+        var maxDegreesDelta = maxRadiansDelta * UnityEngine.Mathf.Rad2Deg;
+        var step = UnityEngine.Mathf.Min(maxDegreesDelta, angle);
+        return UnityEngine.Quaternion.Euler(0f, 0f, step) * self;
+    }
+
     public static v3 ToV3(this v2 σ)
     => new v3(σ.x, 0f, σ.y);
 

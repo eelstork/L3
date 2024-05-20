@@ -1,5 +1,7 @@
+#if UNITY_EDITOR
 using System;
-using UnityEngine; using UnityEditor.Animations;
+using UnityEngine;
+using UnityEditor.Animations;
 using State = UnityEditor.Animations.AnimatorState;
 using Transition = UnityEditor.Animations.AnimatorStateTransition;
 using SMB = UnityEngine.StateMachineBehaviour;
@@ -45,3 +47,4 @@ public static class AnimatorStateExt{
     }
 
 }}
+#endif

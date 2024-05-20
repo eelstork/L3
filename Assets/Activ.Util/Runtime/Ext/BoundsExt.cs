@@ -8,6 +8,9 @@ public static class BoundsExt{
     public static float Radius(this Bounds self)
     => Mathf.Max(self.extents.x, self.extents.z);
 
+    public static float Radius3(this Bounds self)
+    => self.extents.magnitude;
+
     public static float Radius(this Bounds self, bool planar){
         var e = self.extents;
         var r = e.x;

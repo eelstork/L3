@@ -1,7 +1,7 @@
 namespace Activ.Util{
-public class Range{
+[System.Serializable] public class Range{
 
-    float min, max;
+    public float min, max;
 
     public Range(float a, float b){ min = a; max = b; }
 

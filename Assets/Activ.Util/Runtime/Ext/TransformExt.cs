@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using InvOp = System.InvalidOperationException;
 using UnityEngine;
+using v2 = UnityEngine.Vector2;
 using v3 = UnityEngine.Vector3;
 using q4 = UnityEngine.Quaternion;
 using T = UnityEngine.Transform;
@@ -56,6 +58,17 @@ public static class TransformExt{
         var u = arg - self.position;
         if(planar) u.y = 0f;
         return u.normalized;
+    }
+
+    public static Transform[] FindAllWithTag(
+        this T self, string tag, float dist
+    ){
+        var objects = GameObject.FindGameObjectsWithTag(tag);
+        return (
+            from GameObject x in objects
+            where self.Dist(x.transform) < dist
+            select x.transform
+        ).ToArray();
     }
 
     public static C Find<C>(this T self, v3 dir, float dist){
@@ -344,10 +357,28 @@ public static class TransformExt{
         return Q;
     }
 
-    public static T NextSibling(this Transform self){
+    public static T Cycle(this T self, ref int index)
+    => self.GetChild(index = (index + 1) % self.childCount);
+
+    public static T FirstChild(this T self)
+    => self.GetChild(0);
+
+    public static T LastChild(this T self)
+    => self.GetChild(self.childCount - 1);
+
+    public static T NextSibling(this T self){
         var i = self.GetSiblingIndex() + 1;
         if(self.parent == null) return null;
         return self.parent.GetChild(i % self.parent.childCount);
+    }
+
+    public static float GroundArea(this T self){
+        Bounds bounds;
+        var c = self.GetComponentInChildren<Collider>();
+        if(c) bounds = c.bounds;
+        else bounds = self.GetComponentInChildren<Renderer>().bounds;
+        var r = bounds.Radius();
+        return r * r;
     }
 
     public static void PMoveAndOrient(  // call in FixedUpdate
@@ -423,6 +454,12 @@ public static class TransformExt{
         var a0 = v3.Angle(self.up, u0);
         var a1 = v3.Angle(self.right, r0);
         return (a0 + a1) / 2f;
+    }
+
+    public static float Radius3(this T self){
+        var c = self.GetComponentInChildren<Collider>();
+        if(c){ var r = c.bounds.Radius(); if(r > 0) return r; }
+        return self.GetComponentInChildren<Renderer>().bounds.Radius3();
     }
 
     public static float Radius(this T self){
@@ -523,6 +560,15 @@ public static class TransformExt{
 
     public static Rigidbody Rb(this T self)
     => self.GetComponent<Rigidbody>();
+
+    public static void RotateTowardsPlanar(this T self, v3 vec){
+        var u = self.forward;
+        var u2d = new v2(u.x, u.z);
+        var v = vec;
+        var v2d = new v2(v.x, v.z);
+        var w2d = u2d.RotateTowards(v2d, Mathf.PI * Time.deltaTime);
+        self.forward = w2d.ToV3();
+    }
 
     public static void Set(this T self, Ray ray){
         self.position = ray.origin;
