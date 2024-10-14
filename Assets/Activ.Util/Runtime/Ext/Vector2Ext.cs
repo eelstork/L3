@@ -18,7 +18,12 @@ public static class Vector2Ext{
     ){
         var angle = v2.SignedAngle(self, other);
         var maxDegreesDelta = maxRadiansDelta * UnityEngine.Mathf.Rad2Deg;
-        var step = UnityEngine.Mathf.Min(maxDegreesDelta, angle);
+        float step = 0;
+        if(angle > 0){
+            step = UnityEngine.Mathf.Min(maxDegreesDelta, angle);
+        }else{
+            step = UnityEngine.Mathf.Max(-maxDegreesDelta, angle);
+        }
         return UnityEngine.Quaternion.Euler(0f, 0f, step) * self;
     }
 
