@@ -9,6 +9,12 @@ public class Ator : MonoBehaviour{
 
     public RuntimeAnimatorController ac => x.runtimeAnimatorController;
 
+    public static Ator For(Transform arg){
+        var animator = arg.Get<Animator>();
+        if(animator == null) return null;
+        else return arg.Req<Ator>();
+    }
+
     public bool rootMotion
     { get => x.applyRootMotion; set => x.applyRootMotion = value; }
 

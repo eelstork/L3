@@ -47,6 +47,9 @@ public static class ComponentExt{
     public static float PlanarDist(this Component self, T arg)
     => (self.transform.position - arg.position).Planar().magnitude;
 
+    public static float PlanarDist(this Component self, Vector3 arg)
+    => (self.transform.position - arg).Planar().magnitude;
+
     public static float Dist(this Component self, T arg)
     => (self.transform.position - arg.position).magnitude;
 

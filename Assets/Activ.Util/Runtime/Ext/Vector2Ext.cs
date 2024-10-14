@@ -16,7 +16,7 @@ public static class Vector2Ext{
     public static v2 RotateTowards(
         this v2 self, v2 other, float maxRadiansDelta
     ){
-        var angle = v2.Angle(self, other);
+        var angle = v2.SignedAngle(self, other);
         var maxDegreesDelta = maxRadiansDelta * UnityEngine.Mathf.Rad2Deg;
         var step = UnityEngine.Mathf.Min(maxDegreesDelta, angle);
         return UnityEngine.Quaternion.Euler(0f, 0f, step) * self;

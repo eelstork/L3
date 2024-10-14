@@ -89,6 +89,15 @@ public static class Vector3Ext{
     public static v3 Left(this v3 σ)
     => new v3(-σ.z, 0, σ.x).normalized;
 
+    public static float LOS(
+        this v3 self, v3 dir
+    ){
+        var didHit = Physics.Raycast(
+            self, dir, out RaycastHit hit, dir.magnitude
+        );
+        return didHit ? hit.distance : float.MaxValue;
+    }
+
     public static int Major(this v3 σ)
     => σ.x > σ.y && σ.x > σ.z ? 0
      : σ.y > σ.z              ? 1

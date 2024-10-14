@@ -2,7 +2,7 @@ using UnityEngine;
 using Activ.XML;
 
 namespace Activ.Data{
-public abstract class Behaviour: MonoBehaviour,
+public abstract class XBehaviour: MonoBehaviour,
                                  ISerializationCallbackReceiver{
 
     [SerializeField] bool ignoreReadErrors;

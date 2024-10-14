@@ -95,6 +95,11 @@ public static class Draw{
         }
     }
 
+    public static void Point(
+        Component c, Color col, float s=0.05f, float offset=0.02f,
+        float duration=0f
+    ) => Draw.PointXZ(c.transform.position, col, s, offset, duration);
+
     public static void PointXZ(
         v3 pos, Color col, float s=0.05f, float offset=0.02f,
         float duration=0f
